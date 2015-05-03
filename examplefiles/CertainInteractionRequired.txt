@@ -1,0 +1,28 @@
+// All solutions must have A inhibiting C
+
+under #ExperimentOne at 0 $InitialValues;
+under #ExperimentOne at 1 $SecondValues;
+under #ExperimentOne at 18 $FinalValues;
+under #ExperimentOne at 19 $FinalValues;
+
+let $InitialValues :=
+{
+ A = 1 and
+ B = 1 and
+ C = 1 and 
+ D = 1
+};
+
+let $SecondValues :=
+{
+ A = 1 and
+ B = 1
+};
+
+let $FinalValues :=
+{
+ A = 1 and 
+ B = 1 and 
+ C = 0 and 
+ D = 0
+};

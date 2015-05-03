@@ -1,0 +1,31 @@
+// An experiment defines the state you expect the system to be in at different time steps
+under #ExperimentOne at 0 $InitialConditions;
+under #ExperimentOne at 1 $SecondValues;
+under #ExperimentOne at 9 $FinalValues;
+under #ExperimentOne at 10 $FinalValues;
+
+// Gene states can be collected and tagged as in the below examples
+
+let $InitialConditions :=
+{
+ A = 1 and
+ B = 1 and
+ C = 1 and
+ D = 1
+};
+
+let $SecondValues :=
+{
+ A = 1 and
+ B = 0 and
+ C = 1 and
+ D = 0
+};
+
+let $FinalValues :=
+{
+ A = 1 and
+ B = 0 and
+ C = 0 and
+ D = 0
+};

@@ -1,0 +1,683 @@
+// Experiment One from 2i plus LIF to 2i
+under #ExperimentOne at 0 $TwoiPlusLif	 "2i plus LIF initial conditions";
+under #ExperimentOne at 0 $TwoiCultureConditions "2i culture conditions";
+under #ExperimentOne at 0 $NoKnockOuts "Exp1 knockouts"; 
+under #ExperimentOne at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentOne at 18 $Twoi "2i penultimate state Exp 1";
+under #ExperimentOne at 19 $Twoi "2i final state Exp 1";
+
+
+// Experiment Two from 2i to 2i plus LIF
+under #ExperimentTwo at 0 $Twoi "2i initial conditions"; 
+under #ExperimentTwo at 0 $TwoiPlusLifCultureConditions "2i plus LIF culture conditions";
+under #ExperimentTwo at 0 $NoKnockOuts "Exp2 knockouts"; 
+under #ExperimentTwo at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentTwo at 18 $TwoiPlusLif  "2i plus LIF penultimate state Exp 2";
+under #ExperimentTwo at 19 $TwoiPlusLif "2i plus LIF final state Exp 2";
+
+
+// Experiment Three from 2i plus LIF to LIF plus PD
+under #ExperimentThree at 0 $TwoiPlusLif "2i plus LIF initial state";
+under #ExperimentThree at 0 $LifPlusPdCultureConditions "LIF plus PD culture conditions";
+under #ExperimentThree at 0 $NoKnockOuts "Exp3 knockouts"; 
+under #ExperimentThree at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentThree at 18 $LifPlusPd  "LIF plus PD penultimate state Exp 3";
+under #ExperimentThree at 19 $LifPlusPd "LIF plus PD final state Exp 3";
+
+
+// Experiment Four from LIF plus PD to 2i plus LIF
+under #ExperimentFour at 0 $LifPlusPd "LIF plus PD initial state";
+under #ExperimentFour at 0 $TwoiPlusLifCultureConditions "2i plus LIF culture conditions";
+under #ExperimentFour at 0 $NoKnockOuts "Exp4 knockouts"; 
+under #ExperimentFour at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentFour at 18 $TwoiPlusLif  "2i plus LIF penultimate state Exp 4";
+under #ExperimentFour at 19 $TwoiPlusLif "2i plus LIF final state Exp 4";
+
+
+// Experiment Five from 2i plus LIF to LIF plus CH
+under #ExperimentFive at 0 $TwoiPlusLif "2i plus LIF initial state";
+under #ExperimentFive at 0 $LifPlusChCultureConditions "LIF plus CH culture conditions";
+under #ExperimentFive at 0 $NoKnockOuts "Exp5 knockouts";  
+under #ExperimentFive at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentFive at 18 $LifPlusCh  "LIF plus CH penultimate state Exp 5";
+under #ExperimentFive at 19 $LifPlusCh "LIF plus CH final state Exp 5";
+
+
+// Experiment Six from LIF plus CH to 2i plus LIF
+under #ExperimentSix at 0 $LifPlusCh "LIF plus CH initial state";
+under #ExperimentSix at 0 $TwoiPlusLifCultureConditions "2i plus LIF culture conditions";
+under #ExperimentSix at 0 $NoKnockOuts "Exp6 knockouts";  
+under #ExperimentSix at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentSix at 18 $TwoiPlusLif  "2i plus LIF penultimate state Exp 6";
+under #ExperimentSix at 19 $TwoiPlusLif "2i plus LIF final state Exp 6";
+
+
+// Experiment Seven from 2i to LIF plus PD
+under #ExperimentSeven at 0 $Twoi "2i initial state";
+under #ExperimentSeven at 0 $LifPlusPdCultureConditions "LIF plus PD culture conditions";
+under #ExperimentSeven at 0 $NoKnockOuts "Exp7 knockouts";  
+under #ExperimentSeven at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentSeven at 18 $LifPlusPd  "LIF plus PD penultimate state Exp 7";
+under #ExperimentSeven at 19 $LifPlusPd "LIF plus PD final state Exp 7";
+
+
+// Experiment Eight from LIF plus PD to 2i 
+under #ExperimentEight at 0 $LifPlusPd "LIF plus PD initial state";
+under #ExperimentEight at 0 $TwoiCultureConditions "2i culture conditions";
+under #ExperimentEight at 0 $NoKnockOuts "Exp8 knockouts";  
+under #ExperimentEight at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentEight at 18 $Twoi  "2i penultimate state Exp 8";
+under #ExperimentEight at 19 $Twoi "2i final state Exp 8";
+
+
+// Experiment Nine from 2i to LIF plus CH
+under #ExperimentNine at 0 $Twoi "2i initial state";
+under #ExperimentNine at 0 $LifPlusChCultureConditions "LIF plus CH culture conditions";
+under #ExperimentNine at 0 $NoKnockOuts "Exp9 knockouts";  
+under #ExperimentNine at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentNine at 18 $LifPlusCh  "LIF plus CH penultimate state Exp 9";
+under #ExperimentNine at 19 $LifPlusCh "LIF plus CH final state Exp 9";
+
+// Experiment Ten from LIF plus CH to 2i 
+under #ExperimentTen at 0 $LifPlusCh "LIF plus CH initial state";
+under #ExperimentTen at 0 $TwoiCultureConditions "2i culture conditions";
+under #ExperimentTen at 0 $NoKnockOuts "Exp10 knockouts";  
+under #ExperimentTen at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentTen at 18 $Twoi "2i penultimate state Exp 10";
+under #ExperimentTen at 19 $Twoi "2i final state Exp 10";
+
+
+// Experiment Eleven from LIF plus CH to LIF plus PD
+under #ExperimentEleven at 0 $LifPlusCh "LIF plus CH initial state";
+under #ExperimentEleven at 0 $LifPlusPdCultureConditions "LIF plus PD culture conditions";
+under #ExperimentEleven at 0 $NoKnockOuts "Exp11 knockouts";  
+under #ExperimentEleven at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentEleven at 18 $LifPlusPd  "LIF plus PD penultimate state Exp 11";
+under #ExperimentEleven at 19 $LifPlusPd "LIF plus PD final state Exp 11";
+
+
+// Experiment Twelve from LIF plus PD to LIF plus CH
+under #ExperimentTwelve at 0 $LifPlusPd "LIF plus CH initial state";
+under #ExperimentTwelve at 0 $LifPlusChCultureConditions "LIF plus CH culture conditions";
+under #ExperimentTwelve at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentTwelve at 0 $NoKnockOuts "Exp12 knockouts";  
+under #ExperimentTwelve at 18 $LifPlusCh "LIF plus CH penultimate state Exp 12";
+under #ExperimentTwelve at 19 $LifPlusCh "LIF plus CH final state Exp 12";
+
+// Experiment Thirteen from LIF plus 2i to no signal
+under #ExperimentThirteen at 0 $TwoiPlusLif "2i plus LIF initial conditions";
+under #ExperimentThirteen at 0 $NoSignalCultureConditions "No signals culture conditions";
+under #ExperimentThirteen at 0 $NoKnockOuts "Exp13 knockouts"; 
+under #ExperimenThirteen at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentThirteen at 18 $NoSignal "No signal at penultimate state exp 13";
+under #ExperimentThirteen at 19 $NoSignal "No signal at final state exp 13";
+
+// Experiment Fourteen from 2i to no signal
+under #ExperimentFourteen at 0 $Twoi "2i initial conditions";
+under #ExperimentFourteen at 0 $NoSignalCultureConditions "No signals culture conditions";
+under #ExperimentFourteen at 0 $NoKnockOuts "Exp14 knockouts";  
+under #ExperimentFourteen at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentFourteen at 18 $NoSignal "No signal at penultimate state exp 14";
+under #ExperimentFourteen at 19 $NoSignal "No signal at final state exp 14";
+
+// Experiment Fifteen from LIF plus PD to no signal
+under #ExperimentFifteen at 0 $LifPlusPd "LIF plus PD initial conditions";
+under #ExperimentFifteen at 0 $NoSignalCultureConditions "No signals culture conditions";
+under #ExperimentFifteen at 0 $NoKnockOuts "Exp15 knockouts";  
+under #ExperimentFifteen at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentFifteen at 18 $NoSignal "No signal at penultimate state exp 15";
+under #ExperimentFifteen at 19 $NoSignal "No signal at final state exp 15";
+
+// Experiment Sixteen from 2i Oct4 Knockout to everything being repressed
+under #ExperimentSixteen at 0 $TwoiOctFourKnockout "Two i initial conditions with Oct four knockout";
+under #ExperimentSixteen at 0 $TwoiCultureConditions "Two i culture conditions";
+under #ExperimentSixteen at 0 $Oct4GeneKnockOut "Exp16 knockouts";  
+under #ExperimentSixteen at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentSixteen at 18 $FinalStateAllZeroExpression "penultimate state exp 16";
+under #ExperimentSixteen at 19 $FinalStateAllZeroExpression "final state exp 16";
+
+
+// Experiment Seventeen from 2i Sox2 Knockout to everything going down
+under #ExperimentSeventeen at 0 $TwoiSoxTwoKnockout "Two i initial conditions with Sox2 knockout";
+under #ExperimentSeventeen at 0 $TwoiCultureConditions "Two i culture conditions";
+under #ExperimentSeventeen at 0 $Sox2GeneKnockOut "Exp17 knockouts";  
+under #ExperimentSeventeen at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentSeventeen at 18 $FinalStateAllZeroExpression "penultimate state exp 17";
+under #ExperimentSeventeen at 19 $FinalStateAllZeroExpression "final state exp 17";
+
+// Experiment Eighteen from 2i Stat3 Knockout to everything going down
+under #ExperimentEighteen at 0 $2iStatThreeKnockout "2i with Stat3 knockout";
+under #ExperimentEighteen at 0 $LifPlusPdCultureConditions "Lif plus PD culture conditions";
+under #ExperimentEighteen at 0 $Stat3GeneKnockOut "Exp18 knockouts";  
+under #ExperimentEighteen at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentEighteen at 18 $FinalStateAllZeroExpression "penultimate state exp 18";
+under #ExperimentEighteen at 19 $FinalStateAllZeroExpression "final state exp 18";
+
+// Experiment Nineteen from 2i Esrrb Knockout to everything going down 
+under #ExperimentNineteen at 0 $2iEsrrbKnockout "2i Esrrb knockout";
+under #ExperimentNineteen at 0 $TwoiCultureConditions "2i culture conditions";
+under #ExperimentNineteen at 0 $EsrrbGeneKnockOut "Exp19 knockouts";  
+under #ExperimentNineteen at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentNineteen at 18 $FinalStateAllZeroExpression "penultimate state exp 19";
+under #ExperimentNineteen at 19 $FinalStateAllZeroExpression "final state exp 19";
+
+// Experiment Twenty from 2i plus LIF Esrrb Knockout 
+under #ExperimentTwenty at 0 $2iPlusLifEsrrbKnockout "2i plus LIF with Esrrb knockout";
+under #ExperimentTwenty at 0 $TwoiPlusLifCultureConditions "2i plus LIF culture conditions";
+under #ExperimentTwenty at 0 $EsrrbGeneKnockOut "Exp20 knockouts";  
+under #ExperimentTwenty at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimentTwenty at 18 $FinalState2iPlusLifEsrrbKnockout "penultimate state exp 20";
+under #ExperimentTwenty at 19 $FinalState2iPlusLifEsrrbKnockout "final state exp 20";
+
+// Experiment Twenty one overexpression of Esrrb from 2i to just PD
+under #ExperimentTwentyOne at 0 $2iEsrrbOverexpression "2i with Esrrb overexpression";
+under #ExperimentTwentyOne at 0 $JustPdCultureConditions "Just PD culture conditions";
+under #ExperimentTwentyOne at 0 $NoKnockOuts "Exp21 knockouts";  
+under #ExperimentTwentyOne at 0 $EsrrbGeneOverExpression "Exp21 overexpression";
+under #ExperimentTwentyOne at 18 $FinalStatePdOnlyEsrrbOverexpression "penultimate state exp 21";
+under #ExperimentTwentyOne at 19 $FinalStatePdOnlyEsrrbOverexpression "final state exp 21";
+
+// Experiment Nanog knockdown in 2i plus lIF
+under #NanogKnockdown at 0 $2iPusLifNanogKnockdown;
+under #NanogKnockdown at 0 $TwoiPlusLifCultureConditions;
+under #NanogKnockdown at 0 $NanogKnockOut;
+under #NanogKnockdown at 0 $NoOverExpression;
+under #NanogKnockdown at 18 $FinalStateNanogKnockout;
+under #NanogKnockdown at 19 $FinalStateNanogKnockout;
+
+// TCFCP overexpression
+under #TCFCPOverexpression at 0 $TwoiPlusLif;
+under #TCFCPOverexpression at 0 $JustPdCultureConditions;
+under #TCFCPOverexpression at 0 $NoKnockOuts; 
+under #TCFCPOverexpression at 0 $TCFCPGeneOverExpression;
+under #TCFCPOverexpression at 18 $FinalStateTCFCPOverexpression;
+under #TCFCPOverexpression at 19 $FinalStateTCFCPOverexpression;
+
+// Testing Gbx2 single knockout
+under #Gbx2Knockout at 0 $TwoiPlusLifGbx2Knockout;
+under #Gbx2Knockout at 0 $TwoiPlusLifCultureConditions;
+under #Gbx2Knockout at 0 $Gbx2GeneKnockOut;
+under #Gbx2Knockout at 0 $NoOverExpression; 
+under #Gbx2Knockout at 18 $Oct4OrSox2NotMaintained;
+under #Gbx2Knockout at 19 $Oct4OrSox2NotMaintained;
+
+let $Oct4OrSox2NotMaintained:=
+{
+ Oct4 = 0 or
+ Sox2 = 0
+};
+
+
+// Culture conditions 
+let $TwoiPlusLifCultureConditions :=
+{
+ LIF = 1 and
+ CH = 1 and 
+ PD = 1
+};
+
+let $TwoiCultureConditions :=
+{
+ LIF = 0 and
+ CH = 1 and
+ PD = 1
+};
+
+let $LifPlusPdCultureConditions :=
+{
+ LIF = 1 and 
+ CH = 0 and 
+ PD = 1
+};
+
+let $LifPlusChCultureConditions :=
+{
+ LIF = 1 and
+ CH = 1 and 
+ PD = 0
+};
+
+let $NoSignalCultureConditions :=
+{
+ LIF = 0 and
+ CH = 0 and 
+ PD = 0
+};
+
+// When you do not want any knock outs or overexpressions
+let $NoKnockOuts :=
+{
+ KO_Oct4=0 and
+ KO_Sox2=0 and
+ KO_Esrrb=0 and
+ KO_Stat3=0 and
+ KO_Nanog=0 and
+ KO_Gbx2=0 and
+ KO_Tbx3=0 and
+ KO_TCFCP=0 and
+ KO_Klf2=0 and
+ KO_Klf4=0 and 
+ KO_Sall4=0
+};
+
+// Setting which genes are knocked out or overexpressed
+
+let $Oct4GeneKnockOut :=
+{
+ KO_Oct4=1 and
+ KO_Sox2=0 and
+ KO_Esrrb=0 and
+ KO_Stat3=0 and
+ KO_Nanog=0 and
+ KO_Gbx2=0 and
+ KO_Tbx3=0 and
+ KO_TCFCP=0 and
+ KO_Klf2=0 and
+ KO_Klf4=0 and 
+ KO_Sall4=0
+};
+
+let $Sox2GeneKnockOut :=
+{
+ KO_Oct4=0 and
+ KO_Sox2=1 and
+ KO_Esrrb=0 and
+ KO_Stat3=0 and
+ KO_Nanog=0 and
+ KO_Gbx2=0 and
+ KO_Tbx3=0 and
+ KO_TCFCP=0 and
+ KO_Klf2=0 and
+ KO_Klf4=0 and 
+ KO_Sall4=0
+};
+
+let $Stat3GeneKnockOut :=
+{
+ KO_Oct4=0 and
+ KO_Sox2=0 and
+ KO_Esrrb=0 and
+ KO_Stat3=1 and
+ KO_Nanog=0 and
+ KO_Gbx2=0 and
+ KO_Tbx3=0 and
+ KO_TCFCP=0 and
+ KO_Klf2=0 and
+ KO_Klf4=0 and 
+ KO_Sall4=0
+};
+
+let $EsrrbGeneKnockOut :=
+{
+ KO_Oct4=0 and
+ KO_Sox2=0 and
+ KO_Esrrb=1 and
+ KO_Stat3=0 and
+ KO_Nanog=0 and
+ KO_Gbx2=0 and
+ KO_Tbx3=0 and
+ KO_TCFCP=0 and
+ KO_Klf2=0 and
+ KO_Klf4=0 and 
+ KO_Sall4=0
+};
+
+let $NanogKnockOut :=
+{
+ KO_Oct4=0 and
+ KO_Sox2=0 and
+ KO_Esrrb=0 and
+ KO_Stat3=0 and
+ KO_Nanog=1 and
+ KO_Gbx2=0 and
+ KO_Tbx3=0 and
+ KO_TCFCP=0 and
+ KO_Klf2=0 and
+ KO_Klf4=0 and 
+ KO_Sall4=0
+};
+
+let $TCFCPGeneKnockOut :=
+{
+ KO_Oct4=0 and
+ KO_Sox2=0 and
+ KO_Esrrb=0 and
+ KO_Stat3=0 and
+ KO_Nanog=0 and
+ KO_Gbx2=0 and
+ KO_Tbx3=0 and
+ KO_TCFCP=1 and
+ KO_Klf2=0 and
+ KO_Klf4=0 and 
+ KO_Sall4=0
+};
+
+let $Gbx2GeneKnockOut :=
+{
+ KO_Oct4=0 and
+ KO_Sox2=0 and
+ KO_Esrrb=0 and
+ KO_Stat3=0 and
+ KO_Nanog=0 and
+ KO_Gbx2=1 and
+ KO_Tbx3=0 and
+ KO_TCFCP=0 and
+ KO_Klf2=0 and
+ KO_Klf4=0 and 
+ KO_Sall4=0
+};
+
+let $JustPdCultureConditions :=
+{
+ LIF = 0 and
+ CH = 0 and 
+ PD = 1
+};
+
+let $EsrrbGeneOverExpression :=
+{
+ FE_Esrrb=1 and 
+ FE_TCFCP=0
+};
+
+let $TCFCPGeneOverExpression:=
+{
+ FE_Esrrb=0 and
+ FE_TCFCP=1 
+};
+
+let $NoOverExpression :=
+{
+ FE_Esrrb=0 and
+ FE_TCFCP=0
+};
+
+// Gene expression levels for each culture condition 
+
+let $TwoiPlusLif:=
+{
+ MEKERK = 0 and
+ Oct4=1 and
+ Sox2=1 and
+ Nanog=1 and
+ Esrrb=1 and
+ Klf2=1 and
+ TCFCP=1 and
+ Klf4=1 and
+ Gbx2=1 and
+ Tbx3=1 and
+ TCF3=0 and
+ Sall4=1 and
+ Stat3=1
+};
+
+let $Twoi:=
+{
+ MEKERK = 0 and
+ Oct4=1 and
+ Sox2=1 and
+ Nanog=1 and
+ Esrrb=1 and
+ Klf2=1 and
+ TCFCP=1 and
+ Klf4=0 and
+ Gbx2=0 and
+ Tbx3=1 and
+ TCF3=0 and
+ Sall4=1 and
+ Stat3=0
+};
+
+let $LifPlusPd:=
+{
+ MEKERK = 0 and
+ Oct4=1 and
+ Sox2=1 and
+ Nanog=1 and
+ Esrrb=0 and
+ Klf2=1 and
+ TCFCP=0 and
+ Klf4=1 and
+ Gbx2=1 and
+ Tbx3=0 and
+ TCF3=1 and
+ Sall4=0 and
+ Stat3=1
+};
+
+let $LifPlusCh:=
+{
+ MEKERK = 1 and
+ Oct4=1 and
+ Sox2=1 and
+ Nanog=1 and
+ Esrrb=1 and
+ Klf2=1 and
+ TCFCP=1 and
+ Klf4=1 and
+ Gbx2=1 and
+ Tbx3=1 and
+ TCF3=0 and
+ Sall4=1 and
+ Stat3=1
+};
+
+let $NoSignal:=
+{
+ MEKERK = 1 and
+ Oct4=0 and
+ Sox2=0 and
+ Nanog=0 and
+ Esrrb=0 and
+ Klf2=0 and
+ Gbx2 = 0 and 
+ TCFCP=0 and
+ Klf4=0 and
+ Tbx3=0 and
+ Sall4=0 and
+ Stat3=0
+};
+
+// Twoi conditions with Oct4 knockout
+let $TwoiOctFourKnockout:=
+{
+ MEKERK = 0 and
+ Oct4=0 and
+ Sox2=1 and
+ Nanog=1 and
+ Esrrb=1 and
+ Klf2=1 and
+ TCFCP=1 and
+ Klf4=0 and
+ Gbx2=0 and
+ Tbx3=1 and
+ TCF3=0 and
+ Sall4=1 and
+ Stat3=0
+};
+
+// Twoi conditions with Sox2 knockout
+let $TwoiSoxTwoKnockout:=
+{
+ MEKERK = 0 and
+ Oct4=1 and
+ Sox2=0 and
+ Nanog=1 and
+ Esrrb=1 and
+ Klf2=1 and
+ TCFCP=1 and
+ Klf4=0 and
+ Gbx2=0 and
+ Tbx3=1 and
+ TCF3=0 and
+ Sall4=1 and
+ Stat3=0
+};
+
+// LIF plus PD conditions with Stat3 knockout
+let $2iStatThreeKnockout :=
+{
+ MEKERK = 0 and
+ Oct4=1 and
+ Sox2=1 and
+ Nanog=1 and
+ Esrrb=1 and
+ Klf2=1 and
+ TCFCP=1 and
+ Klf4=0 and
+ Gbx2=0 and
+ Tbx3=1 and
+ TCF3=0 and
+ Sall4=1 and
+ Stat3=0
+};
+ 
+let $FinalStateAllZeroExpression:=
+{
+ MEKERK = 0 and
+ Oct4=0 and
+ Sox2=0 and
+ Nanog=0 and
+ Esrrb=0 and
+ Klf2=0 and
+ Gbx2=0 and 
+ TCFCP=0 and
+ Klf4=0 and
+ Tbx3=0 and
+ Sall4=0 and
+ Stat3=0
+};
+
+let $2iEsrrbKnockout:=
+{
+ MEKERK = 0 and
+ Oct4=1 and
+ Sox2=1 and
+ Nanog=1 and
+ Esrrb=0 and
+ Klf2=1 and
+ TCFCP=1 and
+ Klf4=0 and
+ Gbx2=0 and
+ Tbx3=1 and
+ TCF3=0 and
+ Sall4=1 and
+ Stat3=0
+};
+
+let $2iPlusLifEsrrbKnockout:=
+{
+ MEKERK = 0 and
+ Oct4=1 and
+ Sox2=1 and
+ Nanog=1 and
+ Esrrb=0 and
+ Klf2=1 and
+ TCFCP=1 and
+ Klf4=1 and
+ Gbx2=1 and
+ Tbx3=1 and
+ TCF3=0 and
+ Sall4=1 and
+ Stat3=1
+};
+
+let $FinalState2iPlusLifEsrrbKnockout:=
+{
+ MEKERK = 0 and
+ Oct4=1 and
+ Sox2=1 and
+ Nanog=1 and
+ Esrrb=0 and
+ Klf2=1 and
+ TCFCP=1 and
+ Klf4=1 and
+ Gbx2=1 and
+ Tbx3=1 and
+ TCF3=0 and
+ Sall4=1 and
+ Stat3=1
+};
+
+// Twoi conditions with esrrb overexpression
+let $2iEsrrbOverexpression :=
+{
+ MEKERK = 0 and
+ Oct4=1 and
+ Sox2=1 and
+ Nanog=1 and
+ Esrrb=1 and
+ Klf2=1 and
+ TCFCP=1 and
+ Klf4=0 and
+ Gbx2=0 and
+ Tbx3=1 and
+ TCF3=0 and
+ Sall4=1 and
+ Stat3=0
+};
+
+// Only PD
+let $FinalStatePdOnlyEsrrbOverexpression:=
+{
+ Oct4 = 1 and 
+ Sox2 = 1 and 
+ Nanog = 1 and
+ Esrrb = 1 and
+ Klf4 = 0
+};
+
+// Nanog knock down in 2i plus LIF
+let $2iPusLifNanogKnockdown:=
+{
+ MEKERK = 0 and
+ Oct4=1 and
+ Sox2=1 and
+ Nanog=0 and
+ Esrrb=1 and
+ Klf2=1 and
+ TCFCP=1 and
+ Klf4=1 and
+ Gbx2=1 and
+ Tbx3=1 and
+ TCF3=0 and
+ Sall4=1 and
+ Stat3=1
+};
+
+// Final state
+let $FinalStateNanogKnockout:=
+{
+ Oct4=1 and
+ Sox2=1 and
+ Nanog=0 and
+ Tbx3=1 and
+ Esrrb=0
+};
+
+// Final state TCFCP overexpression
+let $FinalStateTCFCPOverexpression:=
+{
+ Oct4=1 and
+ Sox2=1 and 
+ Nanog=1 and 
+ Esrrb=1
+};
+
+// Initial state for Gbx2 knockout
+let $TwoiPlusLifGbx2Knockout:=
+{
+ MEKERK = 0 and
+ Oct4=1 and
+ Sox2=1 and
+ Nanog=1 and
+ Esrrb=1 and
+ Klf2=1 and
+ TCFCP=1 and
+ Klf4=1 and
+ Gbx2=0 and
+ Tbx3=1 and
+ TCF3=0 and
+ Sall4=1 and
+ Stat3=1
+};

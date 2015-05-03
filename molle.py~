@@ -1,0 +1,9 @@
+from z3 import *
+
+modelFile = open("examplefiles/SimpleFourCoponentModel.txt", "r");
+
+allwfuncs = dict();
+af = modelFile.readline();
+for a in af.split(', '):
+  comps[a[0]] = [int[i] for i in a[2:-1].split()];
+print(allwfuncs);
