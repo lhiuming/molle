@@ -9,6 +9,12 @@ def appendEntry(d, k, entry):
     d[k] = [];
     appendEntry(d, k, entry);
 
+def mergeInters(d, bemerged):
+  for node in bemerged:
+    try: d[node].extend(bemerged[node]);
+    except KeyError:
+      d[node] = bemerged[node][:]; # a shallow copy;
+
 def addInter(d, a, b, p):
   appendEntry(d, b, (a,(p == 'positive') and 1 or -1));
 
@@ -61,3 +67,46 @@ def readExp(f):
     elif(l[0] == "let"): shortcut = l[1]; # ready to enter the braket
 
   return (exps, states);
+
+def _binary_index(i, l):
+  '''
+   Take a number and its maximum length, return a list of index for '1's, in a
+   reversed manner. For example, when i = 5, l = 8, the function returns
+   [5, 7], because 5 = b(00000101).
+  '''
+  b = bin(i)[2:]; # bin return a str begining with '0b'
+  b = '0' * (l - len(b)) + b; # make up the missed zeros
+  return filter(lambda x: b[x] == '1', range(l));
+
+def _get_sublist(l):
+  '''
+  Generator for non-empty sublists of list l. It will generate sublists in
+  non-decreasing size, until it yields the complete list l.
+  '''
+  for i in range(1, 2**(len(l))):
+    yield [l[j] for j in _binary_index(i, len(l))];
+
+def _construct_graph(l, defI = None):
+  '''
+  Take a list of directed and signed interactions, return a dictionary of nodes
+  with inputs list as value. If defInters are provide, it will be merge in the
+  resulting graph.
+  '''
+  d = dict();
+  for i in l:
+    appendEntry(d, i[1], (i[0], i[2]));
+  if(defI):
+    mergeInters(d, defI); # records in defI will be merged in d
+  return d;
+
+def getGraph(optI, defI):
+  '''
+  Generator.
+  '''
+  l = [];
+  for node in optI:
+    l.extend([(i[0], node, i[1]) for i in optI[node]]);
+  for sl in _get_sublist(l):
+      yield _construct_graph(sl, defI);
+
+
