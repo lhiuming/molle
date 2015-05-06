@@ -7,7 +7,6 @@ UNDERCONSTRUCTOIN...
 
 ## todos
 
-1. strategy to build models from interaction dictionary;
-  - generator for logical function for nodes in subset?
+1. Debugging to match the result of RE: IN about ABCD model.
 2. test models against constrains;
 3. Output satisfying models.
