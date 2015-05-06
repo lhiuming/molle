@@ -10,13 +10,13 @@ let $InitialConditions :=
 {
  A = 1 and
  B = 1 and
- C = 0 and
+ C = 1 and
  D = 1
 };
 
 let $SecondValues :=
 {
- A = 0 and
+ A = 1 and
  B = 1 and
  C = 0 and
  D = 0

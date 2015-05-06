@@ -1,13 +1,15 @@
 from z3 import *
 from utility import *
-from pprint import pprint
 
 ### Configurations ###
 ######################
 PREFIX = "examplefiles/";
 MODEL = "SimpleFourComponentModel.txt";
-EXP = "SingleExperiment.txt";
-debug = True;
+#EXP = "CertainInteractionRequired.txt";
+EXP = "NoSolutionsPossible.txt";
+STEP = 20;
+debug = False;
+limit = 10;
 
 
 ### Reading Files ###
@@ -26,13 +28,36 @@ expFile.close();
 
 ### Modeling ###
 ################
+count = 0;
+count_solution = 0;
+graphs = getGraph(comps, optInters, defInters);
+functions = getFunction(comps);
 
+for graph in graphs:
+  sgraph = sortGraph(graph);
 
+  for funcDict in functions:
+    count += 1;
+    if(count % 100 == 0): print "doing the %d model..." %count;
+
+    s = Solver();
+    applyFunctions(s, funcDict, sgraph, STEP);
+    for name in exps:
+      addConstrains(s, exps[name], states);
+
+    if(s.check() == sat):
+      count_solution += 1;
+      printModel(sgraph, funcDict);
+
+    if(count_solution >= limit): break;
+  if(count_solution >= limit):break;
+
+if(count_solution == 0):
+  print "No solutions possible, after %d times search." %count;    
 
 
 ### Debugging or Output ###
-#################
-
+###########################
 if __name__ == "__main__":
   if(debug):
     print("The components are: ");
@@ -40,7 +65,6 @@ if __name__ == "__main__":
     print("\nThe defined and optional interactions: ");
     pprint(defInters);
     pprint(optInters);
-
     print("\nThe Experiment Constrains: ");
     pprint(exps);
     pprint(states);
