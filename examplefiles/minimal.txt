@@ -1,0 +1,28 @@
+LIF(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15),CH(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15),PD(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15),Stat3-(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15),Tcf3(16 17), MEKERK(16 17),Klf4(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15),Gbx2(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15),Tfcp2l1+(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15),Esrrb-+(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15),Nanog-(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15),Klf2(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15),Tbx3(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15),Sox2-(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15),Sall4(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15),Oct4-(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15)
+Tfcp2l1       Esrrb  positive optional
+Tfcp2l1       Sall4  positive
+Sox2          Oct4   positive
+Oct4          Nanog  positive
+Nanog         Esrrb  positive
+Nanog         Sox2   positive
+Klf2          Oct4   positive
+Klf2          Nanog  positive
+Sall4         Sox2   positive
+Sall4         Klf2   positive
+Klf4          Klf2   positive
+Klf4          Tfcp2l1   positive
+Gbx2          Klf4      positive
+PD            PD        positive
+CH            CH        positive
+LIF           LIF       positive
+CH            Tcf3      negative
+PD            MEKERK    negative
+MEKERK        Tcf3      negative
+Tcf3          Tfcp2l1   negative
+Tcf3          Esrrb     negative
+MEKERK        Nanog     negative
+Esrrb         Oct4      negative
+Oct4          Tfcp2l1   negative
+Stat3         Klf4      positive
+Stat3         Gbx2      positive
+Stat3         Tfcp2l1   positive
