@@ -107,7 +107,7 @@ under #ExperimentTwelve at 19 $LifPlusCh "Exp12 final state";
 under #ExperimentThirteen at 0 $TwoiPlusLif "Exp12 initial expression pattern";
 under #ExperimentThirteen at 0 $NoSignalCultureConditions "Exp13 culture conditions";
 under #ExperimentThirteen at 0 $NoKnockDowns "Exp13 no knockdowns"; 
-under #ExperimenThirteen at 0 $NoOverExpression "Exp13 no overexpression";
+under #ExperimentThirteen at 0 $NoOverExpression "Exp13 no overexpression";
 under #ExperimentThirteen at 18 $NoSignal "Exp13 penultimate state";
 under #ExperimentThirteen at 19 $NoSignal "Exp13 final state";
 

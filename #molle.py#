@@ -1,7 +1,6 @@
 from z3 import *
 from utility import *
 
-from pprint import pprint
 
 ### Configurations ###
 ######################
@@ -36,6 +35,7 @@ expFile.close();
 
 if __name__ == "__main__":
   if(debug):
+    from pprint import pprint
     print("The components are: ");
     pprint(comps);
     print("\nThe defined and optional interactions: ");
