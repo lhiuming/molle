@@ -5,57 +5,40 @@ from itertools import product
 def __init__():
   return;
 
-def appendEntry(d, k, entry):
-  try: d[k].append(entry);
-  except KeyError:
-    d[k] = [];
-    appendEntry(d, k, entry);
-
-def mergeInters(d, bemerged):
-  for node in bemerged:
-    try: d[node].extend(bemerged[node]);
-    except KeyError:
-      d[node] = bemerged[node][:]; # a shallow copy;
-
-def addInter(d, a, b, p):
-  appendEntry(d, b, (a,(p == 'positive') and 1 or -1));
-
 def readModel(f):
   '''
   Take a file as input, return three dicts, which are allowed rules for 
   components,  defined interactions and optional interactions, seperately.
   The entry of interactions dict collect "from" nodes.
   '''
-  comps = dict();
-  kofe = {'KO':[], 'FE':[]};
-  defInters = dict();
-  optInters = dict();
+  comps = dict()
+  kofe = {'KO':[], 'FE':[]}
+  defInters = []
+  optInters = []
 
-  for c in f.readline().split(','): # read the components line
-    c = c.strip();
-    gene = c[:c.index('(')]; # the first word is the name
+  for gene in f.readline().strip().split(', '): # read the components line
     if(gene[-1] == '+'): 
       gene = gene[:-1];
       kofe['FE'].append(gene.strip('-'));
     if(gene[-1] == '-'):
       gene = gene[:-1];
       kofe['KO'].append(gene.strip('+'));
-    rulelist = c[c.index('(')+1:c.index(')')];
-    comps[gene] = [int(i) for i in rulelist.split()]; # store allowed rules num
+    if(gene in ('MEKERK', 'Tcf3')): comps[gene] = (16, 17)
+    else: comps[gene] = tuple(range(16))
     
   for l in f.readlines(): # loop every line for interaction
-    l = l.strip().split();
-    if(not l): continue;
-    if(l[-1] == 'optional'): addInter(optInters, l[0], l[1], l[2])
-    else: addInter(defInters, l[0], l[1], l[2]); # defined interaction
+    l = l.strip().split()
+    if(not l): continue # skip empty line
+    if(l[-1] == 'optional'): optInters.append(tuple(l[:3]))
+    else: defInters.append(tuple(l[:3]))
 
   return (comps, kofe, defInters, optInters);
 
 def addExp(d, name, t, stateList):
-  appendEntry(d, name, (t, stateList));
+  _appendEntry(d, name, (t, stateList));
 
 def addState(d, name, c, value):
-  appendEntry(d, name, (c, value));
+  _appendEntry(d, name, (c, value));
 
 def readExp(f):
   '''
@@ -100,14 +83,28 @@ def preCon(comps, kofe = None, step = 20):
     d[node] = [Bool(node + '_' + str(t)) for t in range(step)];
   return d;
 
-def _get_sublist(l):
+def _get_sublist(l, limit):
   '''
   Generator for non-empty sublists of list l. It will generate sublists in
   non-decreasing size, until it yields the complete list l.
   '''
-  for r in range(1, len(l) + 1):
+  rg = range(min(len(l)+1, limit));
+  rg.reverse();  
+  for r in rg:
     for combi in combinations(l, r):
-      yield list(combi);
+      yield combi;
+
+def _appendEntry(d, key, entry):
+  try:
+    d[key].append(entry)
+  except KeyError:
+    d[key] = [entry]
+
+def _mergeInters(d, bemerged):
+  for node in bemerged:
+    try: d[node].extend(bemerged[node]);
+    except KeyError:
+      d[node] = bemerged[node][:]; # a shallow copy;
 
 def _construct_graph(l, defI = None, allNodes = None):
   '''
@@ -117,27 +114,30 @@ def _construct_graph(l, defI = None, allNodes = None):
   '''
   d = dict();
   for i in l:
-    appendEntry(d, i[1], (i[0], i[2]));
+    _appendEntry(d, i[1], (i[0], i[2]));
   if(defI):
-    mergeInters(d, defI); # records in defI will be merged in d
+    _mergeInters(d, defI); # records in defI will be merged in d
   if(allNodes):
     for node in allNodes:
       if(node not in d): d[node] = [];
   return d;
 
-def getGraph(comps, optI, defI):
+def _into_dict(interList):
+  d = dict()
+  for l in interList:
+    _appendEntry(d, l[1], ( l[0], (l[2] == "positive") and 1 or -1 ))
+  return d
+
+def getGraph(comps, optI, defI, interLimit):
   '''
-  Generator. Yield a non-empty subpgraph from all interactions. Defined
+  Generator. Yield a subpgraph from all interactions. Defined
   interactions are bound to be present.
   '''
-  l = [];
-  for node in optI: # recover dict to list of optional interactions
-    l.extend([(i[0], node, i[1]) for i in optI[node]]);
-  i = 0; t = 2**len(l);
   complist = comps.keys();
-  yield _construct_graph([], defI, complist);
-  for sl in _get_sublist(l): # use a subset of optional interactions
-      yield _construct_graph(sl, defI, complist);
+  defInters = _into_dict(defI)
+
+  for sl in _get_sublist(optI, interLimit):
+      yield _construct_graph(sl, defInters, complist);
 
 def sortGraph(graph):
   '''
@@ -174,8 +174,11 @@ def getFunction(comps, sgraph):
   '''
   nodes = comps.keys();
   rules = dict();
+  i = 1;
   for n in nodes:
     rules[n] = _compati_func(sgraph[n], comps[n]);
+    i *= len(rules[n]);
+  print "We got %d function comibations!!!!!!!!!!!!!!" %i
   for c in product(*[rules[node] for node in nodes]):
     yield dict(zip(nodes, c));
 

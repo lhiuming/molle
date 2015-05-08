@@ -1,20 +1,16 @@
 from z3 import *
 from utility import *
-
 from pprint import pprint
 
 ### Configurations ###
 ######################
-PREFIX = "examplefiles/";
-MODELFILES = ("SimpleFourComponentModel.txt",
-              "PearsonThreshold792.txt");
-EXPFILES = ("CertainInteractionRequired.txt", "NoSolutionsPossible.txt",
-            "ExperimentalConstraints.txt");
-MODEL = "minimal.txt";
-EXP = EXPFILES[2];
-STEP = 20;
-debug = True;
-limit = 10;
+PREFIX = "examplefiles/"
+MODEL = "minimal.txt"
+EXP = "constrains.txt"
+STEP = 20
+debug = True
+solutions_limit = 10
+interactions_limit = 17
 
 
 ### Reading Files ###
@@ -36,15 +32,15 @@ expFile.close();
 
 def main():
   count = 0;
-  count_solution = 0;
+  solution_count = 0;
   precon = preCon(comps, kofe, step = STEP);
 
-  for graph in getGraph(comps, optInters, defInters):
+  for graph in getGraph(comps, optInters, defInters, interactions_limit):
     sgraph = sortGraph(graph);
     pprint(sgraph);
 
     for funcDict in getFunction(comps, sgraph):
-      count += 1;
+      count += 1; # couting solutions
       if(count % 100 == 0):
         print "doing the %d model..." %count;
         if(debug): printModel(sgraph, funcDict);
@@ -58,13 +54,13 @@ def main():
         s.pop();
 
       if(s.check() == sat):
-        count_solution += 1;
+        solution_count += 1;
         printModel(sgraph, funcDict);
-        break; # one fund is enough for one graph
+        break; # one combination of funcionts is enough for one graph
 
-    if(count_solution >= limit):break;
+    if(solution_count >= solutions_limit):break;
 
-  if(count_solution == 0):
+  if(solution_count == 0):
     print "No solutions possible, after %d times search." %count;    
 
 
@@ -81,5 +77,5 @@ if __name__ == "__main__":
     pprint(exps);
     pprint(states);
 
-  main();
+  main(); # modelling
 
