@@ -7,6 +7,4 @@ UNDERCONSTRUCTOIN...
 
 ## todos
 
-1. improve performance
-  - reduce And and Or;
-  - reduce Bool: preConstruct;
+1. testing
