@@ -7,5 +7,6 @@ UNDERCONSTRUCTOIN...
 
 ## todos
 
-1. support on KO/FE models
 1. improve performance
+  - reduce And and Or;
+  - reduce Bool: preConstruct;

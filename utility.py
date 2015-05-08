@@ -131,6 +131,7 @@ def getGraph(comps, optI, defI):
     l.extend([(i[0], node, i[1]) for i in optI[node]]);
   i = 0; t = 2**len(l);
   complist = comps.keys();
+  yield _construct_graph([], defI, complist);
   for sl in _get_sublist(l): # use a subset of optional interactions
       yield _construct_graph(sl, defI, complist);
 
@@ -144,7 +145,14 @@ def sortGraph(graph):
     d[node] = ([x[0] for x in act], [x[0] for x in rep]);
   return d;
 
-def getFunction(comps):
+def _func_filter(acrp):
+  (ac, rp) = acrp;
+  if(not rp):
+    if(not ac): return lambda x: x < 1
+    else: return lambda x: x < 2
+  else: return lambda x: True;
+
+def getFunction(comps, sgraph):
   '''
   Generator a combination of all possible combinations of allowed function for
   every node. This generator will also check the compatability of
@@ -153,12 +161,12 @@ def getFunction(comps):
   nodes = comps.keys();
   rules = dict();
   for n in nodes:
-    rules[n] = comps[n];
+    rules[n] = filter(_func_filter(sgraph[n]), comps[n]);
     rules[n].reverse();
   for c in product(*[rules[node] for node in nodes]):
     yield dict(zip(nodes, c));
 
-def _create_rule(num, act, rep, t):
+def _create_rule(num, act, rep, t = None):
   if(not (rep or act)): return False; # no interactions
   postfix = t and ('_' + str(t)) or ''; # if t specified, append _t
   actt = [Bool(a + postfix) for a in act];

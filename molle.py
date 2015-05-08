@@ -1,7 +1,6 @@
 from z3 import *
 from utility import *
 
-from pprint import pprint
 
 ### Configurations ###
 ######################
@@ -10,7 +9,7 @@ MODELFILES = ("SimpleFourComponentModel.txt",
               "PearsonThreshold792.txt");
 EXPFILES = ("CertainInteractionRequired.txt", "NoSolutionsPossible.txt",
             "ExperimentalConstraints.txt");
-MODEL = MODELFILES[1];
+MODEL = "minimal.txt";
 EXP = EXPFILES[2];
 STEP = 20;
 debug = True;
@@ -30,12 +29,11 @@ expFile = open(PREFIX + EXP, 'r');
 (exps, states) = readExp(expFile);
 expFile.close();
 
-
-### Modeling ###
-################
-
+### Reading Debugging ###
+#########################
 if __name__ == "__main__":
   if(debug):
+    from pprint import pprint
     print("The components are: ");
     pprint(comps);
     print("\nThe defined and optional interactions: ");
@@ -45,17 +43,23 @@ if __name__ == "__main__":
     pprint(exps);
     pprint(states);
 
+
+### Modeling ###
+################
+
+if __name__ == "__main__":
   count = 0;
   count_solution = 0;
-  graphs = getGraph(comps, optInters, defInters);
-  functions = getFunction(comps);
 
-  for graph in graphs:
+  for graph in getGraph(comps, optInters, defInters):
     sgraph = sortGraph(graph);
+    pprint(sgraph);
 
-    for funcDict in functions:
+    for funcDict in getFunction(comps, sgraph):
       count += 1;
-      if(count % 100 == 0): print "doing the %d model..." %count;
+      if(count % 100 == 0):
+        print "doing the %d model..." %count;
+        printModel(sgraph, funcDict);
 
       s = Solver();
       applyFunctions(s, funcDict, kofe, sgraph, STEP);
