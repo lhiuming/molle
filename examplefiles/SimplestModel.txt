@@ -28,3 +28,4 @@ LIF            Stat3         positive
 PD             PD            positive
 CH             CH            positive
 LIF            LIF           positive
+Tfcp2l1        Tbx3          positive optional

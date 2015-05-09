@@ -1,5 +1,0 @@
-from z3 import *
-
-def __init__():
-  return;
-

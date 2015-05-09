@@ -1,6 +1,7 @@
 from z3 import *
-from itertools import combinations
-from itertools import product
+from itertools import combinations, product
+from time import gmtime, strftime
+from pprint import pprint
 
 def __init__():
   return;
@@ -86,10 +87,10 @@ def preCon(comps, kofe = None, step = 20):
 def _get_sublist(l, limit):
   '''
   Generator for non-empty sublists of list l. It will generate sublists in
-  non-decreasing size, until it yields the complete list l.
+  a decreasing size, first tuple(l), last a empty tuple.
   '''
-  rg = range(min(len(l)+1, limit));
-  rg.reverse();  
+  rg = range( min(len(l), limit) + 1 );
+  rg.reverse(); # return longer list first.
   for r in rg:
     for combi in combinations(l, r):
       yield combi;
@@ -136,7 +137,7 @@ def getGraph(comps, optI, defI, interLimit):
   complist = comps.keys();
   defInters = _into_dict(defI)
 
-  for sl in _get_sublist(optI, interLimit):
+  for sl in _get_sublist(optI, max(interLimit, 0)):
       yield _construct_graph(sl, defInters, complist);
 
 def sortGraph(graph):
@@ -178,7 +179,7 @@ def getFunction(comps, sgraph):
   for n in nodes:
     rules[n] = _compati_func(sgraph[n], comps[n]);
     i *= len(rules[n]);
-  print "We got %d function comibations!!!!!!!!!!!!!!" %i
+  print ">> We got %d function comibations for this graph! \n" %i
   for c in product(*[rules[node] for node in nodes]):
     yield dict(zip(nodes, c));
 
@@ -259,9 +260,24 @@ def addConstrains(s, exp, states):
 ### Output Utilities ###
 #########################
 
-def printModel(sgraph, funcd):
-  s = Solver();
+def _reprModel(sgraph, funcd):
+  s = Solver()
   for node in sgraph:
-    (ac, rp) = sgraph[node];
-    s.add(Bool(node + "'") == _create_rule(funcd[node], ac, rp));
-  print s; print funcd;
+    (ac, rp) = sgraph[node]
+    s.add(Bool(node + "'") == _create_rule(funcd[node], ac, rp))
+  return s
+
+def printModel(sgraph, funcd):
+  pprint(_reprModel(sgraph, funcd))
+  print funcd, '\n'
+
+def outputModel(sgraph, funcd, fileName, count):
+  s = _reprModel(sgraph, funcd)
+  with open(fileName, "a") as f:
+    f.write(strftime("%d %b %H:%M:%S > "))
+    if(count): f.write("The %d solution is: \n" %count)
+    f.write(str(s) + '\n')
+    f.write(str(funcd) + '\n\n')
+    f.close()
+
+
