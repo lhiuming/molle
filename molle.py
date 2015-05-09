@@ -7,11 +7,14 @@ from pprint import pprint
 PREFIX = "examplefiles/"
 MODEL = "SimplestModel.txt"
 EXP = "constrains.txt"
+#MODEL = "SimpleFourComponentModel.txt"
+#EXP = "CertainInteractionRequired.txt"
 OUTPUT = "SOLUTIONS.TXT"
 STEP = 20
-debug = 1 # level 1 of debugging
+debug = 1
 solutions_limit = 1
 interactions_limit = 17
+graph_stop = 1
 
 
 ### Reading Files ###
@@ -27,14 +30,14 @@ expFile.close();
 #debuggin
 if __name__ == "__main__":
   if(debug == 2):
-    print("The components are: \n");
+    print("The components are:");
     pprint(comps);
-    print("\nThe defined and optional interactions: \n");
+    print("\nThe defined and optional interactions:");
     pprint(defInters);
     pprint(optInters);
-    print("\nThe Experiment Constrains: \n");
+    print("\nThe Experiment Constrains:");
     pprint(exps);
-    pprint(states + '\n\n');
+    pprint(states);
 
 
 ### Modeling ###
@@ -42,10 +45,13 @@ if __name__ == "__main__":
 
 count = 0; # count model numbers
 solution_count = 0; # count solutions
+graph_count = 0;
 precon = preCon(comps, kofe, step = STEP); # preconstruct z3 Bool variable
+s = Solver()
 
 for graph in getGraph(comps, optInters, defInters, interactions_limit):
   sgraph = sortGraph(graph); # sort the graph dict into a more compact form
+  graph_count += 1
   if(debug):
     print ">>> The current graph: "
     pprint(sgraph)
@@ -56,7 +62,7 @@ for graph in getGraph(comps, optInters, defInters, interactions_limit):
       print ">>> Verifying the %d model:" %count;
       if(debug): printModel(sgraph, funcDict);
 
-    s = Solver();
+    s.push()
     applyFunctions(s, funcDict, kofe, sgraph, precon, STEP); # construct model
     for name in exps: # test experiment constrains seperately
       s.push();
@@ -67,9 +73,14 @@ for graph in getGraph(comps, optInters, defInters, interactions_limit):
     if(s.check() == sat): # all constrains satisfied
       solution_count += 1;
       outputModel(sgraph, funcDict, OUTPUT, solution_count);
+      s.pop()
       break; # one combination of funcionts is enough for one graph
+    s.pop()
 
-  if(solution_count >= solutions_limit): break;
+  if(solution_count >= solutions_limit or graph_count >= graph_stop): break;
 
-if(solution_count == 0)
+if(solution_count == 0):
   print ">>> No solutions possible, after verifying %d models.\n" %count
+else:
+  print ">>> Done. %d solutions were found, after verifying %d models.\n" \
+        %(solution_count, count)
