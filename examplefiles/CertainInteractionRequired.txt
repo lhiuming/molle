@@ -1,4 +1,4 @@
-// All solutions must have A inhibiting C. NOT!
+// All solutions must have A inhibiting C
 
 under #ExperimentOne at 0 $InitialValues;
 under #ExperimentOne at 1 $SecondValues;

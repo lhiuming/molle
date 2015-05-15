@@ -1,4 +1,4 @@
-Oct4-, Sall4-, Sox2-, Tbx3-, Klf2-, Nanog-, Esrrb-+, Tfcp2l1-+, Gbx2-, Klf4-, MEKERK, Tcf3, Stat3-, PD, CH, LIF
+Oct4-(11), Sall4-(2), Sox2-(1), Tbx3-(14), Klf2-(5), Nanog-(8), Esrrb-+(8), Tfcp2l1-+(7), Gbx2-(12), Klf4-(5), MEKERK(17), Tcf3(17), Stat3-(5), PD(4), CH(3), LIF(15)
 Sox2   Oct4    positive      optional
 Sall4  Sox2    positive      optional
 Tfcp2l1        Sall4         positive   optional
@@ -28,4 +28,4 @@ LIF            Stat3         positive
 PD             PD            positive
 CH             CH            positive
 LIF            LIF           positive
-Tfcp2l1        Tbx3          positive   optional
+Sall4          Tbx3          positive   optional

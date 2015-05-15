@@ -108,7 +108,7 @@ under #ExperimentTwelve at 19 $LifPlusCh "LIF plus CH final state Exp 12";
 under #ExperimentThirteen at 0 $TwoiPlusLif "2i plus LIF initial conditions";
 under #ExperimentThirteen at 0 $NoSignalCultureConditions "No signals culture conditions";
 under #ExperimentThirteen at 0 $NoKnockOuts "Exp13 knockouts"; 
-under #ExperimentThirteen at 0 $NoOverExpression "Exp1 overexpression";
+under #ExperimenThirteen at 0 $NoOverExpression "Exp1 overexpression";
 under #ExperimentThirteen at 18 $NoSignal "No signal at penultimate state exp 13";
 under #ExperimentThirteen at 19 $NoSignal "No signal at final state exp 13";
 

@@ -1,0 +1,23 @@
+> 13 May 00:16:02  The 1th solution is: 
+[Gbx2' == Stat3,
+ LIF' == LIF,
+ CH' == CH,
+ Nanog' == And(Oct4, Klf2),
+ Tcf3' == Not(Or(MEKERK, CH)),
+ Esrrb' == And(Tfcp2l1, Nanog),
+ Oct4' ==
+ Or(And(Sox2, Klf2), And(Or(Sox2, Klf2), Not(Esrrb))),
+ Sall4' == Tfcp2l1,
+ Tfcp2l1' ==
+ And(Or(Klf4, Esrrb, Stat3), Not(And(Oct4, Tcf3))),
+ MEKERK' == Not(PD),
+ Klf4' == Or(Gbx2, Stat3),
+ Klf2' == Or(Sall4, Klf4),
+ PD' == PD,
+ Sox2' == Or(Sall4, Nanog),
+ Stat3' == LIF,
+ Tbx3' == Tfcp2l1]
+Interactoins and functions are: 
+{'Gbx2': (['Stat3'], []), 'LIF': (['LIF'], []), 'CH': (['CH'], []), 'Nanog': (['Oct4', 'Klf2'], ['MEKERK']), 'Tcf3': ([], ['MEKERK', 'CH']), 'Esrrb': (['Tfcp2l1', 'Nanog'], ['Tcf3']), 'Oct4': (['Sox2', 'Klf2'], ['Esrrb']), 'Sall4': (['Tfcp2l1'], []), 'Tfcp2l1': (['Klf4', 'Esrrb', 'Stat3'], ['Oct4', 'Tcf3']), 'MEKERK': ([], ['PD']), 'Klf4': (['Gbx2', 'Stat3'], []), 'Klf2': (['Sall4', 'Klf4'], []), 'PD': (['PD'], []), 'Sox2': (['Sall4', 'Nanog'], []), 'Stat3': (['LIF'], []), 'Tbx3': (['Tfcp2l1'], [])}
+{'Sall4': 1, 'Gbx2': 1, 'LIF': 1, 'CH': 1, 'Nanog': 8, 'Tcf3': 17, 'MEKERK': 17, 'Oct4': 10, 'Esrrb': 8, 'Tfcp2l1': 6, 'Tbx3': 1, 'Klf4': 1, 'Klf2': 1, 'PD': 1, 'Sox2': 1, 'Stat3': 1}
+

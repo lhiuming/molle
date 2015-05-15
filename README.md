@@ -7,4 +7,4 @@ UNDERCONSTRUCTOIN...
 
 ## todos
 
-1. testing
+1. Strange: how to handel LIF/PD/CH transitions???
