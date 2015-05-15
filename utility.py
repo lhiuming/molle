@@ -155,6 +155,7 @@ def getGraph(comps, optI, defI, interLimit):
 
 def sortGraph(graph):
   '''
+  Reconstruct the graph dict in to a more compact dict.
   '''
   d = dict();
   for node in graph:
@@ -214,29 +215,21 @@ def _And(l):
   if(len(l) == 1): return l[0]
   else: return And(l);
 
-def _create_rule(num, act, rep, prec = None, t = None):
+def _create_rule(num, act, rep, precon, t = None):
   if(num == -1): return False
   if(num < 2 and rep): return False
   if(num > 15 and act): return False
 
-  if(prec):
-    actt = [(prec[node])[t] for node in act]
-    rept = [(prec[node])[t] for node in rep]
-  else:
-    postfix = t and ('_' + str(t)) or '' # if t specified, append _t
-    actt = [Bool(a + postfix) for a in act]
-    rept = [Bool(r + postfix) for r in rep]
-
+  actt = [(precon[node])[t] for node in act]
+  rept = [(precon[node])[t] for node in rep]
+  
   if(num > 1 and not rep): return (_And, _Or)[num % 2](actt)
 
   if(num == 0): return _And(actt)
   elif(num == 1): return _Or(actt)
   elif(num < 4): return And(_Or(actt), Not(_Or(rept)))
   elif(num < 6): return And(_And(actt), Not(_And(rept)));
-  elif(num < 8): return And(_Or(actt), Not(_And(rept))) # not as in the paper
-  #elif(num == 6): return And(_Or(actt), Not(_And(rept)))
-  #elif(num == 7): return Or(_And(actt),
-  #                       And(_Or(actt), And(_Or(rept), Not(_And(rept)))))
+  elif(num < 8): return And(_Or(actt), Not(_And(rept)))
   elif(num < 10): return _And(actt)
   elif(num < 12): return Or(_And(actt), And(_Or(actt), Not(_Or(rept))))
   elif(num < 14): return Or(_And(actt), And(_Or(actt), Not(_And(rept))))
