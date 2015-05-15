@@ -23,7 +23,7 @@ INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
               ( "PearsonThreshold792WithOct4Sox2Interaction.txt",
                 "UltimateConstrains.txt" )
         }
-MODEL, EXP = INPUT['minimal_test']
+MODEL, EXP = INPUT['ABCD_test']
 
 # Model configuration
 STEP = 20 # trajactory length
