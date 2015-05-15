@@ -6,9 +6,9 @@ processN = 4 # processes number
 debug = 1 # debugging level
 
 # computation settings
-solutions_limit = 1 # how many solution you wish to find
-interactions_limit = 17 # set to 17 for the minimal model
-graphs_limit = 1 # limits graph numbers. Don't used normally
+solutions_limit = 0 # how many solution you wish to find
+interactions_limit = 0 # set to 17 for the minimal model
+graphs_limit = 0 # limits graph numbers. Don't used normally
 
 # Input and output files
 OUTPUT = "solutions.out" # file name for solution output

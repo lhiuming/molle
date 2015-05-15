@@ -215,13 +215,17 @@ def _And(l):
   if(len(l) == 1): return l[0]
   else: return And(l);
 
-def _create_rule(num, act, rep, precon, t = None):
+def _create_rule(num, act, rep, precon=None, t = None):
   if(num == -1): return False
   if(num < 2 and rep): return False
   if(num > 15 and act): return False
 
-  actt = [(precon[node])[t] for node in act]
-  rept = [(precon[node])[t] for node in rep]
+  if(precon):
+    actt = [precon[node][t] for node in act]
+    rept = [precon[node][t] for node in rep]
+  else:
+    actt = [Bool(node) for node in act]
+    rept = [Bool(node) for node in rep]
   
   if(num > 1 and not rep): return (_And, _Or)[num % 2](actt)
 
@@ -246,19 +250,19 @@ def _with_KOFE(node, kofe, prec):
     return lambda x: Or(prec['FE'][node], x)
   else: return lambda x: x; # no kofe
 
-def _add_function(s, fnum, node, kofe, acrp, prec = None, step = 20):
+def _add_function(s, fnum, node, kofe, acrp, precon, step = 20):
   (ac, rp) = acrp;
-  tune = _with_KOFE(node, kofe, prec);
+  tune = _with_KOFE(node, kofe, precon);
   for t in range(1, step): # 19 transitions from t-1 to t
     s.add(Bool(node + '_' + str(t)) == tune(
-               _create_rule(fnum, ac, rp, prec, t = t-1)));
+               _create_rule(fnum, ac, rp, precon, t = t-1)));
 
-def applyFunctions(s, funcd, kofe, sgraph, prec = None, step = 20):
+def applyFunctions(s, funcd, kofe, sgraph, precon, step = 20):
   '''
   Take the solver, function number, and a sorted graph.
   '''
   for node in funcd:
-    _add_function(s, funcd[node], node, kofe, sgraph[node], prec, step);
+    _add_function(s, funcd[node], node, kofe, sgraph[node], precon, step);
     
 def addConstrains(s, exp, states, precon):
   '''
@@ -300,11 +304,12 @@ def outputModel(sgraph, funcd, fileName, count):
   '''
   s = _reprModel(sgraph, funcd)
   with open(fileName, "a") as f:
-    f.write(strftime(">> %d %b %H:%M:%S  "))
+    f.write(strftime(">> %d %b %H:%M:%S "))
     if(count): f.write("The %dth solution is: \n" %count)
     f.write(str(s) + '\n')
-    f.write(">> Interactoins and functions are: \n")
+    f.write(">> interactoins are: ")
     f.write(str(sgraph) + '\n')
+    f.write(">> functionss are: ")
     f.write(str(funcd) + '\n\n')
     f.close()
 
