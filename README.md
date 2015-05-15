@@ -7,4 +7,4 @@ UNDERCONSTRUCTOIN...
 
 ## todos
 
-1. Strange: how to handel LIF/PD/CH transitions???
+1. profile and improve performance for large networks
