@@ -1,11 +1,11 @@
 ### Configurations ###
 ######################
 
-# Running Setting
+# Running Settings
 processN = 4 # processes number
 debug = 1 # debugging level
 
-# computation settings
+# Computation Settings
 solutions_limit = 0 # how many solution you wish to find
 interactions_limit = 17 # set to 17 for the minimal model
 graphs_limit = 0 # limits graph numbers. Don't used normally
@@ -15,17 +15,19 @@ OUTPUT = "solutions.out" # file name for solution output
 PREFIX = "examplefiles/"
 INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
                          "CertainInteractionRequired.txt" ),
-          'minimal_test': ( "custom.txt",
+          'ABCD_nosolution': ("SimpleFourComponentModel.txt",
+                              "NoSolutionsPossible.txt" ),
+          'minimal_test': ( "custom.txt", # established model%combination
                             "UltimateConstrains.txt" ),
-          "find_minimal_combination": ( "SimplestModel.txt",
+          "find_minimal_combination": ( "SimplestModel.txt", # establised model
                                         "UltimateConstrains.txt" ),
           "find_minimal_model":
               ( "PearsonThreshold792WithOct4Sox2Interaction.txt",
                 "UltimateConstrains.txt" )
         }
-MODEL, EXP = INPUT['minimal_test']
+MODEL, EXP = INPUT['ABCD_test']
 
-# Model configuration
+# Model Configurations
 STEP = 20 # trajactory length
 use_compact = True # use compact list of allowed function
 
