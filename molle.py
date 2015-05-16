@@ -7,7 +7,7 @@ debug = 1 # debugging level
 
 # computation settings
 solutions_limit = 0 # how many solution you wish to find
-interactions_limit = 0 # set to 17 for the minimal model
+interactions_limit = 17 # set to 17 for the minimal model
 graphs_limit = 0 # limits graph numbers. Don't used normally
 
 # Input and output files
@@ -23,7 +23,7 @@ INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
               ( "PearsonThreshold792WithOct4Sox2Interaction.txt",
                 "UltimateConstrains.txt" )
         }
-MODEL, EXP = INPUT['ABCD_test']
+MODEL, EXP = INPUT['minimal_test']
 
 # Model configuration
 STEP = 20 # trajactory length
@@ -43,7 +43,8 @@ from time import sleep, strftime
 
 def now(): return strftime("%d %b %H:%M >>")
 
-def checkGraph(comps, kofe, graph, exps, states, precon, compact, gnum, conn):
+def checkGraph(comps, kofe, graph, exps, states, precon, compact,
+               gnum, gtotal, conn):
   '''
   Worker function for children processes
   '''
@@ -53,17 +54,18 @@ def checkGraph(comps, kofe, graph, exps, states, precon, compact, gnum, conn):
   # reporting
   ftotal, rules = funcds.next() # the first yield is configuration information
   if(debug):
-    print now(), "Start: Graph %d have %d combinations." %(gnum, ftotal)
+    print now(), "Start: Graph %d/%d have %d combinations." \
+      %(gnum, gtotal, ftotal)
     if(debug > 1):
-      print "> The graph: ", sgraph
-      print "> The funcion lists: ", rules
+      print "The graph: " , sgraph
+      print "The funcion lists: ", rules
 
   # check all combinations
   model_count = 0
   for funcd in funcds:
     # reporting
     model_count += 1
-    if(debug and model_count % 500  == 0):
+    if(debug > 1 and model_count % 500  == 0):
       print now(), "Graph %d has verified %d/%d ." %(gnum, model_count, ftotal)
     # buld up the model
     s = Solver()
@@ -117,7 +119,9 @@ if __name__ == "__main__":
   # multiprocess computation
   solutions_count = graphs_count = model_count = 0 # intialize the counters
   workers = Queue(processN) # a queue for workers processes
-  for graph in getGraph(comps, optInters, defInters, interactions_limit):
+  allGraphs = getGraph(comps, optInters, defInters, interactions_limit)
+  gtotal = allGraphs.next() # total number of graphs
+  for graph in allGraphs:
     graphs_count += 1
     
     # make sure there is avaliable site in the queue for a more worker
@@ -137,7 +141,7 @@ if __name__ == "__main__":
     parent_conn, child_conn = Pipe() # pipe for comunication between processes
     p = Process(target=checkGraph,
                 args=(comps, kofe, graph, exps, states, precon, use_compact,
-                      graphs_count, child_conn))
+                      graphs_count, gtotal, child_conn))
     p.start()
     workers.put( (p, parent_conn) ) # put the new worker in queue
     

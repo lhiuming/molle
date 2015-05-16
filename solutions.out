@@ -74,3 +74,839 @@
 >> interactoins are: {'A': (['B'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
 >> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
 
+>> 15 May 14:17:07 The 1th solution is: 
+[A' == Or(B, C),
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 10, 'B': 8, 'D': -1}
+
+>> 15 May 14:19:10 The 2th solution is: 
+[A' == Or(B, C), C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 2, 'B': 8, 'D': -1}
+
+>> 15 May 14:19:55 The 3th solution is: 
+[A' == Or(B, C), C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 0, 'B': 8, 'D': -1}
+
+>> 15 May 14:20:06 The 4th solution is: 
+[A' == B,
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 10, 'B': 8, 'D': -1}
+
+>> 15 May 14:20:33 The 5th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 8, 'B': 8, 'D': -1}
+
+>> 15 May 14:22:04 The 6th solution is: 
+[A' == B, C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 2, 'B': 8, 'D': -1}
+
+>> 15 May 14:22:23 The 7th solution is: 
+[A' == B, C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 0, 'B': 8, 'D': -1}
+
+>> 15 May 14:22:23 The 8th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 15 May 14:22:28 The 9th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 1, 'B': 8, 'D': -1}
+
+>> 15 May 14:22:31 The 10th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 8, 'B': 8, 'D': -1}
+
+>> 15 May 14:23:35 The 11th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 15 May 14:23:36 The 12th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 15 May 14:23:45 The 13th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 1, 'B': 8, 'D': -1}
+
+>> 15 May 14:24:07 The 14th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 15 May 14:30:10 The 1th solution is: 
+[A' == Or(B, C),
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 10, 'B': 8, 'D': -1}
+
+>> 15 May 14:30:13 The 2th solution is: 
+[A' == Or(B, C), C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 2, 'B': 8, 'D': -1}
+
+>> 15 May 14:30:14 The 3th solution is: 
+[A' == Or(B, C), C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 0, 'B': 8, 'D': -1}
+
+>> 15 May 14:30:15 The 4th solution is: 
+[A' == B,
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 10, 'B': 8, 'D': -1}
+
+>> 15 May 14:30:15 The 5th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 8, 'B': 8, 'D': -1}
+
+>> 15 May 14:30:19 The 6th solution is: 
+[A' == B, C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 2, 'B': 8, 'D': -1}
+
+>> 15 May 14:30:19 The 7th solution is: 
+[A' == B, C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 0, 'B': 8, 'D': -1}
+
+>> 15 May 14:30:19 The 8th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 15 May 14:30:19 The 9th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 1, 'B': 8, 'D': -1}
+
+>> 15 May 14:30:19 The 10th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 8, 'B': 8, 'D': -1}
+
+>> 15 May 14:30:22 The 11th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 15 May 14:30:22 The 12th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 15 May 14:30:22 The 13th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 1, 'B': 8, 'D': -1}
+
+>> 15 May 14:30:23 The 14th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 15 May 14:31:22 The 1th solution is: 
+[A' == Or(B, C),
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 10, 'B': 8, 'D': -1}
+
+>> 15 May 14:31:29 The 2th solution is: 
+[A' == Or(B, C), C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 2, 'B': 8, 'D': -1}
+
+>> 15 May 14:31:30 The 3th solution is: 
+[A' == Or(B, C), C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 0, 'B': 8, 'D': -1}
+
+>> 15 May 14:31:31 The 4th solution is: 
+[A' == B,
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 10, 'B': 8, 'D': -1}
+
+>> 15 May 14:31:32 The 5th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 8, 'B': 8, 'D': -1}
+
+>> 15 May 14:31:39 The 6th solution is: 
+[A' == B, C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 2, 'B': 8, 'D': -1}
+
+>> 15 May 14:31:39 The 7th solution is: 
+[A' == B, C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 0, 'B': 8, 'D': -1}
+
+>> 15 May 14:31:39 The 8th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 15 May 14:31:40 The 9th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 1, 'B': 8, 'D': -1}
+
+>> 15 May 14:31:40 The 10th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 8, 'B': 8, 'D': -1}
+
+>> 15 May 14:31:45 The 11th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 15 May 14:31:45 The 12th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 15 May 14:31:46 The 13th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 1, 'B': 8, 'D': -1}
+
+>> 15 May 14:31:48 The 14th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 15 May 14:35:32 The 1th solution is: 
+[A' == Or(B, C),
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 10, 'B': 8, 'D': -1}
+
+>> 15 May 14:35:39 The 2th solution is: 
+[A' == Or(B, C), C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 2, 'B': 8, 'D': -1}
+
+>> 15 May 14:35:40 The 3th solution is: 
+[A' == Or(B, C), C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 0, 'B': 8, 'D': -1}
+
+>> 15 May 14:35:41 The 4th solution is: 
+[A' == B,
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 10, 'B': 8, 'D': -1}
+
+>> 15 May 14:35:41 The 5th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 8, 'B': 8, 'D': -1}
+
+>> 15 May 14:35:48 The 6th solution is: 
+[A' == B, C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 2, 'B': 8, 'D': -1}
+
+>> 15 May 14:35:48 The 7th solution is: 
+[A' == B, C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 0, 'B': 8, 'D': -1}
+
+>> 15 May 14:35:48 The 8th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 15 May 14:35:49 The 9th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 1, 'B': 8, 'D': -1}
+
+>> 15 May 14:35:49 The 10th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 8, 'B': 8, 'D': -1}
+
+>> 15 May 14:35:53 The 11th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 15 May 14:35:53 The 12th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 15 May 14:35:54 The 13th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 1, 'B': 8, 'D': -1}
+
+>> 15 May 14:35:55 The 14th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:02:46 The 1th solution is: 
+[A' == Or(B, C),
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 10, 'B': 8, 'D': -1}
+
+>> 16 May 17:02:49 The 2th solution is: 
+[A' == Or(B, C), C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 2, 'B': 8, 'D': -1}
+
+>> 16 May 17:02:50 The 3th solution is: 
+[A' == Or(B, C), C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 0, 'B': 8, 'D': -1}
+
+>> 16 May 17:02:50 The 4th solution is: 
+[A' == B,
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 10, 'B': 8, 'D': -1}
+
+>> 16 May 17:02:51 The 5th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 8, 'B': 8, 'D': -1}
+
+>> 16 May 17:02:55 The 6th solution is: 
+[A' == B, C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 2, 'B': 8, 'D': -1}
+
+>> 16 May 17:02:56 The 7th solution is: 
+[A' == B, C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 0, 'B': 8, 'D': -1}
+
+>> 16 May 17:02:56 The 8th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:02:56 The 9th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 1, 'B': 8, 'D': -1}
+
+>> 16 May 17:02:56 The 10th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 8, 'B': 8, 'D': -1}
+
+>> 16 May 17:03:00 The 11th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:03:00 The 12th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:03:00 The 13th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 1, 'B': 8, 'D': -1}
+
+>> 16 May 17:03:01 The 14th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:14:53 The 1th solution is: 
+[A' == Or(B, C),
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 10, 'B': 8, 'D': -1}
+
+>> 16 May 17:14:56 The 2th solution is: 
+[A' == Or(B, C), C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 2, 'B': 8, 'D': -1}
+
+>> 16 May 17:14:57 The 3th solution is: 
+[A' == Or(B, C), C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 0, 'B': 8, 'D': -1}
+
+>> 16 May 17:14:57 The 4th solution is: 
+[A' == B,
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 10, 'B': 8, 'D': -1}
+
+>> 16 May 17:14:58 The 5th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 8, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:01 The 6th solution is: 
+[A' == B, C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 2, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:02 The 7th solution is: 
+[A' == B, C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 0, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:02 The 8th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:02 The 9th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 1, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:02 The 10th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 8, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:05 The 11th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:05 The 12th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:05 The 13th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 1, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:06 The 14th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:20 The 1th solution is: 
+[A' == Or(B, C),
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 10, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:23 The 2th solution is: 
+[A' == Or(B, C), C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 2, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:24 The 3th solution is: 
+[A' == Or(B, C), C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 0, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:25 The 4th solution is: 
+[A' == B,
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 10, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:25 The 5th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 8, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:29 The 6th solution is: 
+[A' == B, C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 2, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:29 The 7th solution is: 
+[A' == B, C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 0, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:29 The 8th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:30 The 9th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 1, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:30 The 10th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 8, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:32 The 11th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:32 The 12th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:33 The 13th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 1, 'B': 8, 'D': -1}
+
+>> 16 May 17:15:34 The 14th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:16:47 The 1th solution is: 
+[A' == Or(B, C),
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 10, 'B': 8, 'D': -1}
+
+>> 16 May 17:16:50 The 2th solution is: 
+[A' == Or(B, C), C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 2, 'B': 8, 'D': -1}
+
+>> 16 May 17:16:51 The 3th solution is: 
+[A' == Or(B, C), C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 0, 'B': 8, 'D': -1}
+
+>> 16 May 17:16:51 The 4th solution is: 
+[A' == B,
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 10, 'B': 8, 'D': -1}
+
+>> 16 May 17:16:52 The 5th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 8, 'B': 8, 'D': -1}
+
+>> 16 May 17:16:56 The 6th solution is: 
+[A' == B, C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 2, 'B': 8, 'D': -1}
+
+>> 16 May 17:16:56 The 7th solution is: 
+[A' == B, C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 0, 'B': 8, 'D': -1}
+
+>> 16 May 17:16:56 The 8th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:16:57 The 9th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 1, 'B': 8, 'D': -1}
+
+>> 16 May 17:16:57 The 10th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 8, 'B': 8, 'D': -1}
+
+>> 16 May 17:16:59 The 11th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:16:59 The 12th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:17:00 The 13th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 1, 'B': 8, 'D': -1}
+
+>> 16 May 17:17:01 The 14th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:17:43 The 1th solution is: 
+[A' == Or(B, C),
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 10, 'B': 8, 'D': -1}
+
+>> 16 May 17:17:46 The 2th solution is: 
+[A' == Or(B, C), C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 2, 'B': 8, 'D': -1}
+
+>> 16 May 17:17:47 The 3th solution is: 
+[A' == Or(B, C), C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 0, 'B': 8, 'D': -1}
+
+>> 16 May 17:17:47 The 4th solution is: 
+[A' == B,
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 10, 'B': 8, 'D': -1}
+
+>> 16 May 17:17:48 The 5th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 8, 'B': 8, 'D': -1}
+
+>> 16 May 17:17:52 The 6th solution is: 
+[A' == B, C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 2, 'B': 8, 'D': -1}
+
+>> 16 May 17:17:52 The 7th solution is: 
+[A' == B, C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 0, 'B': 8, 'D': -1}
+
+>> 16 May 17:17:52 The 8th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:17:52 The 9th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 1, 'B': 8, 'D': -1}
+
+>> 16 May 17:17:52 The 10th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 8, 'B': 8, 'D': -1}
+
+>> 16 May 17:17:55 The 11th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:17:55 The 12th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:17:55 The 13th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 1, 'B': 8, 'D': -1}
+
+>> 16 May 17:17:56 The 14th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:18:13 The 1th solution is: 
+[A' == Or(B, C),
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 10, 'B': 8, 'D': -1}
+
+>> 16 May 17:18:16 The 2th solution is: 
+[A' == Or(B, C), C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 2, 'B': 8, 'D': -1}
+
+>> 16 May 17:18:17 The 3th solution is: 
+[A' == Or(B, C), C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 0, 'B': 8, 'D': -1}
+
+>> 16 May 17:18:17 The 4th solution is: 
+[A' == B,
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 10, 'B': 8, 'D': -1}
+
+>> 16 May 17:18:18 The 5th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 8, 'B': 8, 'D': -1}
+
+>> 16 May 17:18:22 The 6th solution is: 
+[A' == B, C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 2, 'B': 8, 'D': -1}
+
+>> 16 May 17:18:22 The 7th solution is: 
+[A' == B, C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 0, 'B': 8, 'D': -1}
+
+>> 16 May 17:18:22 The 8th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:18:23 The 9th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 1, 'B': 8, 'D': -1}
+
+>> 16 May 17:18:23 The 10th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 8, 'B': 8, 'D': -1}
+
+>> 16 May 17:18:25 The 11th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:18:25 The 12th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:18:26 The 13th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 1, 'B': 8, 'D': -1}
+
+>> 16 May 17:18:27 The 14th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:31:57 The 1th solution is: 
+[A' == Or(B, C),
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 10, 'B': 8, 'D': -1}
+
+>> 16 May 17:32:00 The 2th solution is: 
+[A' == Or(B, C), C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 2, 'B': 8, 'D': -1}
+
+>> 16 May 17:32:01 The 3th solution is: 
+[A' == Or(B, C), C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 0, 'B': 8, 'D': -1}
+
+>> 16 May 17:32:01 The 4th solution is: 
+[A' == B,
+ C' == Or(And(B, D), And(Or(B, D), Not(A))),
+ B' == A,
+ D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 10, 'B': 8, 'D': -1}
+
+>> 16 May 17:32:02 The 5th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 8, 'B': 8, 'D': -1}
+
+>> 16 May 17:32:05 The 6th solution is: 
+[A' == B, C' == And(B, Not(A)), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 2, 'B': 8, 'D': -1}
+
+>> 16 May 17:32:05 The 7th solution is: 
+[A' == B, C' == And(B, D), B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['B', 'D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 0, 'B': 8, 'D': -1}
+
+>> 16 May 17:32:05 The 8th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:32:06 The 9th solution is: 
+[A' == Or(B, C), C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': 1, 'B': 8, 'D': -1}
+
+>> 16 May 17:32:06 The 10th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 8, 'B': 8, 'D': -1}
+
+>> 16 May 17:32:09 The 11th solution is: 
+[A' == Or(B, C), C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B', 'C'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 14, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:32:09 The 12th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], ['A']), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+
+>> 16 May 17:32:09 The 13th solution is: 
+[A' == B, C' == D, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': (['D'], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': 1, 'B': 8, 'D': -1}
+
+>> 16 May 17:32:10 The 14th solution is: 
+[A' == B, C' == False, B' == A, D' == False]
+>> interactoins are: {'A': (['B'], ['D']), 'C': ([], []), 'B': (['A'], ['C']), 'D': ([], [])}
+>> functionss are: {'A': 8, 'C': -1, 'B': 8, 'D': -1}
+

@@ -1,5 +1,6 @@
 from z3 import *
 from itertools import combinations, product
+from math import factorial
 from time import strftime
 from pprint import pprint
 
@@ -149,6 +150,10 @@ def getGraph(comps, optI, defI, interLimit):
   '''
   complist = comps.keys();
   defInters = _intoInters(defI)
+
+  l = len(optI)
+  yield sum([factorial(l)/factorial(i)/factorial(l-i) \
+             for i in range( min(l, interLimit) + 1 )])# total number of graphs
 
   for sl in _get_sublist(optI, max(interLimit, 0)): # get a sub-list of inters
       yield _construct_graph(sl, defInters, complist); # return a sub-graph
