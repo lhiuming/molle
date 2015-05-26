@@ -3,7 +3,7 @@ My implementation of Abstract Boolean Network approach for genetic network analy
 
 UNDERCONSTRUCTOIN...
 
-## Work Flow
+The branch for developing a more efficient implementation with SMT-based systhesis approach.
 
 ## todos
 
