@@ -2,12 +2,13 @@
 ######################
 
 # Running Settings
-processN = 4 # processes number
+processN = 12 # processes number
 debug = 1 # debugging level
 
 # Computation Settings
 solutions_limit = 0 # how many solution you wish to find
-interactions_limit = 17 # set to 17 for the minimal model
+interactions_limit = 17 # limit of optional interactions.
+                        # set to 17 for the minimal pluripotency model
 graphs_limit = 0 # limits graph numbers. Don't used normally
 
 # Input and output files
@@ -25,7 +26,7 @@ INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
               ( "PearsonThreshold792WithOct4Sox2Interaction.txt",
                 "UltimateConstrains.txt" )
         }
-MODEL, EXP = INPUT['ABCD_test']
+MODEL, EXP = INPUT['ABCD_nosolution']
 
 # Model Configurations
 STEP = 20 # trajactory length
