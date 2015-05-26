@@ -7,4 +7,5 @@ UNDERCONSTRUCTOIN...
 
 ## todos
 
-1. profile and improve performance for large networks
+1. deceloping a new version, using SMT-based network synthesis method proposed
+by B. Yordanoc et al.[doi:10.1007/978-3-642-38088-4_6]
