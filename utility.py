@@ -220,7 +220,7 @@ def _And(l):
   if(len(l) == 1): return l[0]
   else: return And(l);
 
-def _create_rule(num, act, rep, precon=None, t = None):
+def _create_rule(num, act, rep, precon=None, t=None):
   if(num == -1): return False
   if(num < 2 and rep): return False
   if(num > 15 and act): return False
