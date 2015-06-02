@@ -20,11 +20,11 @@ def _sorted_inters(inter_list, code):
     return d
 
 def readModel(f):
-    ''' Take a file Object as input, return 6 objects:
+    ''' Take a file Object as input, return a tuple of 6 objects:
 
     species: a list of gene name.
-    code   : a dict of gene_name : integer_code. consistant with species list.
-    logics : a dict. { gene_name: list_of_allowed_logic_function_number }
+    code   : a dict of gene_name : integer_code. Consistant with species list.
+    logics : a dict. { gene_name: list_of_allowed_logic_numbers }
     kofe   : a dict. { "FE": list_of_FEable_gene, "KO": list_of_KOable_gene }
     defI   : a dict of defined interations. Processed by _sorted_inters()
     optI   : a dict of optional interactions.
@@ -79,8 +79,9 @@ def _addState(d, state_name, gene, value):
 def readExp(f):
   '''
   Take the file for experiment constrains, return two dicts:
-    exps:   the Experimental constrains for every experiment
-    states: records the mapping of shortcut name to node states
+
+  exps:   the Experimental constrains for every experiment
+  states: records the mapping of shortcut name to node states
   '''
   exps = dict()
   states = dict()
