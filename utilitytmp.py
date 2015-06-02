@@ -45,15 +45,15 @@ def _create_rule(num, act, rep):
     repB = _concat(rep)
 
     if num==0: return ~actB == 0
-    elif num==1: return actB > 0
-    elif num<4: return And(actB > 0, repB == 0)
-    elif num<6: return And(~actB == 0, ~repB > 0)
-    elif num<8: return And(actB > 0, ~repB > 0)
+    elif num==1: return actB != 0
+    elif num<4: return And(actB != 0, repB == 0)
+    elif num<6: return And(~actB == 0, ~repB != 0)
+    elif num<8: return And(actB != 0, ~repB != 0)
     elif num<10: return ~actB == 0
-    elif num<12: return Or(~actB == 0, And(actB > 0, repB == 0))
-    elif num<14: return Or(~actB == 0, And(actB > 0, ~repB > 0))
-    elif num<16: return actB > 0
-    elif num==16: return And(repB > 0, ~repB > 0)
+    elif num<12: return Or(~actB == 0, And(actB != 0, repB == 0))
+    elif num<14: return Or(~actB == 0, And(actB != 0, ~repB != 0))
+    elif num<16: return actB != 0
+    elif num==16: return And(repB != 0, ~repB != 0)
     elif num==17: return repB == 0
     
 def makeFunction(inter, logic_num):
@@ -61,6 +61,10 @@ def makeFunction(inter, logic_num):
     return lambda q: _create_rule(logic_num,
                                   [Extract(i, i, q) for i in inter[0]],
                                   [Extract(i, i, q) for i in inter[1]])
+
+
+
+## debugging section ##
 
 if __name__ == "__main__":
   if __debug__:

@@ -192,7 +192,7 @@ def _compati_func(acrp, funclist):
     if(rpn == 1): return (0, 2, 4, 8, 10, 14) # representative
     if(rpn >= 2): return (0, 2, 4, 6, 8, 10, 12, 14) # representative
 
-def getFunction(comps, sgraph, compact = False):
+def getfunction(comps, sgraph, compact = False):
   '''
   Generator a combination of all possible combinations of allowed function for
   every node. This generator will also check the compatability of
@@ -225,7 +225,7 @@ def _create_rule(num, act, rep, precon=None, t=None):
   if(num < 2 and rep): return False
   if(num > 15 and act): return False
 
-  if(precon):
+  if(precon and t):
     actt = [precon[node][t] for node in act]
     rept = [precon[node][t] for node in rep]
   else:
