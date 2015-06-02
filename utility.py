@@ -69,9 +69,11 @@ def readModel(f):
 
     return (species, code, logics, kofe, defI, optI)
 
+# kept from old version
 def _addExp(d, name, time_point, state_names_list):
   _appendEntry(d, name, (int(time_point), state_names_list))
-
+  
+# kept from old version
 def _addState(d, state_name, gene, value):
   _appendEntry(d, state_name, (gene, int(value)))
 
@@ -121,15 +123,15 @@ def _sublist_generator(l, high=None, low=0):
         g = combinations(l, r)
         for sl in g: yield sl
 
-def getInterCombi(defs, opts):
-    ''' Return a list of *all* iteraction combinations, represented by a couple
+def generateInterCombi(defs, opts):
+    ''' Yielf one of *all* iteraction combinations, represented by a couple
     of tuples, containing activators and represors.
     '''
     defAct, defRep = defs
     optAct, optRep = opts
-    return [(tuple(defAct + list(act)), tuple(defRep + list(rep))) \
-            for act in _sublist_generator(optAct) \
-            for rep in _sublist_generator(optRep)]
+    for act in _sublist_generator(optAct):
+        for rep in _sublist_generator(optRep):
+            yield ( tuple(defAct + list(act)), tuple(defRep + list(rep)) )
 
 # kept from older version
 def _compati_func(acrp, funclist):
