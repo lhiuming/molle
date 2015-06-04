@@ -19,8 +19,7 @@ INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
                                         "UltimateConstrains.txt" ),
           "find_minimal_model":
               ( "PearsonThreshold792WithOct4Sox2Interaction.txt",
-                "UltimateConstrains.txt" )
-        }
+                "UltimateConstrains.txt" )}
 MODEL, EXP = INPUT['ABCD_test']
 
 # Model Configurations
@@ -33,9 +32,6 @@ STEP = 20 # trajactory length
 from z3 import *
 from utility import *
 from pprint import pprint
-
-#from multiprocessing import Process, Pipe
-#from Queue import Queue
 
 def main():
     # reading files
@@ -52,7 +48,6 @@ def main():
         print '>> Optional Interactions:'; pprint(optI)
 
     bitlen = len(species)
-
     # encoding all devices/modules/functions
     A_ = {} # of activator/activating-interaction selection BitVec
     R_ = {} # of repressor/repressing-interaction selection BitVec
@@ -64,21 +59,17 @@ def main():
         acts = optI[c][0] + defI[c][0] # Concat is from left to right
         reps = optI[c][1] + defI[c][1]
         inters[c] = (acts, reps)
-        
         # creating Acr and Rep selecting BitVec
         if acts: A_[s] = BitVec('Act_' + s, len(acts))
         else: A_[s] = None
         if reps: R_[s] = BitVec('Rep_' + s, len(reps))
         else: R_[s] = None
-        
         # create logic-selecting BitVec
         L_[s] = BitVec('Logic_' + s, len(logics[s]))
-        
         # make the functions
         f_[s] = [makeFunction(acts, reps, l, A_[s], R_[s]) for l in logics[s]]
 
     solver = Solver()
-
     # setup functions in solver
     bv = BitVec('bv', len(species)) # used in ForAll expression. Used locally
     F = Function('F', bv.sort(), bv.sort()) # just declaration
@@ -93,8 +84,7 @@ def main():
     # define Transition ralationship. it is a macro.
     T = lambda qo, qn: qn == F(qo)
     
-    ## Apply modeling constrains
-    # only one interaction-combination and one logic for a gene/species
+    # Apply modeling constrains
     for s in species:
         c = code[s]
         # defined activators and repressors must be selected
@@ -102,9 +92,9 @@ def main():
         if defact: solver.add(1 == Extract(len(defact)-1, 0, A_[s]))
         if defrep: solver.add(1 == Extract(len(defrep)-1, 0, R_[s]))
         # only one logic is selected
+        logic_i = range(L_[s].size())
         solver.add(1 == ~(Any([ Extract(i,i,L_[s]) & Extract(j,j,L_[s]) \
-                                for i in range(L_[s].size()) \
-                                for j in range(L_[s].size()) if i != j])))
+                                for i in logic_i for j in logic_i if i != j])))
         # must select one logic
         solver.add(L_[s] != 0)
         
@@ -129,18 +119,25 @@ def main():
     print ">> Constrains established."
 
     count = 0
-    while count != solutions_limit and solver.check() == sat:
+    allAR = list(A_.values()) + list(R_.values())
+    while solver.check() == sat:
         count += 1
-        print ">> Solution %d: "%count
+        # make sure all A_[s] and R_[s] are specified
         m = solver.model()
+        solver.push()
+        for b in allAR:
+            if b and not m[b]:
+                solver.add( b == 0)
+        assert solver.check() == sat
+        m = solver.model() # update the solution
+        # print out
+        print ">> Solution %d: "%count
         printModel(m, A_, R_, L_, species, code, inters)
-        #if __debug__: print m
+        if count == solutions_limit: break
         # find different solutions (with different selections of interactions)
-        new_consA = [ A_[s] != m[A_[s]] for s in A_ if A_[s] and m[A_[s]]]
-        new_consR = [ R_[s] != m[R_[s]] for s in R_ if R_[s] and m[R_[s]]]
-        print 'next model:', new_consA, new_consR
         # at least one species have distinct interactions
-        solver.add(Or(new_consA + new_consR))
+        solver.pop()
+        solver.add(Or([ b != m[b] for b in allAR if b ]))
                       
     if count == 0: print 'No solution found.'
 
