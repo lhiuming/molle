@@ -102,7 +102,7 @@ def main():
         if defact: solver.add(1 == Extract(len(defact)-1, 0, A_[s]))
         if defrep: solver.add(1 == Extract(len(defrep)-1, 0, R_[s]))
         # only one logic is selected
-        solver.add(1 == ~(any([ Extract(i,i,L_[s]) & Extract(j,j,L_[s]) \
+        solver.add(1 == ~(Any([ Extract(i,i,L_[s]) & Extract(j,j,L_[s]) \
                                 for i in range(L_[s].size()) \
                                 for j in range(L_[s].size()) if i != j])))
         # must select one logic
@@ -136,10 +136,10 @@ def main():
         printModel(m, A_, R_, L_, species, code, inters)
         #if __debug__: print m
         # find different solutions (with different selections of interactions)
-        # at least one species have distinct interactions
-        new_consA = [ A_[s] != m[A_[s]] for s in A_ if A_[s]]
-        new_consR = [ R_[s] != m[R_[s]] for s in R_ if R_[s]]
+        new_consA = [ A_[s] != m[A_[s]] for s in A_ if A_[s] and m[A_[s]]]
+        new_consR = [ R_[s] != m[R_[s]] for s in R_ if R_[s] and m[R_[s]]]
         print 'next model:', new_consA, new_consR
+        # at least one species have distinct interactions
         solver.add(Or(new_consA + new_consR))
                       
     if count == 0: print 'No solution found.'

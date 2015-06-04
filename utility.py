@@ -1,7 +1,5 @@
 from z3 import *
-from itertools import combinations
-from operator import and_, or_
-from time import strftime
+from operator import or_
 from pprint import pprint
 
 def _sorted_inters(inter_list, code):
@@ -116,69 +114,23 @@ def readExp(f):
 
   return (exps, states);
 
-def _sublist_generator(l, high=None, low=0):
-    ''' Yields a sublist. '''
-    if not high: high = len(l)
-    for r in range(low, high + 1):
-        g = combinations(l, r)
-        for sl in g: yield sl
-
-def generateInterCombi(defs, opts):
-    ''' Yielf one of *all* iteraction combinations, represented by a couple
-    of tuples, containing activators and represors.
-    '''
-    defAct, defRep = defs
-    optAct, optRep = opts
-    for act in _sublist_generator(optAct):
-        for rep in _sublist_generator(optRep):
-            yield ( tuple(defAct + list(act)), tuple(defRep + list(rep)) )
-
-# kept from older version
-def _compati_func(acrp, funclist):
-  '''
-  Return a filtered tuple of function numers. Only meaningful and allowed
-  function for the node is included, accroding the number of activators and
-  repressors. acrp is the tuples of activators list and repressors list.
-  funclist is a tuple for allowed functions.
-  '''
-  acn = len(acrp[0]) # number of activators
-  rpn = len(acrp[1]) # number of repressors
-
-  if(acn == 0): # when no activator
-    if(rpn == 0): return (-1, ) # -1 means always False
-    if(rpn == 1): return filter(lambda x: x == 17, funclist) or (-1, )
-    if(rpn >= 2): return filter(lambda x: x >= 16, funclist) or (-1, )
-  if(acn == 1): # when only one activator. assumes funclist = 0 ~ 15
-    if(rpn == 0): return (1, ) # 1 means only activated when activator presents
-    if(rpn == 1): return (0, 2, 8) # this is representative
-    if(rpn >= 2): return (0, 2, 4, 8) # representative
-  if(acn >= 2): # when two activators. assumes funclist = 0 ~ 15
-    if(rpn == 0): return (0, 1) # representative
-    if(rpn == 1): return (0, 2, 4, 8, 10, 14) # representative
-    if(rpn >= 2): return (0, 2, 4, 6, 8, 10, 12, 14) # representative
-
-zero = BitVecVal(0, 1)
-one = BitVecVal(1, 1)
-
-def any(bvs):
+def Any(bvs):
     return reduce(or_, bvs, 0)
 
-def all(bvs):
-    return reduce(and_, bvs, 1)
-    
 def _concat(bvs):
     if len(bvs) == 1: return bvs[0]
     else: return Concat(bvs)
     
 def _create_bit_rule(num, act, rep, A, R):
     ''' Create the update rule that return bit-vector of length 1. '''
+    # initialization
     if act:
         act = _concat(act)
         aa = act & A
     if rep:
         rep = _concat(rep)
         rr = rep & R
-    
+    # creating result
     if act:
         if not rep: # not repressor, but have activators
             if num%2: return act == A
@@ -199,16 +151,6 @@ def _create_bit_rule(num, act, rep, A, R):
         else: return False
     return False
 
-# kept from older version
-def _with_KOFE(node, kofe, prec):
-  if(node in kofe['KO']):
-    if(node in kofe['FE']):
-      return lambda x: Or(prec['FE'][node], And(Not(prec['KO'][node]), x))
-    else: return lambda x: And(Not(prec['KO'][node]), x) # only ko
-  if(node in kofe['FE']):
-    return lambda x: Or(prec['FE'][node], x)
-  else: return lambda x: x; # no kofe
-
 def makeFunction(acts, reps, logic, A, R):
     ''' Makes a function that takes q, A, R, and return a coresponding z3 expr.
     A is the acticators-selecting bit-vector, R for repressors.
@@ -217,7 +159,6 @@ def makeFunction(acts, reps, logic, A, R):
                                       [Extract(i, i, q) for i in acts],
                                       [Extract(i, i, q) for i in reps],
                                       A, R)
-
 
 ### Output Utilities ###
 #########################
@@ -270,14 +211,14 @@ def printModel(m, A_, R_, L_, species, code, inters, config = True):
             A[s] = [species[n] for i, n in enumerate(inters[c][0]) \
                     if checkBit(l-i, actB) ]
         else: A[s] = []
-        if R_[s]:
+        if R_[s] and m[R_[s]]:
             repB = m[R_[s]]
             if not repB: print m
             l = repB.size() - 1
             R[s] = [species[n] for i, n in enumerate(inters[c][1]) \
                     if checkBit(l-i, repB) ]
         else: R[s] = []
-    # printing details
+    # printing the model
     print '>>'
     if config:
         print ">>\tConfigurations: "
@@ -289,6 +230,7 @@ def printModel(m, A_, R_, L_, species, code, inters, config = True):
     print ">>\tModel: "
     for s in species: print ">>\t\t%s' = %s" \
         %(s,simplify( _create_sym_rule(L[s], A[s], R[s])))
+    print '>>'
 
 
 ### Debugging Secntions ###
