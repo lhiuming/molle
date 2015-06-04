@@ -10,7 +10,7 @@ interactions_limit = 17 # limit of optional interactions.
 OUTPUT = "solutions.out" # file name for solution output
 PREFIX = "examplefiles/"
 INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
-                         "CertainInteractionRequired.txt" ),
+                         "CertainInteractionRequired.txt" ), # C |- A
           'ABCD_nosolution': ("SimpleFourComponentModel.txt",
                               "NoSolutionsPossible.txt" ),
           'minimal_test': ( "custom.txt", # established model%combination
@@ -25,7 +25,6 @@ MODEL, EXP = INPUT['ABCD_test']
 
 # Model Configurations
 STEP = 20 # trajactory length
-use_compact = False # use compact list of allowed function
 
 
 ### Modelling #########################################
@@ -55,48 +54,51 @@ def main():
     bitlen = len(species)
 
     # encoding all devices/modules/functions
-    # I_ = {} # of Interaction-selecting BitVec for species
-    A_ = {} # activator selecting
-    R_ = {} # repressor selecting
-    L_ = {} # of Logic-selecting BitVec for species
+    A_ = {} # of activator/activating-interaction selection BitVec
+    R_ = {} # of repressor/repressing-interaction selection BitVec
+    L_ = {} # of Logic-selecting BitVec for speciew
     f_ = {} # devices/modules/functions
-    # make function for all logics
+    inters = {} # record all avalible acts and reps for every specie
     for s in species:
-        c = code[s]
-        acts = defI[c][0] + optI[c][0] # defined elements is before optionals
-        reps = defI[c][1] + optI[c][1]
-        # creating A/R selecting BitVec
+        c = code[s] # numeral index
+        acts = optI[c][0] + defI[c][0] # Concat is from left to right
+        reps = optI[c][1] + defI[c][1]
+        inters[c] = (acts, reps)
+        
+        # creating Acr and Rep selecting BitVec
         if acts: A_[s] = BitVec('Act_' + s, len(acts))
-        else: A_[s] = BoolVal(False)
+        else: A_[s] = None
         if reps: R_[s] = BitVec('Rep_' + s, len(reps))
-        else: R_[s] = BoolVal(False)
+        else: R_[s] = None
+        
         # create logic-selecting BitVec
         L_[s] = BitVec('Logic_' + s, len(logics[s]))
+        
         # make the functions
         f_[s] = [makeFunction(acts, reps, l, A_[s], R_[s]) for l in logics[s]]
 
     solver = Solver()
 
     # setup functions in solver
-    bv = BitVec('bv', len(species)) # used in ForAll expression
+    bv = BitVec('bv', len(species)) # used in ForAll expression. Used locally
     F = Function('F', bv.sort(), bv.sort()) # just declaration
     for s in species:
         c = code[s]
         for l in range(L_[s].size()):
             solver.add(Implies(
-                Extract(l,l,L_[s]) == 1,
+                Extract(l,l,L_[s]) == 1, # when l is selected
                 ForAll(bv, (Extract(c,c,F(bv))==1) == f_[s][l](bv))))
         if __debug__: print '>> Set function for %s: %s'%(s,solver.check())
         
     # define Transition ralationship. it is a macro.
     T = lambda qo, qn: qn == F(qo)
     
-    ## apply model constrains
+    ## Apply modeling constrains
     # only one interaction-combination and one logic for a gene/species
     for s in species:
         c = code[s]
-        # defined activators and repressors must be valid
-        defact = defI[c][0]; defrep = defI[c][1]
+        # defined activators and repressors must be selected
+        defact, defrep = defI[c]
         if defact: solver.add(1 == Extract(len(defact)-1, 0, A_[s]))
         if defrep: solver.add(1 == Extract(len(defrep)-1, 0, R_[s]))
         # only one logic is selected
@@ -106,24 +108,30 @@ def main():
         # must select one logic
         solver.add(L_[s] != 0)
         
-        if __debug__: print '>> Constrainting %s: A = %s, R = %s, L = %s, %s' \
-           %(s, A_[s].sort(), R_[s].sort(), L_[s].sort(), solver.check())
+        if __debug__:
+            print '>> Constraints %s:\tAct = %s,\tRep = %s,\tLog = %s.\t(%s)' \
+                %(s, A_[s] and A_[s].sort() or None,
+                  R_[s] and R_[s].sort() or None,
+                  L_[s].sort(), solver.check())
         
     # apply experimental constrains
     for exp in exps:
+        if __debug__: print '>> Adding %s ... '%exp
         # build path
-        if __debug__: print '>> Adding %s... '%exp
         path = [BitVec(exp + '_%d'%t, bitlen) for t in range(STEP)]
-        solver.add(And(*[ T(path[t], path[t+1]) for t in range(STEP-1) ]))
+        solver.add(*[ T(path[t], path[t+1]) for t in range(STEP-1) ])
         # add constrains
         for t, conditions in exps[exp]:
             for cond in conditions:
-                for species, value in states[cond]:
-                    c = code[species]
+                for s, value in states[cond]:
+                    c = code[s]
                     solver.add( Extract(c,c,path[t]) == value )
+    print ">> Done."
+    
     if solver.check() == sat:
         m = solver.model()
-        print m
+        printModel(m, A_, R_, L_, species, code, inters)
+        if __debug__: print m
     else: print 'No solution found.'
 
 if __name__ == '__main__':

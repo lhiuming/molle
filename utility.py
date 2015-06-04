@@ -190,7 +190,7 @@ def _create_bit_rule(num, act, rep, A, R):
             elif num<8: return And(rr != 0, rep != R)
             elif num<10: return act == A
             elif num<12: return Or(act == A, And(aa != 0, rr == 0))
-            elif num<14: return Or(act == A, Or(aa != 0, rep != R))
+            elif num<14: return Or(act == A, And(aa != 0, rep != R))
             elif num<16: return aa != 0
             else: return False
     if rep: # no activator but have repressors
@@ -209,27 +209,81 @@ def _with_KOFE(node, kofe, prec):
     return lambda x: Or(prec['FE'][node], x)
   else: return lambda x: x; # no kofe
 
-def makeFunction(act, rep, logic_num, A, R):
+def makeFunction(acts, reps, logic, A, R):
     ''' Makes a function that takes q, A, R, and return a coresponding z3 expr.
     A is the acticators-selecting bit-vector, R for repressors.
     '''
-    return lambda q: _create_bit_rule(logic_num,
-                                            [Extract(i, i, q) for i in act],
-                                            [Extract(i, i, q) for i in rep],
-                                            A, R)
-                                  
-  
+    return lambda q: _create_bit_rule(logic,
+                                      [Extract(i, i, q) for i in acts],
+                                      [Extract(i, i, q) for i in reps],
+                                      A, R)
+
+
 ### Output Utilities ###
 #########################
+boolf = BoolVal(False)
 
-def printModel(m, A_, R_, L_, code, data=False):
+def _Or(l):
+    if(not l): return boolf
+    if(len(l) == 1): return l[0]
+    else: return Or(l);
+
+def _And(l):
+    if(not l): return boolf
+    if(len(l) == 1): return l[0]
+    else: return And(l);
+
+def _create_sym_rule(num, act, rep):
+    if(num == -1): return boolf
+    if(num < 2 and rep): return boolf
+    if(num > 15 and act): return boolf
+    
+    actt = [Bool(node) for node in act]
+    rept = [Bool(node) for node in rep]
+        
+    if(num > 1 and not rep): return (_And, _Or)[num % 2](actt)
+
+    if(num == 0): return _And(actt)
+    elif(num == 1): return _Or(actt)
+    elif(num < 4): return And(_Or(actt), Not(_Or(rept)))
+    elif(num < 6): return And(_And(actt), Not(_And(rept)));
+    elif(num < 8): return And(_Or(actt), Not(_And(rept)))
+    elif(num < 10): return _And(actt)
+    elif(num < 12): return Or(_And(actt), And(_Or(actt), Not(_Or(rept))))
+    elif(num < 14): return Or(_And(actt), And(_Or(actt), Not(_And(rept))))
+    elif(num < 16): return _Or(actt)
+    elif(num == 16): return And(_Or(rept), Not(_And(rept)))
+    elif(num == 17): return Not(_Or(rept));
+
+def checkBit(i, bv):
+    return simplify(Extract(i, i, bv)).as_long()
+
+def printModel(m, A_, R_, L_, species, code, inters, config = True):
     ''' Print the solved model nicely. '''
-    species = sorted(code.keys())
-    print 'Configurations: '
+    # getting model details
+    A = {}; R = {}; L = {}
     for s in species:
-        logic = len(bin(m(L_[s]).as_long()).lstrip('0b')) - 1
-        act = 
-        print "%s:%d activated by %s, repressed by %s"%(s, logic, 
+        c = code[s]
+        L[s] = len(bin(m[L_[s]].as_long()).lstrip('0b')) - 1
+        if A_[s]:
+            actB = m[A_[s]]; la = actB.size() - 1
+            A[s] = [species[n] for i, n in enumerate(inters[c][0]) \
+                    if checkBit(la-i, actB) ] or ['None']
+        else: A[s] = ['None']
+        if R_[s]:
+            repB = m[R_[s]]; lr = repB.size() - 1
+            R[s] = [species[n] for i, n in enumerate(inters[c][1]) \
+                    if checkBit(lr-i, actB) ] or ['None']
+        else: R[s] = ['None']
+    # printing details
+    print '>>'
+    if config:
+        print ">>\tConfigurations: "
+        for s in species: print ">>\t\t%s:%d\t<- %s, \t|- %s" \
+            %(s, L[s], ' '.join(A[s]), ' '.join(R[s]))
+    print ">>\tModel: "
+    for s in species: print ">>\t\t%s' = %s" \
+        %(s,simplify( _create_sym_rule(L[s], A[s], R[s])))
 
 
 ### Debugging Secntions ###
