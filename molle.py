@@ -2,7 +2,7 @@
 ######################
 
 # Computation Settings
-solutions_limit = 0 # how many solution you wish to find
+solutions_limit = -1 # how many solution you wish to find
 interactions_limit = 17 # limit of optional interactions.
                         # set to 17 for the minimal pluripotency model
 
@@ -10,7 +10,7 @@ interactions_limit = 17 # limit of optional interactions.
 OUTPUT = "solutions.out" # file name for solution output
 PREFIX = "examplefiles/"
 INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
-                         "CertainInteractionRequired.txt" ), # C |- A
+                         "CertainInteractionRequired.txt" ), # not true
           'ABCD_nosolution': ("SimpleFourComponentModel.txt",
                               "NoSolutionsPossible.txt" ),
           'minimal_test': ( "custom.txt", # established model%combination
@@ -126,13 +126,23 @@ def main():
                 for s, value in states[cond]:
                     c = code[s]
                     solver.add( Extract(c,c,path[t]) == value )
-    print ">> Done."
-    
-    if solver.check() == sat:
+    print ">> Constrains established."
+
+    count = 0
+    while count != solutions_limit and solver.check() == sat:
+        count += 1
+        print ">> Solution %d: "%count
         m = solver.model()
         printModel(m, A_, R_, L_, species, code, inters)
-        if __debug__: print m
-    else: print 'No solution found.'
+        #if __debug__: print m
+        # find different solutions (with different selections of interactions)
+        # at least one species have distinct interactions
+        new_consA = [ A_[s] != m[A_[s]] for s in A_ if A_[s]]
+        new_consR = [ R_[s] != m[R_[s]] for s in R_ if R_[s]]
+        print 'next model:', new_consA, new_consR
+        solver.add(Or(new_consA + new_consR))
+                      
+    if count == 0: print 'No solution found.'
 
 if __name__ == '__main__':
     main()

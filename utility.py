@@ -266,21 +266,26 @@ def printModel(m, A_, R_, L_, species, code, inters, config = True):
         c = code[s]
         L[s] = len(bin(m[L_[s]].as_long()).lstrip('0b')) - 1
         if A_[s]:
-            actB = m[A_[s]]; la = actB.size() - 1
+            actB = m[A_[s]]; l = actB.size() - 1
             A[s] = [species[n] for i, n in enumerate(inters[c][0]) \
-                    if checkBit(la-i, actB) ] or ['None']
-        else: A[s] = ['None']
+                    if checkBit(l-i, actB) ]
+        else: A[s] = []
         if R_[s]:
-            repB = m[R_[s]]; lr = repB.size() - 1
+            repB = m[R_[s]]
+            if not repB: print m
+            l = repB.size() - 1
             R[s] = [species[n] for i, n in enumerate(inters[c][1]) \
-                    if checkBit(lr-i, actB) ] or ['None']
-        else: R[s] = ['None']
+                    if checkBit(l-i, repB) ]
+        else: R[s] = []
     # printing details
     print '>>'
     if config:
         print ">>\tConfigurations: "
-        for s in species: print ">>\t\t%s:%d\t<- %s, \t|- %s" \
-            %(s, L[s], ' '.join(A[s]), ' '.join(R[s]))
+        for s in species:
+            print ">>\t\t%s:%d%s%s" \
+            %(s, L[s],
+              A[s] and '\t<- ' + ','.join(A[s]) or '',
+              R[s] and '\t|- ' + ','.join(R[s]) or '')
     print ">>\tModel: "
     for s in species: print ">>\t\t%s' = %s" \
         %(s,simplify( _create_sym_rule(L[s], A[s], R[s])))
