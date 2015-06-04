@@ -1,6 +1,6 @@
 from z3 import *
 from itertools import combinations
-from operator import and_
+from operator import and_, or_
 from time import strftime
 from pprint import pprint
 
@@ -13,7 +13,7 @@ def _sorted_inters(inter_list, code):
     by 5 and 9.
     '''
     d = dict([(c, ([], [])) for c in code.values()]) # initialization
-    for i in inters:
+    for i in inter_list:
         f, t = i[:2]
         idx = (0, 1)[ i[2]=='negative' ]
         d.setdefault(code[t], ([], []))[idx].append(code[f])
@@ -71,11 +71,11 @@ def readModel(f):
 
 # kept from old version
 def _addExp(d, name, time_point, state_names_list):
-  _appendEntry(d, name, (int(time_point), state_names_list))
+    d.setdefault(name, []).append( (int(time_point), state_names_list) )
   
 # kept from old version
 def _addState(d, state_name, gene, value):
-  _appendEntry(d, state_name, (gene, int(value)))
+    d.setdefault(state_name, []).append( (gene, int(value)) )
 
 # kept from old version
 def readExp(f):
@@ -157,43 +157,37 @@ def _compati_func(acrp, funclist):
     if(rpn == 1): return (0, 2, 4, 8, 10, 14) # representative
     if(rpn >= 2): return (0, 2, 4, 6, 8, 10, 12, 14) # representative
 
-# kept from older version
-def _Or(l):
-  if(not l): return False
-  if(len(l) == 1): return l[0]
-  else: return Or(l);
-
-def _And(l):
-  if(not l): return False
-  if(len(l) == 1): return l[0]
-  else: return And(l);
-
-def _concat(l):
-    if not l:return BitVecVal(0, 1)
-    if len(l) == 1: return l[0]
-    return Concat(l)
-  
-def _create_rule(num, act, rep):
-    ''' Create the update rule for making functions. '''
-    if num == -1: return False # -1 is the reserved num
-    if num < 2 and rep: return False
-    if num > 15 and act: return False
+zero = BitVecVal(0, 1)
+one = BitVecVal(1, 1)
     
-    actB = _concat(act)
-    repB = _concat(rep)
+def all(bvs):
+    return reduce(and_, bvs, one)
 
-    if num==0: return ~actB == 0
-    elif num==1: return actB != 0
-    elif num<4: return And(actB != 0, repB == 0)
-    elif num<6: return And(~actB == 0, ~repB != 0)
-    elif num<8: return And(actB != 0, ~repB != 0)
-    elif num<10: return ~actB == 0
-    elif num<12: return Or(~actB == 0, And(actB != 0, repB == 0))
-    elif num<14: return Or(~actB == 0, And(actB != 0, ~repB != 0))
-    elif num<16: return actB != 0
-    elif num==16: return And(repB != 0, ~repB != 0)
-    elif num==17: return repB == 0
+def any(bvs):
+    return reduce(or_, bvs, zero)
     
+def _create_bit_rule(num, act, rep):
+    ''' Create the update rule that return bit-vector of length 1. '''
+    if act:
+        if not rep: # not repressor, but have activators
+            if num%2: return all(act)
+            else: return any(act)
+        else: # both activators and repressors present
+            if num < 2: return zero
+            elif num < 4: return any(act) & ~(any(rep))
+            elif num<6: return all(act) & ~ (all(rep))
+            elif num<8: return any(act) & ~ (all(rep))
+            elif num<10: return all(act)
+            elif num<12: return all(act) | (any(act) & ~(any(rep)))
+            elif num<14: return all(act) | (any(act) & ~(all(rep)))
+            elif num<16: return any(act)
+            else: return zero
+    if rep: # no activator but have repressors
+        if num==16: return any(rep) & ~(all(rep))
+        elif num==17: return ~(any(rep))
+        else: return zero
+    return zero
+
 # kept from older version
 def _with_KOFE(node, kofe, prec):
   if(node in kofe['KO']):
@@ -206,7 +200,7 @@ def _with_KOFE(node, kofe, prec):
 
 def makeFunction(inter, logic_num):
     ''' make a function that takes a q, and return a coresponding z3 expr.'''
-    return lambda q: _create_rule(logic_num,
+    return lambda q: _create_bit_rule(logic_num,
                                   [Extract(i, i, q) for i in inter[0]],
                                   [Extract(i, i, q) for i in inter[1]])
   
@@ -221,20 +215,25 @@ def printModel():
 ###########################
 if __name__ == "__main__":
   if __debug__:
-    print ">> testing sortedInters():"
-    print sortedInters([['a', 'b', 'positive'], ['b', 'c', 'negative']],
-                       {'a':0, 'b':1, 'c':2})
+      print ">> testing file reading: "
+      modelFile = open('examplefiles/SimpleFourComponentModel.txt', 'r')
+      expFile = open('examplefiles/CertainInteractionRequired.txt', 'r')
+      (species, code, logics, kofe, defI, optI) = readModel(modelFile)
+      (exps, states) = readExp(expFile)
+      modelFile.close(); expFile.close()
+      print "speceis code: ", code
+      print "optional interactions: ", optI
 
-    print ">> testing getInterCombi():"
-    testDef = (['a1', 'a2'], ['r1', 'r2'])
-    testOpt = (['aaa'], [])
-    print getInterCombi(testDef, testOpt)
+      print ">> testing getInterCombi():"
+      testDef = (['a1', 'a2'], ['r1', 'r2'])
+      testOpt = (['aaa'], [])
+      pprint([i for i in generateInterCombi(testDef, testOpt)])
 
-    print ">> testing makeFunction():"
-    testq = BitVec('testq', 8)
-    testI = ( (1, 3), (6, 7) )
-    print makeFunction(testI, 1)(testq)
-    print makeFunction(testI, 16)(testq)
-    print makeFunction(testI, 7)(testq)
+      print ">> testing makeFunction():"
+      testq = BitVec('testq', 8)
+      testI = ( (1, 3), (6, 7) )
+      print makeFunction(testI, 1)(testq)
+      print makeFunction(testI, 16)(testq)
+      print simplify(makeFunction(testI, 7)(testq) == 1)
 
 

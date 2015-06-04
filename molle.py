@@ -1,9 +1,6 @@
 ### Configurations ###
 ######################
 
-# Running Settings
-debug = 1 # debugging level
-
 # Computation Settings
 solutions_limit = 0 # how many solution you wish to find
 interactions_limit = 17 # limit of optional interactions.
@@ -49,32 +46,73 @@ def main():
     (exps, states) = readExp(expFile)
     expFile.close();
 
-    # encoding all devices/modules/functions
-    I_ = [] # of Interaction-selecting BitVec for species
-    L_ = [] # of Logic-selecting BitVec for species
-    iNum = [] # total iteraction-combination number for species
-    f_ = [] # devices/modules/functions
-    for s in species:
-        c = code[s]
-        # make function for all combinations
-        f_[c] = []
-        i = 0
-        for i, inter in enumerate(generateInterCombi(defI[c], optI[c])):
-            f_[c][i] = dict([ (l, makeFunction(inter, l)) for l in logics[s] ])
-        iNum[c] = i + 1
-        # create interaction-selecting BitVec
-        if i > 0:
-            I_[c] = BitVec('I_' + s, iNum[c])
-        else: # no optional interaction
-            I_[c] = BitVecVal(0, 1)
-        # create logic-selecting BitVec
-        L_[c] = BitVec('L_' + s, len(logcis[s]))
+    if __debug__: print defI, optI, code
 
-    # define Transition ralationship
-    T = lambda qo, qn:\
-        And(*[ Extract(c, c, qn) == (
-                   Extract(i, i, I_[c]) &
-                   Extract(l, l, L_[c]) &
-                   f_[c][i][l](q0))
-              for c in code.values()])
-            
+    bitlen = len(species)
+
+    # encoding all devices/modules/functions
+    I_ = {} # of Interaction-selecting BitVec for species
+    L_ = {} # of Logic-selecting BitVec for species
+    f_ = {} # devices/modules/functions
+    for s in species:
+        # make function for all combinations
+        f_[s] = []
+        inum = 0
+        c = code[s]
+        for inter in generateInterCombi(defI[c], optI[c]):
+            f_[s].append([makeFunction(inter, l) for l in logics[s]])
+            inum += 1
+        # create interaction-selecting BitVec
+        I_[s] = BitVec('I_' + s, inum)
+        # create logic-selecting BitVec
+        L_[s] = BitVec('L_' + s, len(logics[s]))
+
+    solver = Solver()
+
+    # setup functions in solver
+    bv = BitVec('bv', len(species)) # used in ForAll expression
+    F = Function('F', bv.sort(), bv.sort()) # iteration function
+    for s in species:
+        if __debug__: print '>> setting function for', s
+        c = code[s]
+        for i in range(I_[s].size()):
+            for l in range(L_[s].size()):
+                solver.add(Implies(
+                    Extract(i,i,I_[s]) & Extract(l,l,L_[s]) == 1,
+                    ForAll(bv, Extract(c,c,F(bv)) == f_[s][i][l](bv))))
+        if __debug__: print solver.check()
+        
+    # define Transition ralationship. it is a macro.
+    T = lambda qo, qn: qn == F(qo)
+    
+    ## apply model constrains
+    # only one interaction-combination and one logic for a gene/species
+    for s in species:
+        if __debug__: print '>> constraing:',s, I_[s].sort(), L_[s].sort()
+        solver.add(1 == ~(any([ Extract(i,i,I_[s]) & Extract(j,j,I_[s]) \
+                                for i in range(I_[s].size()) \
+                                for j in range(I_[s].size()) if i != j])))
+        solver.add(I_[s] != 0)
+        print solver.check()
+        solver.add(1 == ~(any([ Extract(i,i,L_[s]) & Extract(j,j,L_[s]) \
+                                for i in range(L_[s].size()) \
+                                for j in range(L_[s].size()) if i != j])))
+        solver.add(L_[s] != 0)
+    # apply experimental constrains
+    for exp in exps:
+        # build path
+        if __debug__: print 'adding %s'%exp
+        path = [BitVec(exp + '_%d'%t, bitlen) for t in range(STEP)]
+        solver.add(And(*[ T(path[t], path[t+1]) for t in range(STEP-1) ]))
+        # add constrains
+        for t, conditions in exps[exp]:
+            for cond in conditions:
+                for species, value in states[cond]:
+                    c = code[species]
+                    solver.add( Extract(c,c,path[t]) == value )
+    if solver.check() == sat:
+        m = solver.model()
+        print m
+
+if __name__ == '__main__':
+    main()
