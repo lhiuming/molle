@@ -55,34 +55,37 @@ def main():
     bitlen = len(species)
 
     # encoding all devices/modules/functions
-    I_ = {} # of Interaction-selecting BitVec for species
+    # I_ = {} # of Interaction-selecting BitVec for species
+    A_ = {} # activator selecting
+    R_ = {} # repressor selecting
     L_ = {} # of Logic-selecting BitVec for species
     f_ = {} # devices/modules/functions
+    # make function for all logics
     for s in species:
-        # make function for all combinations
-        f_[s] = []
-        inum = 0
         c = code[s]
-        for inter in generateInterCombi(defI[c], optI[c]):
-            f_[s].append([makeFunction(inter, l) for l in logics[s]])
-            inum += 1
-        # create interaction-selecting BitVec
-        I_[s] = BitVec('I_' + s, inum)
+        acts = defI[c][0] + optI[c][0] # defined elements is before optionals
+        reps = defI[c][1] + optI[c][1]
+        # creating A/R selecting BitVec
+        if acts: A_[s] = BitVec('Act_' + s, len(acts))
+        else: A_[s] = BoolVal(False)
+        if reps: R_[s] = BitVec('Rep_' + s, len(reps))
+        else: R_[s] = BoolVal(False)
         # create logic-selecting BitVec
-        L_[s] = BitVec('L_' + s, len(logics[s]))
+        L_[s] = BitVec('Logic_' + s, len(logics[s]))
+        # make the functions
+        f_[s] = [makeFunction(acts, reps, l, A_[s], R_[s]) for l in logics[s]]
 
     solver = Solver()
 
     # setup functions in solver
     bv = BitVec('bv', len(species)) # used in ForAll expression
-    F = Function('F', bv.sort(), bv.sort()) # iteration function
+    F = Function('F', bv.sort(), bv.sort()) # just declaration
     for s in species:
         c = code[s]
-        for i in range(I_[s].size()):
-            for l in range(L_[s].size()):
-                solver.add(Implies(
-                    Extract(i,i,I_[s]) & Extract(l,l,L_[s]) == 1,
-                    ForAll(bv, Extract(c,c,F(bv)) == f_[s][i][l](bv))))
+        for l in range(L_[s].size()):
+            solver.add(Implies(
+                Extract(l,l,L_[s]) == 1,
+                ForAll(bv, (Extract(c,c,F(bv))==1) == f_[s][l](bv))))
         if __debug__: print '>> Set function for %s: %s'%(s,solver.check())
         
     # define Transition ralationship. it is a macro.
@@ -91,17 +94,20 @@ def main():
     ## apply model constrains
     # only one interaction-combination and one logic for a gene/species
     for s in species:
-        solver.add(1 == ~(any([ Extract(i,i,I_[s]) & Extract(j,j,I_[s]) \
-                                for i in range(I_[s].size()) \
-                                for j in range(I_[s].size()) if i != j])))
-        solver.add(I_[s] != 0)
+        c = code[s]
+        # defined activators and repressors must be valid
+        defact = defI[c][0]; defrep = defI[c][1]
+        if defact: solver.add(1 == Extract(len(defact)-1, 0, A_[s]))
+        if defrep: solver.add(1 == Extract(len(defrep)-1, 0, R_[s]))
+        # only one logic is selected
         solver.add(1 == ~(any([ Extract(i,i,L_[s]) & Extract(j,j,L_[s]) \
                                 for i in range(L_[s].size()) \
                                 for j in range(L_[s].size()) if i != j])))
+        # must select one logic
         solver.add(L_[s] != 0)
         
-        if __debug__: print '>> Constrainting %s: I = %s, L = %s, %s' \
-           %(s, I_[s].sort(), L_[s].sort(), solver.check())
+        if __debug__: print '>> Constrainting %s: A = %s, R = %s, L = %s, %s' \
+           %(s, A_[s].sort(), R_[s].sort(), L_[s].sort(), solver.check())
         
     # apply experimental constrains
     for exp in exps:

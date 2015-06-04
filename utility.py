@@ -159,34 +159,45 @@ def _compati_func(acrp, funclist):
 
 zero = BitVecVal(0, 1)
 one = BitVecVal(1, 1)
-    
-def all(bvs):
-    return reduce(and_, bvs, one)
 
 def any(bvs):
-    return reduce(or_, bvs, zero)
+    return reduce(or_, bvs, 0)
+
+def all(bvs):
+    return reduce(and_, bvs, 1)
     
-def _create_bit_rule(num, act, rep):
+def _concat(bvs):
+    if len(bvs) == 1: return bvs[0]
+    else: return Concat(bvs)
+    
+def _create_bit_rule(num, act, rep, A, R):
     ''' Create the update rule that return bit-vector of length 1. '''
     if act:
+        act = _concat(act)
+        aa = act & A
+    if rep:
+        rep = _concat(rep)
+        rr = rep & R
+    
+    if act:
         if not rep: # not repressor, but have activators
-            if num%2: return all(act)
-            else: return any(act)
+            if num%2: return act == A
+            else: return aa != 0
         else: # both activators and repressors present
-            if num < 2: return zero
-            elif num < 4: return any(act) & ~(any(rep))
-            elif num<6: return all(act) & ~ (all(rep))
-            elif num<8: return any(act) & ~ (all(rep))
-            elif num<10: return all(act)
-            elif num<12: return all(act) | (any(act) & ~(any(rep)))
-            elif num<14: return all(act) | (any(act) & ~(all(rep)))
-            elif num<16: return any(act)
-            else: return zero
+            if num < 2: return False
+            elif num < 4: return And(aa != 0, rr == 0)
+            elif num<6: return And(act == A, rep != R)
+            elif num<8: return And(rr != 0, rep != R)
+            elif num<10: return act == A
+            elif num<12: return Or(act == A, And(aa != 0, rr == 0))
+            elif num<14: return Or(act == A, Or(aa != 0, rep != R))
+            elif num<16: return aa != 0
+            else: return False
     if rep: # no activator but have repressors
-        if num==16: return any(rep) & ~(all(rep))
-        elif num==17: return ~(any(rep))
-        else: return zero
-    return zero
+        if num==16: return And(rr != 0, rep != R)
+        elif num==17: return rr == 0
+        else: return False
+    return False
 
 # kept from older version
 def _with_KOFE(node, kofe, prec):
@@ -198,18 +209,27 @@ def _with_KOFE(node, kofe, prec):
     return lambda x: Or(prec['FE'][node], x)
   else: return lambda x: x; # no kofe
 
-def makeFunction(inter, logic_num):
-    ''' make a function that takes a q, and return a coresponding z3 expr.'''
+def makeFunction(act, rep, logic_num, A, R):
+    ''' Makes a function that takes q, A, R, and return a coresponding z3 expr.
+    A is the acticators-selecting bit-vector, R for repressors.
+    '''
     return lambda q: _create_bit_rule(logic_num,
-                                  [Extract(i, i, q) for i in inter[0]],
-                                  [Extract(i, i, q) for i in inter[1]])
+                                            [Extract(i, i, q) for i in act],
+                                            [Extract(i, i, q) for i in rep],
+                                            A, R)
+                                  
   
 ### Output Utilities ###
 #########################
 
-def printModel(m, data=False):
+def printModel(m, A_, R_, L_, code, data=False):
     ''' Print the solved model nicely. '''
-    
+    species = sorted(code.keys())
+    print 'Configurations: '
+    for s in species:
+        logic = len(bin(m(L_[s]).as_long()).lstrip('0b')) - 1
+        act = 
+        print "%s:%d activated by %s, repressed by %s"%(s, logic, 
 
 
 ### Debugging Secntions ###
