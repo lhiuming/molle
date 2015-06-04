@@ -207,8 +207,9 @@ def makeFunction(inter, logic_num):
 ### Output Utilities ###
 #########################
 
-def printModel():
-    return None
+def printModel(m, data=False):
+    ''' Print the solved model nicely. '''
+    
 
 
 ### Debugging Secntions ###
