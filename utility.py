@@ -114,8 +114,10 @@ def readExp(f):
 
   return (exps, states);
 
+zero = BitVecVal(0, 1)
+
 def Any(bvs):
-    return reduce(or_, bvs, 0)
+    return reduce(or_, bvs, zero)
 
 def _concat(bvs):
     if len(bvs) == 1: return bvs[0]
@@ -136,10 +138,11 @@ def _create_bit_rule(num, act, rep, A, R):
             if num%2: return act == A
             else: return aa != 0
         else: # both activators and repressors present
-            if num < 2: return False
-            elif num < 4: return And(aa != 0, rr == 0)
+            if num == 0: return And(R == 0, act == A)
+            elif num==1: return And(R == 0, aa != 0)
+            elif num<4: return And(aa != 0, rr == 0)
             elif num<6: return And(act == A, rep != R)
-            elif num<8: return And(rr != 0, rep != R)
+            elif num<8: return And(aa != 0, rep != R)
             elif num<10: return act == A
             elif num<12: return Or(act == A, And(aa != 0, rr == 0))
             elif num<14: return Or(act == A, And(aa != 0, rep != R))
@@ -151,14 +154,27 @@ def _create_bit_rule(num, act, rep, A, R):
         else: return False
     return False
 
-def makeFunction(acts, reps, logic, A, R):
+def _with_kofe(kofe_idx, ko, fe, expr):
+    koc, fec = kofe_idx
+    if koc:
+        ko = Extract(koc-1,koc-1,ko) == 1 # a trick to avoid 0 == False
+        if fec:
+            fe = Extract(fec-1,fec-1,fe) == 1
+            return Or(fe, And(Not(ko), expr))
+        else: return And(Not(ko), expr)
+    elif fec:
+        fe = Extract(fec-1,fec-1,fe) == 1
+        return Or(fe, expr)
+    else: return expr
+
+def makeFunction(acts, reps, kofe_index, logic, A, R):
     ''' Makes a function that takes q, A, R, and return a coresponding z3 expr.
     A is the acticators-selecting bit-vector, R for repressors.
     '''
-    return lambda q: _create_bit_rule(logic,
-                                      [Extract(i, i, q) for i in acts],
-                                      [Extract(i, i, q) for i in reps],
-                                      A, R)
+    return lambda q, ko, fe: \
+        _with_kofe(kofe_index, ko, fe,
+                   _create_bit_rule(logic, [Extract(i,i,q) for i in acts],
+                                    [Extract(i, i, q) for i in reps], A, R))
 
 ### Output Utilities ###
 #########################
@@ -199,7 +215,7 @@ def _create_sym_rule(num, act, rep):
 def checkBit(i, bv):
     return simplify(Extract(i, i, bv)).as_long()
 
-def printModel(m, A_, R_, L_, species, code, inters, config = True):
+def printModel(m, A_, R_, L_, species, code, inters, config = True, model = True):
     ''' Print the solved model nicely. '''
     # getting model details
     A = {}; R = {}; L = {}
@@ -225,9 +241,10 @@ def printModel(m, A_, R_, L_, species, code, inters, config = True):
             %(s, L[s],
               A[s] and '\t<- ' + ','.join(A[s]) or '',
               R[s] and '\t|- ' + ','.join(R[s]) or '')
-    print ">>\tModel: "
-    for s in species: print ">>\t\t%s' = %s" \
-        %(s,simplify( _create_sym_rule(L[s], A[s], R[s])))
+    if model:
+        print ">>\tModel: "
+        for s in species: print ">>\t\t%s' = %s" \
+            %(s,simplify( _create_sym_rule(L[s], A[s], R[s])))
     print '>>'
 
 
