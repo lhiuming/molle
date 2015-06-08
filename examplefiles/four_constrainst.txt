@@ -1,0 +1,34 @@
+// All solutions must have A inhibiting C <- this assertion is not true
+
+under #ExperimentOne at 0 $InitialValues $kofe;
+under #ExperimentOne at 1 $SecondValues;
+under #ExperimentOne at 18 $FinalValues;
+under #ExperimentOne at 19 $FinalValues;
+
+let $kofe :=
+{
+KO_D = 0 and
+FE_D = 0
+};
+
+let $InitialValues :=
+{
+ A = 1 and
+ B = 1 and
+ C = 1 and 
+ D = 1
+};
+
+let $SecondValues :=
+{
+ A = 1 and
+ B = 1
+};
+
+let $FinalValues :=
+{
+ A = 1 and 
+ B = 1 and 
+ C = 0 and 
+ D = 0
+};

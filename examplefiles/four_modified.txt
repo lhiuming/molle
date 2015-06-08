@@ -1,0 +1,11 @@
+A(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15), B(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15), C(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15), D+-(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15)
+
+A	B 	positive	
+B	A 	positive 	optional
+B	C	positive	optional
+C	B	negative 	
+C	A	positive	optional
+A	C	negative	optional	
+B	D	positive	optional
+D	A	negative
+D	C	positive	optional

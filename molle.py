@@ -3,7 +3,7 @@
 
 # Computation Settings
 solutions_limit = 0 # how many solution you wish to find
-interactions_limit = 16 # limit of optional interactions.
+interactions_limit = 17 # limit of optional interactions.
                         # set to 17 for the minimal pluripotency model
 
 # Input and output files
@@ -11,6 +11,8 @@ OUTPUT = "solutions.out" # file name for solution output
 PREFIX = "examplefiles/"
 INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
                          "CertainInteractionRequired.txt" ), # not true
+          'ABCD_kofe': ( "four_modified.txt",
+                         "four_constrainst.txt" ),
           'ABCD_nosolution': ("SimpleFourComponentModel.txt",
                               "NoSolutionsPossible.txt" ),
           'minimal_test': ( "custom.txt", # established model%combination
@@ -22,7 +24,7 @@ INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
           "find_minimal_model":
               ( "PearsonThreshold792WithOct4Sox2Interaction.txt",
                 "UltimateConstrains.txt" )}
-MODEL, EXP = INPUT['minimal_test2']
+MODEL, EXP = INPUT['find_minimal_model']
 
 # Model Configurations
 STEP = 20 # trajactory length
@@ -78,21 +80,8 @@ def main():
                  for l in logics[s]]
 
     solver = Solver()
-    # setup functions in solver
-    bv = BitVec('bv', bitlen) # used in ForAll expression. Used locally
-    ko = BitVec('ko', len(kos) or 1)
-    fe = BitVec('fe', len(fes) or 1)
-    F = Function('F', bv.sort(), ko.sort(), fe.sort(), bv.sort()) # declaration
-    for s in species:
-        c = code[s]
-        for l in range(L_[s].size()):
-            solver.add(Implies(
-                Extract(l,l,L_[s]) == 1, # when l is selected
-                ForAll([bv, ko, fe], (Extract(c,c,F(bv, ko, fe))==1) == \
-                       f_[s][l](bv, ko, fe))))
-        if __debug__: print '>> Set function for %s: %s'%(s, solver.check())
 
-    # Apply modeling constrains
+    # 1. Modeling constrains
     for s in species:
         c = code[s]
         # defined activators and repressors must be selected
@@ -104,17 +93,14 @@ def main():
         solver.add(1 == ~(Any([ Extract(i,i,L_[s]) & Extract(j,j,L_[s]) \
                                 for i in logic_i for j in logic_i if i != j])))
         # must select one logic
-        solver.add(L_[s] != 0 )
+        solver.add(L_[s] != 0)
         if __debug__:
             print '>> Constraints %s:\tAct = %s,\tRep = %s,\tLog = %s. (%s)' \
                 %(s, A_[s] and A_[s].sort() or None,
                   R_[s] and R_[s].sort() or None,
-                  L_[s].sort(), 'nocheck' or solver.check())
-
-            # define Transition ralationship. it is a macro.
-    T = lambda q_old, q_new, ko, fe: q_new == F(q_old, ko, fe)
-
-    # interactions limit
+                  L_[s].sort(), 'nocheck' and solver.check())
+            
+    # 2. Interactions limit
     allOpt = []
     for s in species:
         c = code[s]; actn, repn = map(len,optI[c])
@@ -125,9 +111,27 @@ def main():
             allOpt.extend([Extract(i,i,R_[s]) \
                        for i in range(R_[s].size()-repn, R_[s].size())])
     solver.add(ULE(sum([ZeroExt(6, b) for b in allOpt]), interactions_limit))
-    print '>> Interactions limit added. %s'%solver.check()
-        
-    # apply experimental constrains
+    print '>> Interactions limit added. %s'%solver.check()        
+    
+    # 3. Setup functions in solver
+    bv = BitVec('bv', bitlen) # used in ForAll expression. Used locally
+    ko = BitVec('ko', len(kos) or 1)
+    fe = BitVec('fe', len(fes) or 1)
+    F = Function('F', bv.sort(), ko.sort(), fe.sort(), bv.sort()) # declaration
+    for s in species:
+        c = code[s]
+        for l in range(L_[s].size()):
+            solver.add(Implies(Extract(l,l,L_[s]) == 1, # when l is selected
+                               ForAll([bv, ko, fe],
+                                      (Extract(c,c,F(bv, ko, fe))==1) == \
+                                      f_[s][l](bv, ko, fe))))
+        if __debug__: print '>> Set function for %s: %s'%(s, solver.check())
+
+
+    # 4. Define Transition ralationship. It is like a macro.
+    T = lambda q_old, q_new, ko, fe: q_new == F(q_old, ko, fe)
+
+    # 5. Experimental constrains
     for exp in exps:
         if __debug__: print '>> Adding %s ... '%exp
         # build path
@@ -152,6 +156,7 @@ def main():
                         solver.add( Extract(c,c,path[t]) == value )
     print ">> Constrains established."
 
+    # Noe get the solutions
     count = 0
     allAR = [b for b in list(A_.values()) + list(R_.values()) if b]
     while solver.check() == sat:
@@ -166,7 +171,6 @@ def main():
         print ">> Solution %d: "%count
         printModel(m, A_, R_, L_, species, code, inters,\
                    config = True, model = True)
-        if count == 3: print m
         if count == solutions_limit: break
         # find different solutions (with different selections of interactions)
         # at least one species have distinct interactions

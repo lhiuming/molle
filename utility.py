@@ -135,18 +135,42 @@ def _create_bit_rule(num, act, rep, A, R):
     # creating result
     if act:
         if not rep: # not repressor, but have activators
-            if num%2: return act == A
+            if num%2 == 0: return act == A
             else: return aa != 0
         else: # both activators and repressors present
             if num == 0: return And(R == 0, act == A)
             elif num==1: return And(R == 0, aa != 0)
-            elif num<4: return And(aa != 0, rr == 0)
-            elif num<6: return And(act == A, rep != R)
-            elif num<8: return And(aa != 0, rep != R)
-            elif num<10: return act == A
-            elif num<12: return Or(act == A, And(aa != 0, rr == 0))
-            elif num<14: return Or(act == A, And(aa != 0, rep != R))
-            elif num<16: return aa != 0
+            elif num==2: return Or( And(R == 0, act == A),
+                                    And(R != 0, aa != 0, rr == 0) )
+            elif num==3: return Or( And(R == 0, aa != 0),
+                                    And(R != 0,aa != 0, rr == 0) )
+            elif num==4: return Or( And(R == 0, act == A),
+                                    And(R != 0, act == A, rep != R) )
+            elif num==5: return Or( And(R == 0, aa != 0),
+                                    And(R != 0, act == A, rep != R) )
+            elif num==6: return Or( And(R == 0, act == A),
+                                    And(R != 0, aa != 0, rep != R) )
+            elif num==7: return Or( And(R == 0, aa != 0),
+                                    And(R != 0, aa != 0, rep != R) )
+            elif num==8: return Or( And(R == 0, act == A),
+                                    And(R != 0, act == A) )
+            elif num==9: return Or( And(R == 0, aa != 0),
+                                    And(R != 0, act == A) )
+            elif num==10: return Or( And(R == 0, act == A),
+                                     And(R != 0,
+                                         Or(act == A, And(aa != 0, rr == 0))))
+            elif num==11: return Or( And(R == 0, aa != 0),
+                                     And(R != 0,
+                                         Or(act == A, And(aa != 0, rr == 0))))
+            elif num==12: return Or( And(R == 0, act == A),
+                                     And(R != 0,
+                                         Or(act == A, And(aa != 0, rep != R))))
+            elif num==13: return Or( And(R == 0, aa != 0),
+                                     And(R != 0,
+                                         Or(act == A, And(aa != 0, rep != R))))
+            elif num==14: return Or( And(R == 0, act == A),
+                                     And(R != 0, aa != 0) )
+            elif num==15: return aa != 0
             else: return False
     if rep: # no activator but have repressors
         if num==16: return And(rr != 0, rep != R)
@@ -191,26 +215,31 @@ def _And(l):
     else: return And(l);
 
 def _create_sym_rule(num, act, rep):
-    if(num == -1): return boolf
-    if(num < 2 and rep): return boolf
-    if(num > 15 and act): return boolf
-    
-    actt = [Bool(node) for node in act]
-    rept = [Bool(node) for node in rep]
-        
-    if(num > 1 and not rep): return (_And, _Or)[num % 2](actt)
+    if num < 0: return Bool('Strange')
+    if act:
+        actt = [Bool(node) for node in act]
+    if rep:
+        rept = [Bool(node) for node in rep]
 
-    if(num == 0): return _And(actt)
-    elif(num == 1): return _Or(actt)
-    elif(num < 4): return And(_Or(actt), Not(_Or(rept)))
-    elif(num < 6): return And(_And(actt), Not(_And(rept)));
-    elif(num < 8): return And(_Or(actt), Not(_And(rept)))
-    elif(num < 10): return _And(actt)
-    elif(num < 12): return Or(_And(actt), And(_Or(actt), Not(_Or(rept))))
-    elif(num < 14): return Or(_And(actt), And(_Or(actt), Not(_And(rept))))
-    elif(num < 16): return _Or(actt)
-    elif(num == 16): return And(_Or(rept), Not(_And(rept)))
-    elif(num == 17): return Not(_Or(rept));
+    if act:
+        if not rep:
+            if num%2 == 0: return _And(actt)
+            else: return _Or(actt)
+        elif num == 0: return boolf
+        elif num == 1: return boolf
+        elif(num < 4): return And(_Or(actt), Not(_Or(rept)))
+        elif(num < 6): return And(_And(actt), Not(_And(rept)));
+        elif(num < 8): return And(_Or(actt), Not(_And(rept)))
+        elif(num < 10): return _And(actt)
+        elif(num < 12): return Or(_And(actt), And(_Or(actt), Not(_Or(rept))))
+        elif(num < 14): return Or(_And(actt), And(_Or(actt), Not(_And(rept))))
+        elif(num < 16): return _Or(actt)
+        else: return boolf
+    if rep:
+        if num == 16: return And(_Or(rept), Not(_And(rept)))
+        elif num==17: return Not(_Or(rept));
+        else: return boolf
+    return boolf
 
 def checkBit(i, bv):
     return simplify(Extract(i, i, bv)).as_long()
@@ -244,7 +273,7 @@ def printModel(m, A_, R_, L_, species, code, inters, config = True, model = True
     if model:
         print ">>\tModel: "
         for s in species: print ">>\t\t%s' = %s" \
-            %(s,simplify( _create_sym_rule(L[s], A[s], R[s])))
+            %(s,simplify( _create_sym_rule(L[s], A[s], R[s]) ))
     print '>>'
 
 
