@@ -200,6 +200,9 @@ def makeFunction(acts, reps, kofe_index, logic, A, R):
                    _create_bit_rule(logic, [Extract(i,i,q) for i in acts],
                                     [Extract(i, i, q) for i in reps], A, R))
 
+def isExpOf2(bvv):
+    return len(filter(lambda x: x == '1', bin(bvv.as_long()))) == 1
+
 ### Output Utilities ###
 #########################
 boolf = BoolVal(False)
@@ -244,13 +247,20 @@ def _create_sym_rule(num, act, rep):
 def checkBit(i, bv):
     return simplify(Extract(i, i, bv)).as_long()
 
-def printModel(m, A_, R_, L_, species, code, inters, config = True, model = True):
+def bv2logic(lbvv, llist):
+    ''' convert a bit-vector to a integer, as logic function number.'''
+    assert isExpOf2(lbvv)
+    lcode = len(bin(lbvv.as_long()).lstrip('0b')) - 1
+    return llist[lcode]
+
+def printModel(m, A_, R_, L_, species, code, inters, logics,
+               config = True, model = True):
     ''' Print the solved model nicely. '''
     # getting model details
     A = {}; R = {}; L = {}
     for s in species:
         c = code[s]
-        L[s] = len(bin(m[L_[s]].as_long()).lstrip('0b')) - 1
+        L[s] = bv2logic(m[L_[s]], logics[s])
         if A_[s]:
             actB = m[A_[s]]; l = actB.size() - 1
             A[s] = [species[n] for i, n in enumerate(inters[c][0]) \

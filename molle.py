@@ -36,6 +36,7 @@ STEP = 20 # trajactory length
 from z3 import *
 from utility import *
 from pprint import pprint
+from time import time, localtime, strftime
 
 def main():
     # reading files
@@ -46,6 +47,7 @@ def main():
     (exps, states) = readExp(expFile)
     expFile.close();
 
+    # convinient variables
     bitlen = len(species)
     kos, fes = kofe['KO'], kofe['FE']
     
@@ -84,56 +86,68 @@ def main():
     # 1. Modeling constrains
     for s in species:
         c = code[s]
-        # defined activators and repressors must be selected
+        # INTER: defined activators and repressors must be selected
         defact, defrep = defI[c]
         solver.add([1 == Extract(i,i,A_[s]) for i in range(len(defact))])
         solver.add([1 == Extract(i,i,R_[s]) for i in range(len(defrep))])
-        # only one logic is selected
+        # LOGIC: only one logic is selected
         logic_i = range(L_[s].size())
-        solver.add(1 == ~(Any([ Extract(i,i,L_[s]) & Extract(j,j,L_[s]) \
+        solver.add(1 == ~(Any([ Extract(i,i,L_[s]) & Extract(j,j,L_[s])
                                 for i in logic_i for j in logic_i if i != j])))
-        # must select one logic
+        # LOGIC: must select one logic
         solver.add(L_[s] != 0)
         if __debug__:
-            print '>> Constraints %s:\tAct = %s,\tRep = %s,\tLog = %s. (%s)' \
+            assert solver.check() == sat
+            print '>> #1 Constraints %s:\tAct=%s,\tRep=%s,\tLog=%s(%s).' \
                 %(s, A_[s] and A_[s].sort() or None,
                   R_[s] and R_[s].sort() or None,
-                  L_[s].sort(), 'nocheck' and solver.check())
+                  L_[s].sort(), isExpOf2(solver.model()[L_[s]]) or
+                  bin(solver.model()[L_[s]].as_long()))
             
     # 2. Interactions limit
-    allOpt = []
+    allOpt = [] # all optional interactions
     for s in species:
-        c = code[s]; actn, repn = map(len,optI[c])
+        c = code[s]; actn, repn = map(len,optI[c]) # nums of interactions for s
+        # fill the allOpt list with all optional interactions
         if A_[s]:
             allOpt.extend([Extract(i,i,A_[s]) \
                        for i in range(A_[s].size()-actn, A_[s].size())])
         if R_[s]:
             allOpt.extend([Extract(i,i,R_[s]) \
                        for i in range(R_[s].size()-repn, R_[s].size())])
+    # constraints that all selected nums of inters are less than limit
     solver.add(ULE(sum([ZeroExt(6, b) for b in allOpt]), interactions_limit))
-    print '>> Interactions limit added. %s'%solver.check()        
+    if __debug__: print '>> #2 Interactions limit added. %s'%solver.check()        
     
     # 3. Setup functions in solver
-    bv = BitVec('bv', bitlen) # used in ForAll expression. Used locally
-    ko = BitVec('ko', len(kos) or 1)
-    fe = BitVec('fe', len(fes) or 1)
-    F = Function('F', bv.sort(), ko.sort(), fe.sort(), bv.sort()) # declaration
-    for s in species:
-        c = code[s]
-        for l in range(L_[s].size()):
-            solver.add(Implies(Extract(l,l,L_[s]) == 1, # when l is selected
-                               ForAll([bv, ko, fe],
-                                      (Extract(c,c,F(bv, ko, fe))==1) == \
-                                      f_[s][l](bv, ko, fe))))
-        if __debug__: print '>> Set function for %s: %s'%(s, solver.check())
+    #bv = BitVec('bv', bitlen) # used in ForAll expression. Used locally
+    #ko = BitVec('ko', len(kos) or 1)
+    #fe = BitVec('fe', len(fes) or 1)
+    #F = Function('F', bv.sort(), ko.sort(), fe.sort(), bv.sort()) # declare
+    #for s in species:
+    #    c = code[s]
+    #    for l in range(L_[s].size()):
+    #        solver.add(Implies(Extract(l,l,L_[s]) == 1, # when l is selected
+    #                           ForAll([bv, ko, fe],
+    #                                  (Extract(c,c,F(bv, ko, fe))==1) == \
+    #                                  f_[s][l](bv, ko, fe))))
+    #    if __debug__: print '>> Set function for %s: %s'%(s, solver.check())
+    if __debug__: print '>> #3 SKIPPED: forall style function setup.'
 
 
     # 4. Define Transition ralationship. It is like a macro.
-    T = lambda q_old, q_new, ko, fe: q_new == F(q_old, ko, fe)
+    #T = lambda q_old, q_new, ko, fe: q_new == F(q_old, ko, fe)
+    T = lambda q_old, q_new, ko, fe: \
+        And([ And([Implies(Extract(l,l, L_[s]) == 1, # if logic l is selected
+                       (Extract(code[s],code[s],q_new)==1) == \
+                        f_[s][l](q_old, ko, fe)) # update value
+                  for l in range(L_[s].size())])
+               for s in species ])
+    if __debug__: print '>> #4 Transition relation macro setup.'
 
     # 5. Experimental constrains
+    if __debug__: print '>> #5 Applying experimental constraints:'
     for exp in exps:
-        if __debug__: print '>> Adding %s ... '%exp
         # build path
         KO = BitVec(exp + '_KO', len(kos) or 1)
         FE = BitVec(exp + '_FE', len(fes) or 1)
@@ -154,11 +168,14 @@ def main():
                     else:
                         c = code[sl[-1]]
                         solver.add( Extract(c,c,path[t]) == value )
-    print ">> Constrains established."
+        if __debug__: print '>> #5 %s added...'%exp
+    print ">> #5 Constrains established."
 
     # Noe get the solutions
     count = 0
     allAR = [b for b in list(A_.values()) + list(R_.values()) if b]
+    startt = time()
+    print '>> Start solving: %s'%strftime("%d %b %H:%M", localtime(startt))
     while solver.check() == sat:
         count += 1
         # make sure all A_[s] and R_[s] are specified
@@ -169,13 +186,16 @@ def main():
         solver.pop()
         # print out
         print ">> Solution %d: "%count
-        printModel(m, A_, R_, L_, species, code, inters,\
+        printModel(m, A_, R_, L_, species, code, inters, logics,
                    config = True, model = True)
         if count == solutions_limit: break
         # find different solutions (with different selections of interactions)
         # at least one species have distinct interactions
         solver.add(Or([ b != m[b] for b in allAR]))                      
     if count == 0: print 'No solution found.'
+    endt = time()
+    print '>> End solving: %s.'%strftime("%d %b %H:%M",localtime(endt))
+    print '>> Duration: %.1f min'%(endt - startt)
 
 if __name__ == '__main__':
     main()
