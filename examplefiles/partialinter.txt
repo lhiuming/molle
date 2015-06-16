@@ -1,0 +1,58 @@
+Oct4-(11), Sall4-(2), Sox2-(1), Tbx3-(14), Klf2-(5), Nanog-(8), Esrrb-+(8), Tfcp2l1-+(7), Gbx2-(12), Klf4-(5), MEKERK(17), Tcf3(17), Stat3-(5), PD(4), CH(3), LIF(15)
+
+LIF        LIF        positive
+CH         CH         positive
+PD         PD         positive
+LIF        Stat3      positive
+Stat3      Klf4       positive 
+Stat3      Gbx2       positive 
+Stat3      Tfcp2l1    positive 
+CH         Tcf3       negative
+Tcf3       Tfcp2l1    negative 
+Tcf3       Esrrb      negative 
+PD         MEKERK     negative
+MEKERK     Nanog      negative	
+MEKERK     Tcf3       negative
+Esrrb      Nanog      positive  optional
+Nanog      Esrrb      positive  optional
+Esrrb      Oct4       negative  optional
+Oct4       Esrrb      negative  optional
+Esrrb Tfcp2l1 positive optional
+Tfcp2l1 Esrrb positive optional
+Klf2 Klf4 positive optional
+Klf4 Klf2 positive optional
+Klf2 Nanog positive optional
+Klf2 Oct4 positive optional
+Klf2 Tfcp2l1 negative optional
+Klf2 Gbx2 negative optional
+Sall4 Klf2 positive optional
+Klf2 Tcf3 positive optional
+Tbx3 Klf4 positive optional
+Klf4 Tfcp2l1 positive optional
+Tfcp2l1 Klf4 positive optional
+Gbx2 Klf4 positive optional
+Nanog Oct4 positive optional
+Oct4 Nanog positive optional
+Nanog Tfcp2l1 positive optional
+Tfcp2l1 Nanog positive optional
+Nanog Sox2 positive optional
+Sox2 Nanog positive optional
+Oct4 Tfcp2l1 negative optional
+Tfcp2l1 Oct4 negative optional
+Gbx2 Oct4 negative optional
+Oct4 Tcf3 positive optional
+Tcf3 Oct4 positive optional
+Tbx3 Tfcp2l1 positive optional
+Sall4 Tbx3 positive optional
+Tbx3 Tcf3 negative optional
+Tbx3 Sox2 positive optional
+Tfcp2l1 Sall4 positive optional
+Sall4 Tfcp2l1 positive optional
+Stat3 Tcf3 negative optional
+Stat3 Sox2 negative optional
+Sox2 Stat3 negative optional
+Sall4 Sox2 positive optional
+Tcf3 Nanog positive optional
+Nanog Tcf3 positive optional
+Oct4 Sox2 positive optional
+Sox2 Oct4 positive optional

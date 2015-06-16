@@ -4,7 +4,8 @@
 # Computation Settings
 solutions_limit = 0 # how many solution you wish to find
 interactions_limit = 17 # limit of optional interactions.
-                        # set to 17 for the minimal pluripotency model
+# set to 17 for the minimal pluripotency model
+
 
 # Input and output files
 OUTPUT = "solutions.out" # file name for solution output
@@ -17,14 +18,18 @@ INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
                               "NoSolutionsPossible.txt" ),
           'minimal_test': ( "custom.txt", # established model%combination
                             "UltimateConstrains.txt" ),
-          'minimal_test2': ( "custom2.txt", # established model%combination
-                            "UltimateConstrains.txt" ),
-          "find_minimal_combination": ( "SimplestModel.txt", # establised model
-                                        "UltimateConstrains.txt" ),
+          'find_min_inter': ( "simplestlogic.txt", # established logics
+                              "UltimateConstrains.txt" ),
+          "find_min_logic": ( "simplestmodel.txt", # establised inters
+                              "UltimateConstrains.txt" ),
+          "inter_test": ( "partialinter.txt",
+                          "UltimateConstrains.txt" ),
+          "inter_test2": ( "littleinter.txt",
+                          "UltimateConstrains.txt" ),
           "find_minimal_model":
               ( "PearsonThreshold792WithOct4Sox2Interaction.txt",
                 "UltimateConstrains.txt" )}
-MODEL, EXP = INPUT['find_minimal_model']
+MODEL, EXP = INPUT['inter_test2']
 
 # Model Configurations
 STEP = 20 # trajactory length
@@ -38,7 +43,7 @@ from utility import *
 from pprint import pprint
 from time import time, localtime, strftime
 
-def main():
+def main(solver, solutions_limit, interactions_limit):
     startt = time()
     
     # reading files
@@ -83,7 +88,6 @@ def main():
         f_[s] = [makeFunction(acts, reps, kofe_index, l, A_[s], R_[s])\
                  for l in logics[s]]
 
-    solver = Solver()
 
     # 1. Modeling constrains
     if __debug__: print '>> #1 Adding modeling constrains: '
@@ -122,7 +126,9 @@ def main():
         # constraints that all selected nums of inters are less than limit
         solver.add(ULE(sum([ZeroExt(6, b) for b in opts]),
                        interactions_limit))
-        if __debug__: print '>> #2 Interactions limit ADDED. %s'%solver.check()
+        if __debug__:
+            print '>> #2 Interactions limit %d ADDED. %s' \
+                %(interactions_limit,solver.check())
     else:
         if __debug__: print '>> #2 Interactions limit: not set.'
         
@@ -159,6 +165,7 @@ def main():
     count_exp = 0
     for exp in exps:
         count_exp += 1
+        if __debug__: solver.push()
         # build path
         KO = BitVec(exp + '_KO', len(kos) or 1)
         FE = BitVec(exp + '_FE', len(fes) or 1)
@@ -177,8 +184,14 @@ def main():
                         c = fes.index(s)
                         solver.add( Extract(c,c,FE) == value)
                     else:
-                        c = code[sl[-1]]
+                        c = code[s]
                         solver.add( Extract(c,c,path[t]) == value )
+        if solver.check() == unsat:
+            solver.pop()
+            solver.check(); m = solver.model()
+            printModel(m, A_, R_, L_, species, code, inters, logics,
+                   config = True, model = True)
+            break
         if __debug__:
             print '>> \t %d/%d %s added...'%(count_exp, total_exp, exp)
     print ">> All Constrains established."
@@ -189,6 +202,7 @@ def main():
     solvingt = time()
     print '>> Start solving: %s'%strftime("%d %b %H:%M", localtime(startt))
     while solver.check() == sat:
+        break
         count += 1
         # make sure all A_[s] and R_[s] are specified
         solver.push() # push will somehow change the solution
@@ -207,8 +221,10 @@ def main():
     if count == 0: print '>> No solution found.'
     endt = time()
     print '>> End solving: %s.'%strftime("%d %b %H:%M",localtime(endt))
+    print '>> ' + '-'* 76
     print '>> Solving duration:\t%.1f min'%((endt - solvingt)/60)
     print '>> Total duration:\t%.1f min'%((endt - startt)/60)
 
 if __name__ == '__main__':
-    main()
+    s = Solver()
+    main(s, solutions_limit, interactions_limit)

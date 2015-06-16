@@ -14,6 +14,13 @@ def _sorted_inters(inter_list, code):
     for i in inter_list:
         f, t = i[:2]
         idx = (0, 1)[ i[2]=='negative' ]
+        if 'negative' in i:
+            idx = 1
+        elif 'positive' in i:
+            idx = 0
+        else:
+            print 'no +/- assigend to interactions %d'%(inter_list)
+            raise(Error)
         d.setdefault(code[t], ([], []))[idx].append(code[f])
     return d
 
@@ -57,11 +64,18 @@ def readModel(f):
     code = dict([ (s, n) for (n, s) in enumerate(species) ])
 
     # read the interaction lines
+    total_opt = total_def = 0
     for l in f.readlines(): # loop every line
         l = l.strip().split()
         if(not l): continue # skip empty line
-        if(l[-1] == 'optional'): opt_inters_list.append(tuple(l[:3]))
-        else: def_inters_list.append(tuple(l[:3]))
+        print l
+        if 'optional' in l:
+            opt_inters_list.append(tuple(l[:3]))
+            total_opt += 1
+        else:
+            def_inters_list.append(tuple(l[:3]))
+            total_def += 1
+    print 'total opt: %d\ttotal def: %d'%(total_opt, total_def)
     defI = _sorted_inters(def_inters_list, code)
     optI = _sorted_inters(opt_inters_list, code)
 
@@ -128,55 +142,68 @@ def _create_bit_rule(num, act, rep, A, R):
     # initialization
     if act:
         act = _concat(act)
-        aa = act & A
+        aa = act & A # extract all selected acts
     if rep:
         rep = _concat(rep)
-        rr = rep & R
+        rr = rep & R # extract all selected reps
     # creating result
     if act:
         if not rep: # not repressor, but have activators
-            if num%2 == 0: return act == A
-            else: return aa != 0
-        else: # both activators and repressors present
-            if num == 0: return And(R == 0, act == A)
-            elif num==1: return And(R == 0, aa != 0)
-            elif num==2: return Or( And(R == 0, act == A),
-                                    And(R != 0, aa != 0, rr == 0) )
-            elif num==3: return Or( And(R == 0, aa != 0),
-                                    And(R != 0,aa != 0, rr == 0) )
-            elif num==4: return Or( And(R == 0, act == A),
-                                    And(R != 0, act == A, rep != R) )
-            elif num==5: return Or( And(R == 0, aa != 0),
-                                    And(R != 0, act == A, rep != R) )
-            elif num==6: return Or( And(R == 0, act == A),
-                                    And(R != 0, aa != 0, rep != R) )
-            elif num==7: return Or( And(R == 0, aa != 0),
-                                    And(R != 0, aa != 0, rep != R) )
-            elif num==8: return Or( And(R == 0, act == A),
-                                    And(R != 0, act == A) )
-            elif num==9: return Or( And(R == 0, aa != 0),
-                                    And(R != 0, act == A) )
-            elif num==10: return Or( And(R == 0, act == A),
-                                     And(R != 0,
-                                         Or(act == A, And(aa != 0, rr == 0))))
-            elif num==11: return Or( And(R == 0, aa != 0),
-                                     And(R != 0,
-                                         Or(act == A, And(aa != 0, rr == 0))))
-            elif num==12: return Or( And(R == 0, act == A),
-                                     And(R != 0,
-                                         Or(act == A, And(aa != 0, rep != R))))
-            elif num==13: return Or( And(R == 0, aa != 0),
-                                     And(R != 0,
-                                         Or(act == A, And(aa != 0, rep != R))))
-            elif num==14: return Or( And(R == 0, act == A),
-                                     And(R != 0, aa != 0) )
-            elif num==15: return aa != 0
-            else: return False
+            if num%2 == 0: return act == A # all selected acts on
+            else: return aa != 0 # exist selected acts on
+        elif num == 0: # both activators and repressors present
+            return And(R == 0, act == A)
+            # not rep selected, all selected acts on
+        elif num == 1:
+            return And(R == 0, aa != 0)
+            # not rep selected, exists selected acts on
+        elif num == 2:
+            return Or( And(R == 0, act == A), # situ: num%2==0
+                       And(R != 0, aa != 0, rr == 0) )
+        elif num == 3:
+            return Or( And(R == 0, aa != 0), # situ: num%2==1
+                       And(R != 0,aa != 0, rr == 0) ) # no slcted rep activated
+        elif num == 4:
+            return Or( And(R == 0, act == A),
+                       And(R != 0, act == A, rep != R) ) # all a, not all r
+        elif num == 5:
+            return Or( And(R == 0, aa != 0),
+                       And(R != 0, act == A, rep != R) )
+        elif num == 6:
+            return Or( And(R == 0, act == A),
+                       And(R != 0, aa != 0, rep != R) ) # not all r
+        elif num == 7:
+            return Or( And(R == 0, aa != 0),
+                       And(R != 0, aa != 0, rep != R) )
+        elif num == 8:
+            return act == A # sepcial occasion. see Dunn
+        elif num == 9:
+            return Or( And(R == 0, aa != 0),
+                       And(R != 0, act == A) ) # all select acts activated
+        elif num == 10:
+            return Or( And(R == 0, act == A),
+                       And(R != 0, Or(act == A, # all select acts activated
+                                      And(aa != 0, rr == 0)))) # no r activated
+        elif num == 11:
+            return Or( And(R == 0, aa != 0),
+                       And(R != 0, Or(act == A, And(aa != 0, rr == 0))))
+        elif num == 12:
+            return Or( And(R == 0, act == A),
+                       And(R != 0, Or(act == A,
+                                      And(aa != 0, rep != R)))) # no all r
+        elif num == 13:
+            return Or( And(R == 0, aa != 0),
+                       And(R != 0, Or(act == A, And(aa != 0, rep != R))))
+        elif num == 14:
+            return Or( And(R == 0, act == A),
+                       And(R != 0, aa != 0) )
+        elif num == 15: return aa != 0
+        else: return False # num == 16 or 17
     if rep: # no activator but have repressors
-        if num==16: return And(rr != 0, rep != R)
-        elif num==17: return rr == 0
+        if num == 16: return And(rr != 0, rep != R)
+        elif num == 17: return rr == 0
         else: return False
-    return False
+    return False # lonely gene
 
 def _with_kofe(kofe_idx, ko, fe, expr):
     koc, fec = kofe_idx
@@ -197,8 +224,10 @@ def makeFunction(acts, reps, kofe_index, logic, A, R):
     '''
     return lambda q, ko, fe: \
         _with_kofe(kofe_index, ko, fe,
-                   _create_bit_rule(logic, [Extract(i,i,q) for i in acts],
-                                    [Extract(i, i, q) for i in reps], A, R))
+                   _create_bit_rule(logic,
+                                    [Extract(i,i,q) for i in acts],
+                                    [Extract(i,i,q) for i in reps],
+                                    A, R))
 
 def isExpOf2(bvv):
     return len(filter(lambda x: x == '1', bin(bvv.as_long()))) == 1
@@ -245,7 +274,8 @@ def _create_sym_rule(num, act, rep):
     return boolf
 
 def checkBit(i, bv):
-    return simplify(Extract(i, i, bv)).as_long()
+    # simplify is necessary
+    return simplify(Extract(i, i, bv)).as_long() == 1
 
 def bv2logic(lbvv, llist):
     ''' convert a bit-vector to a integer, as logic function number.'''
@@ -253,23 +283,24 @@ def bv2logic(lbvv, llist):
     lcode = len(bin(lbvv.as_long()).lstrip('0b')) - 1
     return llist[lcode]
 
+def bv2inters(ibvv, ilist, species):
+    if not ibvv: return []
+    l = ibvv.size() - 1
+    print bin(ibvv.as_long())
+    return [species[c] for i, c in enumerate(ilist) if checkBit(l-i, ibvv)]
+
 def printModel(m, A_, R_, L_, species, code, inters, logics,
                config = True, model = True):
     ''' Print the solved model nicely. '''
     # getting model details
     A = {}; R = {}; L = {}
     for s in species:
+        print 'converting for %s'%s
         c = code[s]
         L[s] = bv2logic(m[L_[s]], logics[s])
-        if A_[s]:
-            actB = m[A_[s]]; l = actB.size() - 1
-            A[s] = [species[n] for i, n in enumerate(inters[c][0]) \
-                    if checkBit(l-i, actB) ]
+        if A_[s]: A[s] = bv2inters(m[A_[s]], inters[c][0], species)
         else: A[s] = []
-        if R_[s]:
-            repB = m[R_[s]]; l = repB.size() - 1
-            R[s] = [species[n] for i, n in enumerate(inters[c][1]) \
-                    if checkBit(l-i, repB) ]
+        if R_[s]: R[s] = bv2inters(m[R_[s]], inters[c][1], species)
         else: R[s] = []
     # printing the model
     print '>>'
