@@ -18,18 +18,18 @@ INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
                               "NoSolutionsPossible.txt" ),
           'minimal_test': ( "custom.txt", # established model%combination
                             "UltimateConstrains.txt" ),
-          'find_min_inter': ( "simplestlogic.txt", # established logics
-                              "UltimateConstrains.txt" ),
           "find_min_logic": ( "simplestmodel.txt", # establised inters
                               "UltimateConstrains.txt" ),
-          "inter_test": ( "partialinter.txt",
+          'find_min_inter': ( "simplestlogic.txt", # established logics
+                              "UltimateConstrains.txt" ),
+          "inter_dcrease": ( "partialinter.txt",
                           "UltimateConstrains.txt" ),
-          "inter_test2": ( "littleinter.txt",
+          "inter_increase": ( "littleinter.txt",
                           "UltimateConstrains.txt" ),
           "find_minimal_model":
               ( "PearsonThreshold792WithOct4Sox2Interaction.txt",
                 "UltimateConstrains.txt" )}
-MODEL, EXP = INPUT['inter_test2']
+MODEL, EXP = INPUT['inter_increase']
 
 # Model Configurations
 STEP = 20 # trajactory length
@@ -84,7 +84,8 @@ def main(solver, solutions_limit, interactions_limit):
         # create logic-selecting BitVec
         L_[s] = BitVec('Logic_' + s, len(logics[s]))
         # make the functions
-        kofe_index = (s in kos and kos.index(s)+1, s in fes and fes.index(s)+1)
+        kofe_index = (s in kos and kos.index(s)+1,
+                      s in fes and fes.index(s)+1)
         f_[s] = [makeFunction(acts, reps, kofe_index, l, A_[s], R_[s])\
                  for l in logics[s]]
 
@@ -165,7 +166,6 @@ def main(solver, solutions_limit, interactions_limit):
     count_exp = 0
     for exp in exps:
         count_exp += 1
-        if __debug__: solver.push()
         # build path
         KO = BitVec(exp + '_KO', len(kos) or 1)
         FE = BitVec(exp + '_FE', len(fes) or 1)
@@ -186,23 +186,16 @@ def main(solver, solutions_limit, interactions_limit):
                     else:
                         c = code[s]
                         solver.add( Extract(c,c,path[t]) == value )
-        if solver.check() == unsat:
-            solver.pop()
-            solver.check(); m = solver.model()
-            printModel(m, A_, R_, L_, species, code, inters, logics,
-                   config = True, model = True)
-            break
         if __debug__:
             print '>> \t %d/%d %s added...'%(count_exp, total_exp, exp)
     print ">> All Constrains established."
 
-    # Noe get the solutions
+    # Now get the solutions !!!
     count = 0
     allAR = [b for b in list(A_.values()) + list(R_.values()) if b]
-    solvingt = time()
+    solvingt = time() # just for timing
     print '>> Start solving: %s'%strftime("%d %b %H:%M", localtime(startt))
     while solver.check() == sat:
-        break
         count += 1
         # make sure all A_[s] and R_[s] are specified
         solver.push() # push will somehow change the solution

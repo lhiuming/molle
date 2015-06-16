@@ -142,68 +142,74 @@ def _create_bit_rule(num, act, rep, A, R):
     # initialization
     if act:
         act = _concat(act)
-        aa = act & A # extract all selected acts
+        aa = act & A
+        emptyAct = A == 0 # no activators
+        allAct = And(R != 0, aa == A) # all selected activators present
+        noAct = aa == 0 # no selected activators presents
+    else:
+        emptyAct = noAct = True
+        allAct = False
     if rep:
         rep = _concat(rep)
-        rr = rep & R # extract all selected reps
+        rr = rep & R
+        emptyRep = R == 0
+        allRep = And(R != 0, rr == R)
+        noRep = rr == 0
+    else:
+        emptyRep = noRep = True
+        allRep = False # becarefull
     # creating result
-    if act:
-        if not rep: # not repressor, but have activators
-            if num%2 == 0: return act == A # all selected acts on
-            else: return aa != 0 # exist selected acts on
-        elif num == 0: # both activators and repressors present
-            return And(R == 0, act == A)
-            # not rep selected, all selected acts on
-        elif num == 1:
-            return And(R == 0, aa != 0)
-            # not rep selected, exists selected acts on
-        elif num == 2:
-            return Or( And(R == 0, act == A), # situ: num%2==0
-                       And(R != 0, aa != 0, rr == 0) )
-        elif num == 3:
-            return Or( And(R == 0, aa != 0), # situ: num%2==1
-                       And(R != 0,aa != 0, rr == 0) ) # no slcted rep activated
-        elif num == 4:
-            return Or( And(R == 0, act == A),
-                       And(R != 0, act == A, rep != R) ) # all a, not all r
-        elif num == 5:
-            return Or( And(R == 0, aa != 0),
-                       And(R != 0, act == A, rep != R) )
-        elif num == 6:
-            return Or( And(R == 0, act == A),
-                       And(R != 0, aa != 0, rep != R) ) # not all r
-        elif num == 7:
-            return Or( And(R == 0, aa != 0),
-                       And(R != 0, aa != 0, rep != R) )
-        elif num == 8:
-            return act == A # sepcial occasion. see Dunn
-        elif num == 9:
-            return Or( And(R == 0, aa != 0),
-                       And(R != 0, act == A) ) # all select acts activated
-        elif num == 10:
-            return Or( And(R == 0, act == A),
-                       And(R != 0, Or(act == A, # all select acts activated
-                                      And(aa != 0, rr == 0)))) # no r activated
-        elif num == 11:
-            return Or( And(R == 0, aa != 0),
-                       And(R != 0, Or(act == A, And(aa != 0, rr == 0))))
-        elif num == 12:
-            return Or( And(R == 0, act == A),
-                       And(R != 0, Or(act == A,
-                                      And(aa != 0, rep != R)))) # no all r
-        elif num == 13:
-            return Or( And(R == 0, aa != 0),
-                       And(R != 0, Or(act == A, And(aa != 0, rep != R))))
-        elif num == 14:
-            return Or( And(R == 0, act == A),
-                       And(R != 0, aa != 0) )
-        elif num == 15: return aa != 0
-        else: return False # num == 16 or 17
-    if rep: # no activator but have repressors
-        if num == 16: return And(rr != 0, rep != R)
-        elif num == 17: return rr == 0
-        else: return False
-    return False # lonely gene
+    if num == 0:
+        return And(emptyRep, allAct)
+    elif num == 1:
+        return And(emptyRep, Not(noAct)) # exists Act presenting
+    elif num == 2:
+        return Or( And(emptyRep, allAct),
+                   And(Not(emptyRep), Not(noAct), noRep))
+    elif num == 3:
+        return Or( And(emptyRep, Not(noAct)),
+                   And(Not(emptyRep), Not(noAct), noRep)) # save Not(emptyRep)
+    elif num == 4:
+        return Or( And(emptyRep, allAct),
+                   And(Not(emptyRep), allAct, Not(allRep)))
+    elif num == 5:
+        return Or( And(emptyRep, Not(noAct)),
+                   And(Not(emptyRep), allAct, Not(allRep)))
+    elif num == 6:
+        return Or( And(emptyRep, allAct),
+                   And(Not(emptyRep), Not(noAct), Not(allRep)))
+    elif num == 7:
+        return Or( And(emptyRep, Not(noAct)),
+                   And(Not(emptyRep), Not(noAct), Not(allRep)))
+    elif num == 8:
+        return allAct # particulary simple
+    elif num == 9:
+        return Or( And(emptyRep, Not(noAct)),
+                   And(Not(emptyRep), allAct))
+    elif num == 10:
+        return Or( And(emptyRep, allAct),
+                   And(Not(emptyRep), Or(allAct, And(Not(noAct), noRep))))
+    elif num == 11:
+        return Or( And(emptyRep, Not(noAct)),
+                   And(Not(emptyRep), Or(allAct, And(Not(noAct), noRep))))
+    elif num == 12:
+        return Or(And(emptyRep, allAct),
+                  And(Not(emptyRep), Or(allAct, And(Not(noAct), Not(allRep)))))
+    elif num == 13:
+        return Or(And(emptyRep, Not(noAct)),
+                  And(Not(emptyRep), Or(allAct, And(Not(noAct), Not(allRep)))))
+    elif num == 14:
+        return Or( And(emptyRep, allAct),
+                   And(Not(emptyRep), Not(noAct)))
+    elif num == 15:
+        return Not(noAct) # particulary simple
+    elif num == 16:
+        return And(emptyAct, Not(emptyRep), Not(noRep), Not(allRep))
+    elif num == 17:
+        return And(emptyAct, Not(emptyRep), noRep)
+    else:
+        print "Strange Num"
+        raise ValueError
 
 def _with_kofe(kofe_idx, ko, fe, expr):
     koc, fec = kofe_idx
@@ -223,11 +229,11 @@ def makeFunction(acts, reps, kofe_index, logic, A, R):
     A is the acticators-selecting bit-vector, R for repressors.
     '''
     return lambda q, ko, fe: \
-        _with_kofe(kofe_index, ko, fe,
+        _with_kofe(kofe_index, ko, fe, simplify(
                    _create_bit_rule(logic,
                                     [Extract(i,i,q) for i in acts],
                                     [Extract(i,i,q) for i in reps],
-                                    A, R))
+                                    A, R)))
 
 def isExpOf2(bvv):
     return len(filter(lambda x: x == '1', bin(bvv.as_long()))) == 1
@@ -248,6 +254,7 @@ def _And(l):
 
 def _create_sym_rule(num, act, rep):
     if num < 0: return Bool('Strange')
+
     if act:
         actt = [Bool(node) for node in act]
     if rep:
@@ -286,7 +293,6 @@ def bv2logic(lbvv, llist):
 def bv2inters(ibvv, ilist, species):
     if not ibvv: return []
     l = ibvv.size() - 1
-    print bin(ibvv.as_long())
     return [species[c] for i, c in enumerate(ilist) if checkBit(l-i, ibvv)]
 
 def printModel(m, A_, R_, L_, species, code, inters, logics,
@@ -295,7 +301,6 @@ def printModel(m, A_, R_, L_, species, code, inters, logics,
     # getting model details
     A = {}; R = {}; L = {}
     for s in species:
-        print 'converting for %s'%s
         c = code[s]
         L[s] = bv2logic(m[L_[s]], logics[s])
         if A_[s]: A[s] = bv2inters(m[A_[s]], inters[c][0], species)

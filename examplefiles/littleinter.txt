@@ -1,6 +1,6 @@
 Oct4-(11), Sox2-(1), Sall4-(2),Tbx3-(14), Klf2-(5), Nanog-(8), Esrrb-+(8), Tfcp2l1-+(7), Gbx2-(12), Klf4-(5), MEKERK(17), Tcf3(17), Stat3-(5), PD(4), CH(3), LIF(15)
 
-Nanog Tfcp2l1 negative optional
+Nanog Oct4 positive optional
 
 Sox2       Oct4       positive      optional 1
 Sall4      Sox2       positive      optional 2
