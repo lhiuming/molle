@@ -344,7 +344,6 @@ def mailMe(content, title = 'Computation Finished'):
     msg = ['From:' + addr,
            'To:'+ addr,
            'Subject:' + title,
-           '\n',
            content]
 
     s.sendmail(addr, addr, '\n'.join(msg))
