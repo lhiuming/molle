@@ -22,7 +22,7 @@ INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
           "find_minimal_model":
               ( "PearsonThreshold792WithOct4Sox2Interaction.txt",
                 "UltimateConstrains.txt" )}
-MODEL, EXP = INPUT['find_min_logic']
+MODEL, EXP = INPUT['find_min_inter']
 
 # Model Configurations
 STEP = 20 # trajactory length
@@ -226,7 +226,7 @@ def main(solver, solutions_limit=10, interactions_limit=0,
     print '>> ' + '-'* 76
     if endt - startt > 600:
         solving = '%.1f min'%((endt - solvingt) / 60)
-        total = '%.1f min'%((endt - start) / 60)
+        total = '%.1f min'%((endt - startt) / 60)
     else:
         solving = '%.2f s'%(endt - solvingt)
         total = '%.2f s'%(endt - startt)
