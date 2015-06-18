@@ -232,8 +232,8 @@ def main(solver, solutions_limit=10, interactions_limit=0,
         total = '%.2f s'%(endt - startt)
     print '>> Solving duration:\t%s'%solving
     print '>> Total duration:\t%s'%total
-    mailMe('>> %d solutions found.\n>> Total duration: %s'%(count, total))
-    print '>> ' + '-' * 3 + ' (Mail sent.) Finished. ' + '-' * 3
+    mailMe('%d solutions found. Total duration: %s'%(count, total))
+    print '>> ' + '-' * 3 + ' Finished. (mail sent.) ' + '-' * 3
 
 if __name__ == '__main__':
     s = Solver()
