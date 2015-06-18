@@ -22,7 +22,7 @@ INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
           "find_minimal_model":
               ( "PearsonThreshold792WithOct4Sox2Interaction.txt",
                 "UltimateConstrains.txt" )}
-MODEL, EXP = INPUT['find_min_inter']
+MODEL, EXP = INPUT['ABCD_test']
 
 # Model Configurations
 STEP = 20 # trajactory length
@@ -232,7 +232,8 @@ def main(solver, solutions_limit=10, interactions_limit=0,
         total = '%.2f s'%(endt - startt)
     print '>> Solving duration:\t%s'%solving
     print '>> Total duration:\t%s'%total
-    print '>> ' + '-' * 3 + ' Finished. ' + '-' * 3
+    mailMe('>> %d solutions found.\n>> Total dutation: %s'%(count, total))
+    print '>> ' + '-' * 3 + ' (Mail sent.) Finished. ' + '-' * 3
 
 if __name__ == '__main__':
     s = Solver()

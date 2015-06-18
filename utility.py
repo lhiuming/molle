@@ -1,6 +1,7 @@
 from z3 import *
 from operator import or_
 from pprint import pprint
+from smtplib import SMTP
 
 def _sorted_inters(inter_list, code):
     ''' Sorts the inter_list = [('from', 'to', 'positive'), ...] into a dict,
@@ -335,30 +336,15 @@ def printModel(m, A_, R_, L_, species, code, inters, logics,
             %(s,simplify( _create_sym_rule(L[s], A[s], R[s]) ))
     print '>>'
 
+def mailMe(content, title = 'Computation Finished'):
+    s = SMTP('smtp.qq.com')
+    addr = 'syaominglai@qq.com'
+    s.login(addr, 'qqmail746857947')
+    
+    msg = ['From:' + addr,
+           'To:'+ addr,
+           'Subject:' + title,
+           '\n',
+           content]
 
-### Debugging Secntions ###
-###########################
-if __name__ == "__main__":
-  if __debug__:
-      print ">> testing file reading: "
-      modelFile = open('examplefiles/SimpleFourComponentModel.txt', 'r')
-      expFile = open('examplefiles/CertainInteractionRequired.txt', 'r')
-      (species, code, logics, kofe, defI, optI) = readModel(modelFile)
-      (exps, states) = readExp(expFile)
-      modelFile.close(); expFile.close()
-      print "speceis code: ", code
-      print "optional interactions: ", optI
-
-      print ">> testing getInterCombi():"
-      testDef = (['a1', 'a2'], ['r1', 'r2'])
-      testOpt = (['aaa'], [])
-      pprint([i for i in generateInterCombi(testDef, testOpt)])
-
-      print ">> testing makeFunction():"
-      testq = BitVec('testq', 8)
-      testI = ( (1, 3), (6, 7) )
-      print makeFunction(testI, 1)(testq)
-      print makeFunction(testI, 16)(testq)
-      print simplify(makeFunction(testI, 7)(testq) == 1)
-
-
+    s.sendmail(addr, addr, '\n'.join(msg))
