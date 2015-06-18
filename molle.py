@@ -186,14 +186,15 @@ def main(solver, solutions_limit, interactions_limit):
                         c = code[s]
                         solver.add( Extract(c,c,path[t]) == value )
         if __debug__:
-            print '>> \t %d/%d %s added...'%(count_exp, total_exp, exp)
+            print '>> \t %02d/%d %s added...'%(count_exp, total_exp, exp)
     print ">> All Constrains established."
 
-    # Now get the solutions !!!
+    # Now get the solutions !
     count = 0
     allAR = [b for b in list(A_.values()) + list(R_.values()) if b]
     solvingt = time() # just for timing
     print '>> Start solving: %s'%strftime("%d %b %H:%M", localtime(startt))
+    print '>> '
     while solver.check() == sat:
         count += 1
         # make sure all A_[s] and R_[s] are specified
@@ -210,12 +211,13 @@ def main(solver, solutions_limit, interactions_limit):
         # find different solutions (with different selections of interactions)
         # at least one species have distinct interactions
         solver.add(Or([ b != m[b] for b in allAR]))                      
-    if count == 0: print '>> No solution found.'
+    if count == 0: print '>> No solution found. \n>> '
     endt = time()
     print '>> End solving: %s.'%strftime("%d %b %H:%M",localtime(endt))
     print '>> ' + '-'* 76
     print '>> Solving duration:\t%.1f min'%((endt - solvingt)/60)
     print '>> Total duration:\t%.1f min'%((endt - startt)/60)
+    print '>> Finished.'
 
 if __name__ == '__main__':
     s = Solver()
