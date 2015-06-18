@@ -193,11 +193,13 @@ def main(solver, solutions_limit=10, interactions_limit=0,
                         solver.add( Extract(c,c,path[t]) == value )
         if detail:
             print '>> \t %02d/%d %s added...'%(count_exp, total_exp, exp)
-    if detail: print ">> All Constrains established."
+    if detail:
+        print ">> All Constrains established. (takes %.1f min)" \
+            %((time() - start)/60)
 
     # Now get the solutions !
+    print '>> ' + '-'* 76 # seperator
     solvingt = lastt = time() # just for timing
-    print '>> ' + '-'* 76
     print '>> Start solving: %s'%strftime("%d %b %H:%M",localtime(solvingt))
     
     count = 0
@@ -205,19 +207,20 @@ def main(solver, solutions_limit=10, interactions_limit=0,
     while solver.check() == sat:
         count += 1
         m = solver.model()
+        lastt = time() # time for last model
         print '>> '
-        print ">> Solution %d: (with %.1f min)"%(count,(time() - lastt)/60)
+        print ">> Solution %d: (takes %.1f min)"%(count,(time() - lastt)/60)
+        print '>> '
         if output:
             printModel(m, A_, R_, L_, species, code, inters, logics,
                        config = True, model = True)
         if count == solutions_limit: break
         # find different solutions (with different selections of interactions)
-        # at least one species have distinct interactions
         solver.add(Or([ b != (m[b] or 0) for b in allAR]))
 
     if count > 0: print '>> '
     endt = time()
-    print '>> %d solutions found. (take %.1f min to end)' \
+    print '>> %d solutions found. (takes %.1f min to end)' \
         %(count, (endt - lastt)/60)
     print '>> End solving: %s.'%strftime("%d %b %H:%M",localtime(endt))
     print '>> ' + '-'* 76

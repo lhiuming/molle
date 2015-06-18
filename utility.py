@@ -322,7 +322,6 @@ def printModel(m, A_, R_, L_, species, code, inters, logics,
         if R_[s]: R[s] = bv2inters(m[R_[s]] or zero, inters[c][1], species)
         else: R[s] = []
     # printing the model
-    print '>>'
     if config:
         print ">>\tConfigurations: "
         for s in species:
@@ -334,7 +333,6 @@ def printModel(m, A_, R_, L_, species, code, inters, logics,
         print ">>\tModel: "
         for s in species: print ">>\t\t%s' = %s" \
             %(s,simplify( _create_sym_rule(L[s], A[s], R[s]) ))
-    print '>>'
 
 def mailMe(content, title = 'Computation Finished'):
     s = SMTP('smtp.qq.com')
