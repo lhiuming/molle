@@ -233,7 +233,7 @@ def main(solver, solutions_limit=10, interactions_limit=0,
         total = '%.2f s'%(endt - startt)
     print '>> Solving duration:\t%s'%solving
     print '>> Total duration:\t%s'%total
-    mailMe('Solutions:\t%d\nTotal:\t%s'%(count, total),
+    mailMe('Solutions number:\t%d\nTotal duration:\t%s'%(count, total),
            "Computation Fnishied for '%s'."%config)
     print '>> ' + '-' * 3 + ' Finished. (mail sent.) ' + '-' * 3
 
