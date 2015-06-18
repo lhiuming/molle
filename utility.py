@@ -68,14 +68,12 @@ def readModel(f):
     for l in f.readlines(): # loop every line
         l = l.strip().split()
         if(not l): continue # skip empty line
-        print l
         if 'optional' in l:
             opt_inters_list.append(tuple(l[:3]))
             total_opt += 1
         else:
             def_inters_list.append(tuple(l[:3]))
             total_def += 1
-    print 'total opt: %d\ttotal def: %d'%(total_opt, total_def)
     defI = _sorted_inters(def_inters_list, code)
     optI = _sorted_inters(opt_inters_list, code)
 
@@ -137,24 +135,14 @@ def _concat(bvs):
     if len(bvs) == 1: return bvs[0]
     else: return Concat(bvs)
     
-def _create_bit_rule(num, act, rep, A, R):
+def _create_bit_rule(num, act_list, rep_list, A, R):
     ''' Create the update rule that return bit-vector of length 1. '''
     # initialization
-    if act:
-        act = _concat(act)
-    else:
-        act = 0
-        A = 0
-    aloAct = (act & A) != 0
-    allAct = And(A != 0, (act & A) == A)
-    emptyAct = A == 0
-    if rep:
-        rep = _concat(rep)
-    else:
-        rep = 0
-        R = 0
-    emptyRep = R == 0
-    noRep = And(R != 0, (rep & R) == 0)
+    if act_list: act = _concat(act_list)
+    else: act = A = 0
+    if rep_list: rep = _concat(rep_list)
+    else: rep = R = 0
+    
     # creating result
     if num == 0:
         return And(R == 0, A != 0, A & act == A)
@@ -162,12 +150,12 @@ def _create_bit_rule(num, act, rep, A, R):
         return And(R == 0, A != 0, A & act != 0)
     elif num == 2:
         return Or( And(R == 0, A != 0, A & act == A),
-                   And(R != 0, rep & R == 0, A != 0, A & act != 0) )
+                   And(R != 0, rep & R == 0, A & act != 0) )
     elif num == 3:
-        return And( A != 0, A & act != 0, rep & R == 0)
+        return And(A & act != 0, rep & R == 0)
     elif num == 4:
         return Or( And(R == 0, A != 0, A & act == A),
-                   And(R != 0, A != 0, A & act == A, rep & R != R) )
+                   And(A != 0, A & act == A, rep & R != R) )
     elif num == 5:
         return Or( And(R == 0, A != 0, act & A != 0),
                    And(R != 0, A != 0, act & A == A, rep & R != R) )
@@ -230,8 +218,8 @@ def makeFunction(acts, reps, kofe_index, logic, A, R):
     ''' Makes a function that takes q, A, R, and return a coresponding z3 expr.
     A is the acticators-selecting bit-vector, R for repressors.
     '''
-    return lambda q, ko, fe: \
-        _with_kofe(kofe_index, ko, fe, simplify(
+    return lambda q, ko, fe: simplify(
+        _with_kofe(kofe_index, ko, fe,
                    _create_bit_rule(logic,
                                     [Extract(i,i,q) for i in acts],
                                     [Extract(i,i,q) for i in reps],
@@ -293,7 +281,6 @@ def bv2logic(lbvv, llist):
     return llist[lcode]
 
 def bv2inters(ibvv, ilist, species):
-    if not ibvv: return []
     l = ibvv.size() - 1
     return [species[c] for i, c in enumerate(ilist) if checkBit(l-i, ibvv)]
 

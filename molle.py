@@ -2,8 +2,8 @@
 ######################
 
 # Computation Settings
-solutions_limit = 0 # how many solution you wish to find
-interactions_limit = 17 # limit of optional interactions. 17 for minimal model
+SOLUTIONS_LIMIT = 0 # how many solution you wish to find
+INTERACTIONS_LIMIT = 0 # limit of optional interactions. 17 for minimal model
 
 # Input and output files
 PREFIX = "examplefiles/"
@@ -39,14 +39,15 @@ from utility import *
 from pprint import pprint
 from time import time, localtime, strftime
 
-def main(solver, solutions_limit, interactions_limit):
+def main(solver, solutions_limit=10, interactions_limit=0,
+         mfile=MODEL, efile=EXP, debug=False, detail=True, output = True):
     startt = time()
     
     # reading files
-    modelFile = open(PREFIX + MODEL, 'r')
+    modelFile = open(PREFIX + mfile, 'r')
     (species, code, logics, kofe, defI, optI) = readModel(modelFile)
     modelFile.close()
-    expFile = open(PREFIX + EXP, 'r')
+    expFile = open(PREFIX + efile, 'r')
     (exps, states) = readExp(expFile)
     expFile.close();
 
@@ -54,7 +55,7 @@ def main(solver, solutions_limit, interactions_limit):
     bitlen = len(species)
     kos, fes = kofe['KO'], kofe['FE']
     
-    if __debug__:
+    if debug:
         print '>> Species codes:'; pprint(code)
         print '>> Defined Iteractions:'; pprint(defI)
         print '>> Optional Interactions:'; pprint(optI)
@@ -90,7 +91,7 @@ def main(solver, solutions_limit, interactions_limit):
 
 
     # 1. Modeling constrains
-    if __debug__: print '>> #1 Adding modeling constrains: '
+    if detail: print '>> #1 Adding modeling constrains: '
     for s in species:
         c = code[s]
         # INTER: defined activators and repressors must be selected
@@ -103,7 +104,7 @@ def main(solver, solutions_limit, interactions_limit):
                               for i in logic_i for j in logic_i if i != j]))
         # LOGIC: must select one logic
         solver.add(L_[s] != 0)
-        if __debug__:
+        if debug:
             assert solver.check() == sat
             print '>> \tConstraints %s:\tAct=%s,\tRep=%s,\tLog=%s(%s).' \
                 %(s, A_[s] and A_[s].sort() or None,
@@ -126,11 +127,11 @@ def main(solver, solutions_limit, interactions_limit):
         # constraints that all selected nums of inters are less than limit
         solver.add(ULE(sum([ZeroExt(6, b) for b in opts]),
                        interactions_limit))
-        if __debug__:
+        if detail:
             print '>> #2 Interactions limit %d ADDED. %s' \
                 %(interactions_limit,solver.check())
     else:
-        if __debug__: print '>> #2 Interactions limit: not set.'
+        if detail: print '>> #2 Interactions limit: NOT SET.'
         
     
     # 3. Setup functions in solver
@@ -146,21 +147,27 @@ def main(solver, solutions_limit, interactions_limit):
     #                                  (Extract(c,c,F(bv, ko, fe))==1) == \
     #                                  f_[s][l](bv, ko, fe))))
     #    if __debug__: print '>> Set function for %s: %s'%(s, solver.check())
-    if __debug__: print '>> #3 Setup forall style function-definition: SKIP.'
+    if detail: print '>> #3 Setup forall style function-definition: SKIP.'
 
 
     # 4. Define Transition ralationship. It is like a macro.
-    #T = lambda q_old, q_new, ko, fe: q_new == F(q_old, ko, fe)
     T = lambda q_old, q_new, ko, fe: \
         And([ And([Implies(Extract(l,l, L_[s]) == 1, # if logic l is selected
                        (Extract(code[s],code[s],q_new)==1) == \
                         f_[s][l](q_old, ko, fe)) # update value
                   for l in range(L_[s].size())])
                for s in species ])
-    if __debug__: print '>> #4 Transition relation macro: SET.'
+    bunchT = lambda qs, ko, fe: \
+             And([ And([ Implies(Extract(l,l,L_[s]) == 1,
+                               And([ (Extract(code[s],code[s],qs[t+1])==1) == \
+                                     f_[s][l](qs[t], ko, fe)
+                                     for t in range(STEP-1) ]))
+                         for l in range(L_[s].size())])
+                   for s in species ])
+    if detail: print '>> #4 Transition relation macro: SET.'
 
     # 5. Experimental constrains
-    if __debug__: print '>> #5 Applying experimental constraints:'
+    if detail: print '>> #5 Applying experimental constraints:'
     total_exp = len(exps)
     count_exp = 0
     for exp in exps:
@@ -169,7 +176,8 @@ def main(solver, solutions_limit, interactions_limit):
         KO = BitVec(exp + '_KO', len(kos) or 1)
         FE = BitVec(exp + '_FE', len(fes) or 1)
         path = [BitVec(exp + '_%d'%t, bitlen) for t in range(STEP)]
-        solver.add(*[ T(path[t], path[t+1], KO, FE) for t in range(STEP-1) ])
+        #solver.add(*[ T(path[t], path[t+1], KO, FE) for t in range(STEP-1) ])
+        solver.add(bunchT(path, KO, FE)) # a little bit faster in solving
         # add constrains
         for t, conditions in exps[exp]:
             for cond in conditions:
@@ -185,41 +193,51 @@ def main(solver, solutions_limit, interactions_limit):
                     else:
                         c = code[s]
                         solver.add( Extract(c,c,path[t]) == value )
-        if __debug__:
+        if detail:
             print '>> \t %02d/%d %s added...'%(count_exp, total_exp, exp)
-    print ">> All Constrains established."
+    if detail: print ">> All Constrains established."
 
     # Now get the solutions !
-    count = 0
-    allAR = [b for b in list(A_.values()) + list(R_.values()) if b]
     solvingt = time() # just for timing
     print '>> ' + '-'* 76
     print '>> Start solving: %s'%strftime("%d %b %H:%M", localtime(startt))
     print '>> '
+    
+    count = 0
+    allAR = [b for b in list(A_.values()) + list(R_.values()) if b]
     while solver.check() == sat:
         count += 1
         # make sure all A_[s] and R_[s] are specified
         solver.push() # push will somehow change the solution
         solver.check(); m = solver.model()
-        solver.add([ b == 0 for b in allAR if not m[b] ])
+        solver.add([ b == 0 for b in allAR if not m[b] ]) # must hola a value
+        solver.add([ b == m[b] for b in allAR if m[b] ]) # keep the  value
         solver.check(); m = solver.model() # update the solution
         solver.pop()
         # print out
-        print ">> Solution %d: "%count
-        printModel(m, A_, R_, L_, species, code, inters, logics,
-                   config = True, model = True)
+        if output:
+            print ">> Solution %d: "%count
+            printModel(m, A_, R_, L_, species, code, inters, logics,
+                       config = True, model = True)
         if count == solutions_limit: break
         # find different solutions (with different selections of interactions)
         # at least one species have distinct interactions
-        solver.add(Or([ b != m[b] for b in allAR]))                      
-    if count == 0: print '>> No solution found. \n>> '
+        solver.add(Or([ b != m[b] for b in allAR]))
+        
     endt = time()
+    print '>> %d solutions found. \n>> '%count
     print '>> End solving: %s.'%strftime("%d %b %H:%M",localtime(endt))
     print '>> ' + '-'* 76
-    print '>> Solving duration:\t%.1f min'%((endt - solvingt)/60)
-    print '>> Total duration:\t%.1f min'%((endt - startt)/60)
+    if endt - startt > 600:
+        solving = '%.1f min'%((endt - solvingt) / 60)
+        total = '%.1f min'%((endt - start) / 60)
+    else:
+        solving = '%.2f s'%(endt - solvingt)
+        total = '%.2f s'%(endt - startt)
+    print '>> Solving duration:\t%s'%solving
+    print '>> Total duration:\t%s'%total
     print '>> ' + '-' * 3 + ' Finished. ' + '-' * 3
 
 if __name__ == '__main__':
     s = Solver()
-    main(s, solutions_limit, interactions_limit)
+    main(s, SOLUTIONS_LIMIT, INTERACTIONS_LIMIT, MODEL, EXP)
