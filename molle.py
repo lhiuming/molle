@@ -19,10 +19,6 @@ INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
                               "UltimateConstrains.txt" ),
           'find_min_inter': ( "simplestlogic.txt", # established logics
                               "UltimateConstrains.txt" ),
-          "inter_dcrease": ( "partialinter.txt",
-                          "UltimateConstrains.txt" ),
-          "inter_increase": ( "littleinter.txt",
-                          "UltimateConstrains.txt" ),
           "find_minimal_model":
               ( "PearsonThreshold792WithOct4Sox2Interaction.txt",
                 "UltimateConstrains.txt" )}
