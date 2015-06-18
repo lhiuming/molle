@@ -147,54 +147,78 @@ def _create_bit_rule(num, act_list, rep_list, A, R):
     if num == 0:
         return And(R == 0, A != 0, A & act == A)
     elif num == 1:
-        return And(R == 0, A != 0, A & act != 0)
+        return And(R == 0, A & act != 0)
+       #return And(R == 0, A != 0, A & act != 0)
     elif num == 2:
         return Or( And(R == 0, A != 0, A & act == A),
                    And(R != 0, rep & R == 0, A & act != 0) )
+       #return Or( And(R == 0, A != 0, A & act == A),
+       #           And(R != 0, A != 0, rep & R == 0, A & act != 0) )
     elif num == 3:
         return And(A & act != 0, rep & R == 0)
     elif num == 4:
-        return Or( And(R == 0, A != 0, A & act == A),
-                   And(A != 0, A & act == A, rep & R != R) )
+       return And( A != 0, A & act == A,
+                   Or(R == 0, rep & R != R) )
+       #return Or( And(R == 0, A != 0, A & act == A),
+       #           And(A != 0, A & act == A, rep & R != R) )
+       #return Or( And(R == 0, A != 0, A & act == A),
+       #           And(R != 0, A != 0, A & act == A, rep & R != R) )
     elif num == 5:
-        return Or( And(R == 0, A != 0, act & A != 0),
-                   And(R != 0, A != 0, act & A == A, rep & R != R) )
+        return Or( And(R == 0, act & A != 0),
+                   And(A != 0, act & A == A, rep & R != R) )
+       #return Or( And(R == 0, A != 0, act & A != 0),
+       #           And(R != 0, A != 0, act & A == A, rep & R != R) )
     elif num == 6:
         return Or( And(R == 0, A != 0, act & A == A),
-                   And(R != 0, A != 0, act & A != 0, rep & R != R) )
+                   And(act & A != 0, rep & R != R) )
+       #return Or( And(R == 0, A != 0, act & A == A),
+       #          And(R != 0, A != 0, act & A != 0, rep & R != R) )
     elif num == 7:
-        return Or( And(R == 0, A != 0, act & A != 0),
-                   And(R != 0, A != 0, act & A != 0, rep & R != R) )
+        return Or( And(R == 0, act & A != 0),
+                   And(act & A != 0, rep & R != R) )
+       #return Or( And(R == 0, A != 0, act & A != 0),
+       #           And(R != 0, A != 0, act & A != 0, rep & R != R) )
     elif num == 8:
-        return Or( And(R == 0, A != 0, act & A == A),
-                   And(R != 0, A != 0, act & A == A) )
+        return And(A != 0, act & A == A)
+       #return Or( And(R == 0, A != 0, act & A == A),
+       #           And(R != 0, A != 0, act & A == A) )
     elif num == 9:
-        return Or( And(R == 0, A != 0, act & A != 0),
+        return Or( And(R == 0, act & A != 0),
                    And(R != 0, A != 0, act & A == A) )
+       #return Or( And(R == 0, A != 0, act & A != 0),
+       #           And(R != 0, A != 0, act & A == A) )
     elif num == 10:
-        return Or( And(R == 0, A != 0, act & A == A),
-                   And(R != 0, A != 0, Or(act & A == A,
-                                          And(act & A != 0, rep & R == 0))) )
+        return Or( And(A != 0, act & A == A),
+                   And(R != 0, act & A != 0, rep & R == 0) )
+       #return Or( And(R == 0, A != 0, act & A == A),
+       #           And(R != 0, A != 0, Or(act & A == A,
+       #                                  And(act & A != 0, rep & R == 0))) )
     elif num == 11:
-        return Or( And(R == 0, A != 0, act & A != 0),
-                   And(R != 0, A != 0, Or(act & A == A,
-                                          And(act & A != 0, rep & R == 0))) )
+       return Or( And(R == 0, A != 0, act & A != 0),
+                  And(R != 0, A != 0, Or(act & A == A,
+                                         And(act & A != 0, rep & R == 0))) )
     elif num == 12:
-        return Or( And(R == 0, A != 0, act & A == A),
-                   And(R != 0, A != 0, Or(act & A == A,
-                                          And(act & A != 0, rep & R != R))) )
+        return Or( And(A != 0, act & A == A),
+                   And(act & A != 0, rep & R != R) )
+       #return Or( And(R == 0, A != 0, act & A == A),
+       #           And(R != 0, A != 0, Or(act & A == A,
+       #                                  And(act & A != 0, rep & R != R))) )
     elif num == 13:
         return Or( And(R == 0, A != 0, act & A != 0),
                    And(R != 0, A != 0, Or(act & A == A,
                                           And(act & A != 0, rep & R != R))) )
     elif num == 14:
         return Or( And(R == 0, A != 0, act & A == A),
-                   And(R != 0, A != 0, act & A != 0) )
+                   And(R != 0, act & A != 0) )
+        #return Or( And(R == 0, A != 0, act & A == A),
+        #           And(R != 0, A != 0, act & A != 0) )
     elif num == 15:
-        return Or( And(R == 0, A != 0, act & A != 0),
-                   And(R != 0, A != 0, act & A != 0) )
+        return act & A != 0
+        #return Or( And(R == 0, A != 0, act & A != 0),
+        #           And(R != 0, A != 0, act & A != 0) )
     elif num == 16:
-        return And(A == 0, R != 0, rep & R != 0, rep & R != R)
+        return And(A == 0, rep & R != 0, rep & R != R)
+        #return And(A == 0, R != 0, rep & R != 0, rep & R != R)
     elif num == 17:
         return And(A == 0, R != 0, rep & R == 0)
     else:

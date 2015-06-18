@@ -3,7 +3,7 @@
 
 # Computation Settings
 SOLUTIONS_LIMIT = 0 # how many solution you wish to find
-INTERACTIONS_LIMIT = 0 # limit of optional interactions. 17 for minimal model
+INTERACTIONS_LIMIT = 17 # limit of optional interactions. 17 for minimal model
 
 # Input and output files
 PREFIX = "examplefiles/"
@@ -26,7 +26,7 @@ INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
           "find_minimal_model":
               ( "PearsonThreshold792WithOct4Sox2Interaction.txt",
                 "UltimateConstrains.txt" )}
-MODEL, EXP = INPUT['ABCD_kofe']
+MODEL, EXP = INPUT['find_min_logic']
 
 # Model Configurations
 STEP = 20 # trajactory length
