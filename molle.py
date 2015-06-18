@@ -22,7 +22,8 @@ INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
           "find_minimal_model":
               ( "PearsonThreshold792WithOct4Sox2Interaction.txt",
                 "UltimateConstrains.txt" )}
-MODEL, EXP = INPUT['ABCD_test']
+config = 'ABCD_kofe'
+MODEL, EXP = INPUT[config]
 
 # Model Configurations
 STEP = 20 # trajactory length
@@ -232,7 +233,8 @@ def main(solver, solutions_limit=10, interactions_limit=0,
         total = '%.2f s'%(endt - startt)
     print '>> Solving duration:\t%s'%solving
     print '>> Total duration:\t%s'%total
-    mailMe('%d solutions found. Total duration: %s'%(count, total))
+    mailMe('Solutions:\t%d\nTotal:\t%s'%(count, total),
+           "Computation Fnishied for '%s'."%config)
     print '>> ' + '-' * 3 + ' Finished. (mail sent.) ' + '-' * 3
 
 if __name__ == '__main__':
