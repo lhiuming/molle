@@ -3,12 +3,9 @@
 
 # Computation Settings
 solutions_limit = 0 # how many solution you wish to find
-interactions_limit = 17 # limit of optional interactions.
-# set to 17 for the minimal pluripotency model
-
+interactions_limit = 0 # limit of optional interactions. 17 for minimal model
 
 # Input and output files
-OUTPUT = "solutions.out" # file name for solution output
 PREFIX = "examplefiles/"
 INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
                          "CertainInteractionRequired.txt" ), # not true
@@ -29,11 +26,10 @@ INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
           "find_minimal_model":
               ( "PearsonThreshold792WithOct4Sox2Interaction.txt",
                 "UltimateConstrains.txt" )}
-MODEL, EXP = INPUT['inter_increase']
+MODEL, EXP = INPUT['find_min_logic']
 
 # Model Configurations
 STEP = 20 # trajactory length
-
 
 ### Modelling #########################################
 #######################################################
@@ -76,13 +72,16 @@ def main(solver, solutions_limit, interactions_limit):
         acts = optI[c][0] + defI[c][0] # Concat is from left to right
         reps = optI[c][1] + defI[c][1]
         inters[c] = (acts, reps)
+        
         # creating Acr and Rep selecting BitVec
         if acts: A_[s] = BitVec('Act_' + s, len(acts))
         else: A_[s] = None
         if reps: R_[s] = BitVec('Rep_' + s, len(reps))
         else: R_[s] = None
+        
         # create logic-selecting BitVec
         L_[s] = BitVec('Logic_' + s, len(logics[s]))
+        
         # make the functions
         kofe_index = (s in kos and kos.index(s)+1,
                       s in fes and fes.index(s)+1)
@@ -100,8 +99,8 @@ def main(solver, solutions_limit, interactions_limit):
         solver.add([1 == Extract(i,i,R_[s]) for i in range(len(defrep))])
         # LOGIC: only one logic is selected
         logic_i = range(L_[s].size())
-        solver.add(1 == ~(Any([ Extract(i,i,L_[s]) & Extract(j,j,L_[s])
-                                for i in logic_i for j in logic_i if i != j])))
+        solver.add(0 == Any([ Extract(i,i,L_[s]) & Extract(j,j,L_[s])
+                              for i in logic_i for j in logic_i if i != j]))
         # LOGIC: must select one logic
         solver.add(L_[s] != 0)
         if __debug__:
