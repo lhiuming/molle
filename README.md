@@ -1,13 +1,13 @@
 # molle
 My implementation of Abstract Boolean Network approach for genetic network analysis
 
-UNDERCONSTRUCTOIN...
+Change the configuration and inputs in the header of molle.py. Then run:
 
-The branch for developing a more efficient implementation with SMT-based systhesis approach.
+    python molle.py
+
+Checking the example files for infput file format.
 
 ## todos
 
-1. deceloping a new version, using SMT-based network synthesis method proposed
-by B. Yordanoc et al.[doi:10.1007/978-3-642-38088-4_6]
-- test, while ignoring kofe effect?
-- try eliminating the ForAll expressions.
+1. useful API
+2. simple Documentation / wiki
