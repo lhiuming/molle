@@ -3,7 +3,7 @@
 
 # Computation Settings
 solutions_limit = 0 # how many solution you wish to find
-interactions_limit = 0 # limit of optional interactions. 17 for minimal model
+interactions_limit = 17 # limit of optional interactions. 17 for minimal model
 
 # Input and output files
 PREFIX = "examplefiles/"
@@ -26,7 +26,7 @@ INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
           "find_minimal_model":
               ( "PearsonThreshold792WithOct4Sox2Interaction.txt",
                 "UltimateConstrains.txt" )}
-MODEL, EXP = INPUT['find_min_logic']
+MODEL, EXP = INPUT['ABCD_kofe']
 
 # Model Configurations
 STEP = 20 # trajactory length
@@ -193,6 +193,7 @@ def main(solver, solutions_limit, interactions_limit):
     count = 0
     allAR = [b for b in list(A_.values()) + list(R_.values()) if b]
     solvingt = time() # just for timing
+    print '>> ' + '-'* 76
     print '>> Start solving: %s'%strftime("%d %b %H:%M", localtime(startt))
     print '>> '
     while solver.check() == sat:
@@ -217,7 +218,7 @@ def main(solver, solutions_limit, interactions_limit):
     print '>> ' + '-'* 76
     print '>> Solving duration:\t%.1f min'%((endt - solvingt)/60)
     print '>> Total duration:\t%.1f min'%((endt - startt)/60)
-    print '>> Finished.'
+    print '>> ' + '-' * 3 + ' Finished. ' + '-' * 3
 
 if __name__ == '__main__':
     s = Solver()
