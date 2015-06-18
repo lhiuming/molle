@@ -22,7 +22,7 @@ INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
           "find_minimal_model":
               ( "PearsonThreshold792WithOct4Sox2Interaction.txt",
                 "UltimateConstrains.txt" )}
-config = 'ABCD_kofe'
+config = 'minimal_test'
 MODEL, EXP = INPUT[config]
 
 # Model Configurations
@@ -39,7 +39,8 @@ from time import time, localtime, strftime
 def main(solver, solutions_limit=10, interactions_limit=0,
          mfile=MODEL, efile=EXP, debug=False, detail=True, output = True):
     startt = time()
-    
+    print '>> Start program: %s'%strftime("%d %b %H:%M", localtime(startt))    
+
     # reading files
     modelFile = open(PREFIX + mfile, 'r')
     (species, code, logics, kofe, defI, optI) = readModel(modelFile)
@@ -195,34 +196,29 @@ def main(solver, solutions_limit=10, interactions_limit=0,
     if detail: print ">> All Constrains established."
 
     # Now get the solutions !
-    solvingt = time() # just for timing
+    solvingt = lastt = time() # just for timing
     print '>> ' + '-'* 76
-    print '>> Start solving: %s'%strftime("%d %b %H:%M", localtime(startt))
-    print '>> '
+    print '>> Start solving: %s'%strftime("%d %b %H:%M",localtime(solvingt))
     
     count = 0
     allAR = [b for b in list(A_.values()) + list(R_.values()) if b]
     while solver.check() == sat:
         count += 1
-        # make sure all A_[s] and R_[s] are specified
-        solver.push() # push will somehow change the solution
-        solver.check(); m = solver.model()
-        solver.add([ b == 0 for b in allAR if not m[b] ]) # must hola a value
-        solver.add([ b == m[b] for b in allAR if m[b] ]) # keep the  value
-        solver.check(); m = solver.model() # update the solution
-        solver.pop()
-        # print out
+        m = solver.model()
+        print '>> '
+        print ">> Solution %d: (with %.1f min)"%(count,(time() - lastt)/60)
         if output:
-            print ">> Solution %d: "%count
             printModel(m, A_, R_, L_, species, code, inters, logics,
                        config = True, model = True)
         if count == solutions_limit: break
         # find different solutions (with different selections of interactions)
         # at least one species have distinct interactions
-        solver.add(Or([ b != m[b] for b in allAR]))
-        
+        solver.add(Or([ b != (m[b] or 0) for b in allAR]))
+
+    if count > 0: print '>> '
     endt = time()
-    print '>> %d solutions found. \n>> '%count
+    print '>> %d solutions found. (take %.1f min to end)' \
+        %(count, (endt - lastt)/60)
     print '>> End solving: %s.'%strftime("%d %b %H:%M",localtime(endt))
     print '>> ' + '-'* 76
     if endt - startt > 600:

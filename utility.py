@@ -317,9 +317,9 @@ def printModel(m, A_, R_, L_, species, code, inters, logics,
     for s in species:
         c = code[s]
         L[s] = bv2logic(m[L_[s]], logics[s])
-        if A_[s]: A[s] = bv2inters(m[A_[s]], inters[c][0], species)
+        if A_[s]: A[s] = bv2inters(m[A_[s]] or zero, inters[c][0], species)
         else: A[s] = []
-        if R_[s]: R[s] = bv2inters(m[R_[s]], inters[c][1], species)
+        if R_[s]: R[s] = bv2inters(m[R_[s]] or zero, inters[c][1], species)
         else: R[s] = []
     # printing the model
     print '>>'
