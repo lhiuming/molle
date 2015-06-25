@@ -22,7 +22,7 @@ INPUT = { 'ABCD_test': ( "SimpleFourComponentModel.txt",
           "find_minimal_model":
               ( "PearsonThreshold792WithOct4Sox2Interaction.txt",
                 "UltimateConstrains.txt" )}
-config = 'minimal_test'
+config = 'find_min_inter'
 MODEL, EXP = INPUT[config]
 
 # Model Configurations
@@ -195,7 +195,7 @@ def main(solver, solutions_limit=10, interactions_limit=0,
             print '>> \t %02d/%d %s added...'%(count_exp, total_exp, exp)
     if detail:
         print ">> All Constrains established. (takes %.1f min)" \
-            %((time() - start)/60)
+            %((time() - startt)/60)
 
     # Now get the solutions !
     print '>> ' + '-'* 76 # seperator
@@ -210,8 +210,8 @@ def main(solver, solutions_limit=10, interactions_limit=0,
         lastt = time() # time for last model
         print '>> '
         print ">> Solution %d: (takes %.1f min)"%(count,(time() - lastt)/60)
-        print '>> '
         if output:
+            print '>> '
             printModel(m, A_, R_, L_, species, code, inters, logics,
                        config = True, model = True)
         if count == solutions_limit: break
@@ -238,4 +238,5 @@ def main(solver, solutions_limit=10, interactions_limit=0,
 
 if __name__ == '__main__':
     s = Solver()
-    main(s, SOLUTIONS_LIMIT, INTERACTIONS_LIMIT, MODEL, EXP)
+    main(s, SOLUTIONS_LIMIT, INTERACTIONS_LIMIT, MODEL, EXP, debug = False,
+         detail = False, output = True)
