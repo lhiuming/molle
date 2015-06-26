@@ -1,7 +1,6 @@
 from z3 import *
 from operator import or_
 from pprint import pprint
-from smtplib import SMTP
 
 def _sorted_inters(inter_list, sp):
     ''' Sorts the inter_list = [('from', 'to', 'positive'), ...] into a dict,
@@ -330,15 +329,19 @@ def printModel(m, A_, R_, L_, species, inters, logics,
         for s in species: print ">>\t\t%s' = %s" \
             %(s,simplify( _create_sym_rule(L[s], A[s], R[s]) ))
 
-def mailMe(content, title = 'Computation Finished'):
-    s = SMTP('smtp.qq.com')
-    addr = 'syaominglai@qq.com'
-    s.login(addr, 'qqmail746857947')
-    
-    msg = ['From:' + addr,
-           'To:'+ addr,
-           'Subject:' + title,
-           '\n',
-           content]
+from smtplib import SMTP
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
-    s.sendmail(addr, addr, '\n'.join(msg))
+def mailMe(content, title = 'Computation Finished'):
+    me = 'syaominglai@qq.com'
+
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = title
+    msg['From'] = msg['To'] = me
+    msg.attach(MIMEText(content, 'plain'))
+
+    server = SMTP('smtp.qq.com')
+    server.login(me, 'qqmail746857947')
+    server.sendmail(me, me, msg.as_string())
+    server.quit()
