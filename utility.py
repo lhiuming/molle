@@ -302,13 +302,11 @@ def bv2logic(lbvv, llist):
     return llist[lcode]
 
 def bv2inters(ibvv, ilist, species):
+    if simplify(ibvv == 0): return []
     l = ibvv.size() - 1
     return [species[c] for i, c in enumerate(ilist) if checkBit(l-i, ibvv)]
 
-def printModel(m, A_, R_, L_, species, inters, logics,
-               config = True, model = True):
-    ''' Print the solved model nicely. '''
-    # getting model details
+def getDetail(m, A_, R_, L_, species, inters, logics):
     A = {}; R = {}; L = {}
     for c, s in enumerate(species):
         L[s] = bv2logic(m[L_[s]], logics[s])
@@ -316,6 +314,10 @@ def printModel(m, A_, R_, L_, species, inters, logics,
         else: A[s] = []
         if R_[s]: R[s] = bv2inters(m[R_[s]] or zero, inters[c][1], species)
         else: R[s] = []
+    return (A, R, L)
+
+def printModel(species, A, R, L, config = True, model = True):
+    ''' Print the solved model nicely. '''
     # printing the model
     if config:
         print ">>\tConfigurations: "
