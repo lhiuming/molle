@@ -5,3 +5,6 @@
 
 # Complied
 *.pyc
+
+# running log
+*.log
