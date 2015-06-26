@@ -180,25 +180,24 @@ def main(solver, problem, solutions_limit=10, interactions_limit=0,
     count = 0
     allAR = filter(lambda x: x, list(A_.values()) + list(R_.values()))
     while solver.check() == sat:
+        print ">> Solution %d: (takes %.1f min)"%(count,(time() - lastt)/60)
+        lastt = time() # update time for lasted model
         count += 1
         m = solver.model()
-        lastt = time() # time for last model
-        print ">> Solution %d: (takes %.1f min)"%(count,(time() - lastt)/60)
-        if output:
-            printModel(m, A_, R_, L_, species, inters, logics,
-                       config = True, model = True)
+        if output: printModel(m, A_, R_, L_, species, inters, logics,
+                              config = True, model = True)
         if count == solutions_limit: break
-        # find different solutions (with different selections of interactions)
+        # find different solutions
+        # (with different selections of interactions)
         solver.add(Or([ b != (m[b] or 0) for b in allAR]))
-
     endt = time()
-    print '>> %d solutions found. (takes %.1f min to end)' \
-        %(count, (endt - lastt)/60)
+    
+    print '>> %d solutions found. (takes %s to end)' \
+        %(count, conv_time(endt - lastt))
     print '>> End solving: %s.'%strftime("%d %b %H:%M",localtime(endt))
     print '>> ' + '-'* 76
-    solving = conv_time(endt - solvingt)
+    print '>> Solving duration:\t%s'%conv_time(endt - solvingt)
     total = conv_time(endt - startt)
-    print '>> Solving duration:\t%s'%solving
     print '>> Total duration:\t%s'%total
     mailMe('Solutions number:\t%d\nTotal duration:\t%s'%(count, total),
            "Computation Fnishied for '%s'."%problem)
@@ -207,7 +206,7 @@ def main(solver, problem, solutions_limit=10, interactions_limit=0,
 if __name__ == '__main__':
     s = Solver()
     main(s,
-         problem = 'find_min_logic',
+         problem = 'find_min_inter',
          solutions_limit = 0,
          interactions_limit = 17,
          debug = True, detail = True, output = True)
