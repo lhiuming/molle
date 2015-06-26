@@ -125,7 +125,7 @@ def compati(l, actn, repn):
     if actn == 0:
         if repn == 0: return (-1, )
         else: # only repressors
-            return (16, 17) # tottaly change the allowed logics!!!
+            return filter(lambda x: x > 15, l)
     elif repn == 0: # only activator
         return filter(lambda x: x < 2, l) or (-1, )
     else:

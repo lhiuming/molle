@@ -95,9 +95,9 @@ class ABN:
                 if self.R_[s]:
                     a, b = self.R_[s].size() - repn, self.R_[s].size()
                     opts.extend([ Extract(i,i,self.R_[s]) for i in range(a,b)])
-                # all selected nums of inters are less than limit
-                solver.add(ULE(sum([ZeroExt(6, bv) for bv in opts]),
-                               ilimit))
+            # all selected nums of inters are less than limit
+            solver.add(ULE(sum([ ZeroExt(6, bv) for bv in opts ]),
+                           ilimit))
             if detail:
                 print '>> #2 Interactions limit %d ADDED. %s' \
                     %(ilimit, solver.check())

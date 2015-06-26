@@ -1,0 +1,54 @@
+>> Abstract Network Modeling: molle -------------------------------------------
+>> Modeling for find_minimal_model
+>> Start program: 26 Jun 19:47
+Traceback (most recent call last):
+  File "solve.py", line 62, in <module>
+    model.build(ilimit = ilimit, detail=verbose, debug=debug)
+  File "/data/user/xiaoming/git/molle/molle.py", line 120, in build
+    solver.add(self.bunchT(path, ko_exp, fe_exp))
+  File "/data/user/xiaoming/git/molle/molle.py", line 157, in bunchT
+    for c, s in enumerate(self.species) ])
+  File "/data/user/xiaoming/git/molle/utility.py", line 257, in <lambda>
+    A, R)))
+  File "/data/user/xiaoming/git/molle/utility.py", line 148, in _create_bit_rule
+    if act_list: act = _concat(act_list)
+  File "/data/user/xiaoming/git/molle/utility.py", line 141, in _concat
+    else: return Concat(bvs)
+  File "/data/user/xiaoming/lib/python2.6/dist-packages/z3.py", line 3537, in Concat
+    r = BitVecRef(Z3_mk_concat(ctx.ref(), r.as_ast(), args[i+1].as_ast()), ctx)
+  File "/data/user/xiaoming/lib/python2.6/dist-packages/z3.py", line 275, in __init__
+    self.ctx  = _get_ctx(ctx)
+KeyboardInterrupt
+Exception AttributeError: "BitVecRef instance has no attribute 'ctx'" in  ignored
+>> Abstract Network Modeling: molle -------------------------------------------
+>> Modeling for find_minimal_model
+>> Start program: 26 Jun 19:52
+>> #1 Adding modeling constrains: 
+>> #2 Interactions limit 17 ADDED. sat
+>> #3 Applying experimental constraints:
+Traceback (most recent call last):
+  File "solve.py", line 62, in <module>
+    model.build(ilimit = ilimit, detail=verbose, debug=debug)
+  File "/data/user/xiaoming/git/molle/molle.py", line 120, in build
+    solver.add(self.bunchT(path, ko_exp, fe_exp))
+  File "/data/user/xiaoming/git/molle/molle.py", line 157, in bunchT
+    for c, s in enumerate(self.species) ])
+  File "/data/user/xiaoming/git/molle/utility.py", line 257, in <lambda>
+    A, R)))
+  File "/data/user/xiaoming/git/molle/utility.py", line 198, in _create_bit_rule
+    return Or( And(A != 0, act & A == A),
+  File "/data/user/xiaoming/lib/python2.6/dist-packages/z3.py", line 789, in __eq__
+    a, b = _coerce_exprs(self, other)
+  File "/data/user/xiaoming/lib/python2.6/dist-packages/z3.py", line 938, in _coerce_exprs
+    s = _coerce_expr_merge(s, a)
+  File "/data/user/xiaoming/lib/python2.6/dist-packages/z3.py", line 917, in _coerce_expr_merge
+    s1 = a.sort()
+  File "/data/user/xiaoming/lib/python2.6/dist-packages/z3.py", line 2962, in sort
+    return BitVecSortRef(Z3_get_sort(self.ctx_ref(), self.as_ast()), self.ctx)
+  File "/data/user/xiaoming/lib/python2.6/dist-packages/z3.py", line 276, in __init__
+    Z3_inc_ref(self.ctx.ref(), self.as_ast())
+  File "/data/user/xiaoming/lib/python2.6/dist-packages/z3.py", line 453, in as_ast
+    return Z3_sort_to_ast(self.ctx_ref(), self.ast)
+  File "/data/user/xiaoming/lib/python2.6/dist-packages/z3core.py", line 2260, in Z3_sort_to_ast
+    err = lib().Z3_get_error_code(a0)
+KeyboardInterrupt
