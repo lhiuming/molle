@@ -140,7 +140,7 @@ def main(solver, problem, solutions_limit=10, interactions_limit=0,
     if detail: print '>> #3 Transition relation macro: SET.'
 
     # 4. Experimental constrains
-    if detail: print '>> #5 Applying experimental constraints:'
+    if detail: print '>> #4 Applying experimental constraints:'
     total_exp = len(exps)
     count_exp = 0
     for exp in exps:
@@ -159,10 +159,10 @@ def main(solver, problem, solutions_limit=10, interactions_limit=0,
                     s = sl[-1]
                     if sl[0] == 'KO':
                         c = kos.index(s)
-                        solver.add( Extract(c,c,KO) == value)
+                        solver.add( Extract(c,c,ko_exp) == value)
                     elif sl[0] == 'FE':
                         c = fes.index(s)
-                        solver.add( Extract(c,c,FE) == value)
+                        solver.add( Extract(c,c,fe_exp) == value)
                     else:
                         c = species.index(s)
                         solver.add( Extract(c,c,path[t]) == value )
@@ -207,7 +207,7 @@ def main(solver, problem, solutions_limit=10, interactions_limit=0,
 if __name__ == '__main__':
     s = Solver()
     main(s,
-         problem = 'find_min_logic',
+         problem = 'find_min_inter',
          solutions_limit = 0,
          interactions_limit = 17,
          debug = True, detail = True, output = True)

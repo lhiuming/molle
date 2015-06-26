@@ -133,9 +133,9 @@ def _create_bit_rule(num, act_list, rep_list, A, R):
     ''' Create the update rule that return bit-vector of length 1. '''
     # initialization
     if act_list: act = _concat(act_list)
-    else: act = A = 0
+    else: act = A = zero
     if rep_list: rep = _concat(rep_list)
-    else: rep = R = 0
+    else: rep = R = zero
     
     # creating result
     if num == 0:
@@ -151,7 +151,7 @@ def _create_bit_rule(num, act_list, rep_list, A, R):
     elif num == 3:
         return And(A & act != 0, rep & R == 0)
     elif num == 4:
-       return And( A != 0, A & act == A,
+        return And( A != 0, A & act == A,
                    Or(R == 0, rep & R != R) )
        #return Or( And(R == 0, A != 0, A & act == A),
        #           And(A != 0, A & act == A, rep & R != R) )
@@ -188,9 +188,9 @@ def _create_bit_rule(num, act_list, rep_list, A, R):
        #           And(R != 0, A != 0, Or(act & A == A,
        #                                  And(act & A != 0, rep & R == 0))) )
     elif num == 11:
-       return Or( And(R == 0, A != 0, act & A != 0),
-                  And(R != 0, A != 0, Or(act & A == A,
-                                         And(act & A != 0, rep & R == 0))) )
+        return Or( And(R == 0, A != 0, act & A != 0),
+                   And(R != 0, A != 0, Or(act & A == A,
+                                          And(act & A != 0, rep & R == 0))) )
     elif num == 12:
         return Or( And(A != 0, act & A == A),
                    And(act & A != 0, rep & R != R) )
