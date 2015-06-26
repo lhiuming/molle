@@ -331,19 +331,20 @@ def printModel(species, A, R, L, config = True, model = True):
         for s in species: print ">>\t\t%s' = %s" \
             %(s,simplify( _create_sym_rule(L[s], A[s], R[s]) ))
 
-from smtplib import SMTP
+from smtplib import SMTP, SMTPAuthenticationError
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-def mailMe(content, title = 'Computation Finished'):
-    me = 'syaominglai@qq.com'
-
+def mailMe(addr, pw, content, title = 'Computation Finished'):
     msg = MIMEMultipart('alternative')
     msg['Subject'] = title
-    msg['From'] = msg['To'] = me
+    msg['From'] = msg['To'] = addr
     msg.attach(MIMEText(content, 'plain'))
 
     server = SMTP('smtp.qq.com')
-    server.login(me, 'qqmail746857947')
-    server.sendmail(me, me, msg.as_string())
-    server.quit()
+    try:
+        server.login(addr, pw)
+        server.sendmail(addr, addr, msg.as_string())
+        server.quit()
+    except SMTPAuthenticationError:
+        print ">> SMTP: login fail with %s:%s"%(addr, pw)

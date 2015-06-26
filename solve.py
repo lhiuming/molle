@@ -33,14 +33,17 @@ if __name__ == '__main__':
         mpath, epath = [PREFIX + name for name in INPUT[problem]]
     else:
         print "No enough arguments. ending."; quit()
+    output = '-o' in sys.argv
     debug = '-d' in sys.argv
     verbose = '-v' in sys.argv or debug
     mail = '-m' in sys.argv
-    output = '-o' in sys.argv
+    if mail:
+        i = sys.argv.index('-m') + 1
+        addr, pw = sys.argv[i:i+2]
 
     # start timing
     startt = time()
-    print '>>> ' * 6 + " Abstract Network Modeling: molle " + '<<< ' * 6
+    print '>> '+  "Abstract Network Modeling: molle " + '-' * 48
     print '>> Modeling for %s'%problem
     print '>> Start program: %s'%strftime("%d %b %H:%M", localtime(startt))    
 
@@ -75,7 +78,8 @@ if __name__ == '__main__':
     total = conv_time(endt - startt)
     print '>> Total duration:\t%s'%total
     if mail:
-        mailMe('Solutions number:\t%d\nTotal duration:\t%s'%(count, total),
+        mailMe(addr, pw,
+               'Solutions number:\t%d\nTotal duration:\t%s'%(count, total),
                "Computation Fnishied for '%s'."%problem)
     print '>> ' + '-' * 9 + ' Finished. ' + '-' * 9
 
