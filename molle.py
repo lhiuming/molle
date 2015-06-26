@@ -39,6 +39,8 @@ class ABN:
             acts = self.optI[c][0] + self.defI[c][0] # Concat is from L to R
             reps = self.optI[c][1] + self.defI[c][1]
             self.inters[c] = (acts, reps)
+            # filter the useless functiono
+            self.logics[s] = compati(self.logics[s], len(acts), len(reps))
             
             # creating Act and Rep selecting BitVec
             if acts: self.A_[s] = BitVec('Act_' + s, len(acts))

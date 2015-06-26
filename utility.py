@@ -22,7 +22,7 @@ def _sorted_inters(inter_list, sp):
         d.setdefault(tcode, ([], []))[idx].append(fcode)
     return d
 
-def readModel(f):
+def readModel(f, opmt = True):
     ''' Take a file Object as input, return a tuple of 6 objects:
 
     species: a tuple of gene name.
@@ -119,6 +119,18 @@ def readExp(f):
 
   return (exps, states);
 
+def compati(l, actn, repn):
+    ''' Speed up the solving. 
+    Not sure with the validicity when actn == 0 of such approach. '''
+    if actn == 0:
+        if repn == 0: return (-1, )
+        else: # only repressors
+            return (16, 17) # tottaly change the allowed logics!!!
+    elif repn == 0: # only activator
+        return filter(lambda x: x < 2, l) or (-1, )
+    else:
+        return l
+
 zero = BitVecVal(0, 1)
 
 def Any(bvs):
@@ -130,6 +142,8 @@ def _concat(bvs):
     
 def _create_bit_rule(num, act_list, rep_list, A, R):
     ''' Create the update rule that return bit-vector of length 1. '''
+    if num == -1: return BoolVal(False) # special case
+    
     # initialization
     if act_list: act = _concat(act_list)
     else: act = A = zero
