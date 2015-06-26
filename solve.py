@@ -43,7 +43,7 @@ if __name__ == '__main__':
 
     # start timing
     startt = time()
-    print '>> '+  "Abstract Network Modeling: molle " + '-' * 48
+    print '>> '+  "Abstract Network Modeling: molle " + '-' * 43
     print '>> Modeling for %s'%problem
     print '>> Start program: %s'%strftime("%d %b %H:%M", localtime(startt))    
 
