@@ -122,10 +122,11 @@ def readExp(f):
 def compati(l, actn, repn):
     ''' Speed up the solving. 
     Not sure with the validicity when actn == 0 of such approach. '''
+    if len(l) < 16: return l
     if actn == 0:
         if repn == 0: return (-1, )
         else: # only repressors
-            return filter(lambda x: x > 15, l)
+            return filter(lambda x: x > 15, l) or (-1, )
     elif repn == 0: # only activator
         return filter(lambda x: x < 2, l) or (-1, )
     else:

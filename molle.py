@@ -23,12 +23,6 @@ class ABN:
         kos, fes = self.kofe['KO'], self.kofe['FE']        
         solver = Solver()
     
-        if debug:
-            print '>> Defined Iteractions:'; pprint(self.defI)
-            print '>> Optional Interactions:'; pprint(self.optI)
-            print '>> KO: ', kos
-            print '>> FE: ', fes
-
         # 0. Encoding functions
         self.A_ = {} # of activator/activating-interaction selection BitVec
         self.R_ = {} # of repressor/repressing-interaction selection BitVec
@@ -40,7 +34,9 @@ class ABN:
             reps = self.optI[c][1] + self.defI[c][1]
             self.inters[c] = (acts, reps)
             # filter the useless functiono
-            self.logics[s] = compati(self.logics[s], len(acts), len(reps))
+            ta = sum(map(len, ( self.optI[c][0], self.defI[c][0] )))
+            tr = sum(map(len, ( self.optI[c][1], self.defI[c][1] )))
+            self.logics[s] = compati(self.logics[s], ta, tr)
             
             # creating Act and Rep selecting BitVec
             if acts: self.A_[s] = BitVec('Act_' + s, len(acts))
@@ -57,6 +53,14 @@ class ABN:
             self.f_[s] = [ makeFunction(acts, reps, kofe_index,
                                         l, self.A_[s], self.R_[s])
                            for l in self.logics[s] ]
+
+        if debug:
+            print '>> Species:';
+            pprint([ (s, self.logics[s]) for s in self.species ])
+            print '>> Defined Iteractions:'; pprint(self.defI)
+            print '>> Optional Interactions:'; pprint(self.optI)
+            print '>> KO: ', kos
+            print '>> FE: ', fes
 
         # 1. Modeling Constrains
         if detail:

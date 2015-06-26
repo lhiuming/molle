@@ -33,6 +33,7 @@ if __name__ == '__main__':
         mpath, epath = [PREFIX + name for name in INPUT[problem]]
     else:
         print "No enough arguments. ending."; quit()
+        
     if '-l' in sys.argv:
         idx = sys.argv.index('-l') + 1
         slimit, ilimit = [int(i) for i in sys.argv[idx:idx+2] ]
@@ -59,7 +60,7 @@ if __name__ == '__main__':
     modelFile.close(); expFile.close()
 
     # build the model
-    model.build(ilimit = ilimit, detail=verbose, debug=debug)
+    model.build(ilimit=ilimit, detail=verbose, debug=debug)
     print ">> All Constrains established. (takes %s)" %conv_time(time()-startt)
 
     # get solutions
