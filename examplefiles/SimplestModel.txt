@@ -1,6 +1,7 @@
-Oct4-, Sall4-, Sox2-, Tbx3-, Klf2-, Nanog-, Esrrb-+, Tfcp2l1-+, Gbx2-, Klf4-, MEKERK, Tcf3, Stat3-, PD, CH, LIF
-Sox2   Oct4    positive      optional
-Sall4  Sox2    positive      optional
+Oct4-(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15), Sall4-(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15), Sox2-(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15), Tbx3-(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15), Klf2-(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15), Nanog-(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15), Esrrb-+(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15), Tfcp2l1-+(16 17), Gbx2-(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15), Klf4-(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15), MEKERK(16 17), Tcf3(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15), Stat3-(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15), PD(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15), CH(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15), LIF(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15)
+
+Sox2    Oct4    positive      optional
+Sall4   Sox2    positive      optional
 Tfcp2l1        Sall4         positive   optional
 Oct4           Tfcp2l1       negative   optional
 Nanog          Sox2          positive   optional

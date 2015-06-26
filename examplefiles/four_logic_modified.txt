@@ -1,0 +1,11 @@
+A, B, C, D-+
+
+A	B 	positive	
+B	A 	positive 	optional
+B	C	positive	optional
+C	B	negative 	
+C	A	positive	optional
+A	C	negative	optional	
+B	D	positive	optional
+D	A	negative
+D	C	positive	optional

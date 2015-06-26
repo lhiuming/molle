@@ -3,7 +3,7 @@ from operator import or_
 from pprint import pprint
 from smtplib import SMTP
 
-def _sorted_inters(inter_list, code):
+def _sorted_inters(inter_list, sp):
     ''' Sorts the inter_list = [('from', 'to', 'positive'), ...] into a dict,
      where keyvalue is a couple of number tuples, wich integer codes as keys.
 
@@ -11,32 +11,28 @@ def _sorted_inters(inter_list, code):
     {1: ( (2, 3), (5, 9) )} : species 1 is activated by 2 and 3, and repressed
     by 5 and 9.
     '''
-    d = dict([(c, ([], [])) for c in code.values()]) # initialization
+    d = dict([(c, ([], [])) for c in range(len(sp))]) # initialization
     for i in inter_list:
         f, t = i[:2]
-        idx = (0, 1)[ i[2]=='negative' ]
-        if 'negative' in i:
-            idx = 1
-        elif 'positive' in i:
-            idx = 0
+        if   'negative' in i: idx = 1
+        elif 'positive' in i: idx = 0
         else:
             print 'no +/- assigend to interactions %d'%(inter_list)
             raise(Error)
-        d.setdefault(code[t], ([], []))[idx].append(code[f])
+        tcode, fcode = sp.index(t), sp.index(f)
+        d.setdefault(tcode, ([], []))[idx].append(fcode)
     return d
 
 def readModel(f):
     ''' Take a file Object as input, return a tuple of 6 objects:
 
-    species: a list of gene name.
-    code   : a dict of gene_name : integer_code. Consistant with species list.
+    species: a tuple of gene name.
     logics : a dict. { gene_name: list_of_allowed_logic_numbers }
     kofe   : a dict. { "FE": list_of_FEable_gene, "KO": list_of_KOable_gene }
     defI   : a dict of defined interations. Processed by _sorted_inters()
     optI   : a dict of optional interactions.
     '''
     species = []
-    code = {}
     logics = {}
     kofe = {'KO':[], 'FE':[]}
     def_inters_list = []
@@ -44,30 +40,27 @@ def readModel(f):
   
     # read the components line
     for c in f.readline().strip().split(','):
-        if '(' in c :
-            gene_ = c[:c.index('(')].strip() # name is before '('
-        else:
-            gene_ = c.strip() # no logics specified
+        # get the gene name and +- mark
+        if '(' in c : gene_ = c[:c.index('(')].strip()
+        else: gene_ = c.strip()
         gene = filter(lambda x: not x in '+-', gene_)
         mark = filter(lambda x: x in '+-', gene_)
         # add to kofe if the gene has mark
         if('+' in mark): kofe['FE'].append(gene)
         if('-' in mark): kofe['KO'].append(gene)
-        # record allows logics
+        # record the allowed logics; if no, set to range(18)
         if '(' in c:
-            rules = tuple([int(i)\
-                           for i in c[c.index('(')+1:c.index(')')].split()])
-        else: # no specific logics
-            if gene in ('MEKERK', 'Tcf3'): rules = (16, 17)
-            else: rules = tuple(range(16))
-        logics[gene] = rules # record the list of allowed functions
+            left, right = c.index('('), c.index(')')
+            rules = tuple( int(i) for i in c[left+1:right].split() )
+        else:
+            rules = tuple(range(18))
+        logics[gene] = rules
         species.append(gene)
-    code = dict([ (s, n) for (n, s) in enumerate(species) ])
 
     # read the interaction lines
     total_opt = total_def = 0
-    for l in f.readlines(): # loop every line
-        l = l.strip().split()
+    for line in f.readlines():
+        l = line.strip().split()
         if(not l): continue # skip empty line
         if 'optional' in l:
             opt_inters_list.append(tuple(l[:3]))
@@ -75,10 +68,10 @@ def readModel(f):
         else:
             def_inters_list.append(tuple(l[:3]))
             total_def += 1
-    defI = _sorted_inters(def_inters_list, code)
-    optI = _sorted_inters(opt_inters_list, code)
+    defI = _sorted_inters(def_inters_list, species)
+    optI = _sorted_inters(opt_inters_list, species)
 
-    return (species, code, logics, kofe, defI, optI)
+    return (species, logics, kofe, defI, optI)
 
 # kept from old version
 def _addExp(d, name, time_point, state_names_list):
@@ -257,6 +250,10 @@ def isExpOf2(bvv):
 #########################
 boolf = BoolVal(False)
 
+def conv_time(secs, th = 600):
+    if secs > th: return '%.1f min'%( secs / 60 )
+    return '%.1f sec'%secs
+
 def _Or(l):
     if(not l): return boolf
     if(len(l) == 1): return l[0]
@@ -309,13 +306,12 @@ def bv2inters(ibvv, ilist, species):
     l = ibvv.size() - 1
     return [species[c] for i, c in enumerate(ilist) if checkBit(l-i, ibvv)]
 
-def printModel(m, A_, R_, L_, species, code, inters, logics,
+def printModel(m, A_, R_, L_, species, inters, logics,
                config = True, model = True):
     ''' Print the solved model nicely. '''
     # getting model details
     A = {}; R = {}; L = {}
-    for s in species:
-        c = code[s]
+    for c, s in enumerate(species):
         L[s] = bv2logic(m[L_[s]], logics[s])
         if A_[s]: A[s] = bv2inters(m[A_[s]] or zero, inters[c][0], species)
         else: A[s] = []
