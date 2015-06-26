@@ -250,7 +250,7 @@ def isExpOf2(bvv):
 #########################
 boolf = BoolVal(False)
 
-def conv_time(secs, th = 600):
+def conv_time(secs, th = 300):
     if secs > th: return '%.1f min'%( secs / 60 )
     return '%.1f sec'%secs
 

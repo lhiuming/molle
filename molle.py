@@ -207,7 +207,7 @@ def main(solver, problem, solutions_limit=10, interactions_limit=0,
 if __name__ == '__main__':
     s = Solver()
     main(s,
-         problem = 'find_min_inter',
+         problem = 'find_min_logic',
          solutions_limit = 0,
          interactions_limit = 17,
          debug = True, detail = True, output = True)
