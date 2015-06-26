@@ -35,9 +35,9 @@ if __name__ == '__main__':
         print "No enough arguments. ending."; quit()
     if '-l' in sys.argv:
         idx = sys.argv.index('-l') + 1
-        ilimit, slimit = [int(i) for i in sys.argv[idx:idx+2] ]
+        slimit, ilimit = [int(i) for i in sys.argv[idx:idx+2] ]
     else:
-        ilimit, slimit = 0, 10
+        slimit, ilimit = 10, 0
     output = '-o' in sys.argv
     debug = '-d' in sys.argv
     verbose = '-v' in sys.argv or debug
