@@ -1,3 +1,4 @@
+
 from z3 import *
 from utility import *
 from pprint import pprint
@@ -16,6 +17,7 @@ class ABN:
         (self.species, self.logics, self.kofe,
          self.defI, self.optI) = readModel(mfile)
         (self.exps, self.states) = readExp(efile)
+        self.built = False
 
     def build(self, ilimit=0, detail=True, debug=False):
         ''' Add all constrains, and set self.solver. '''
@@ -139,6 +141,7 @@ class ABN:
                 print '>> \t %02d/%d %s added...'%(count_exp, total_exp, name)
 
         self.solver = solver
+        self.built = True
 
     def T(self, q_old, q_new, ko, fe):
         ''' Define Transition ralationship. It is like a macro.'''
@@ -162,6 +165,7 @@ class ABN:
 
     def solve(self):
         ''' Get the solutions. return an iterator.'''
+        assert self.built
         allAR = filter(None, list(self.A_.values()) + list(self.R_.values()))
         while self.solver.check() == sat:
             m = self.solver.model()
@@ -172,12 +176,12 @@ class ABN:
 class Solution:
     ''' A printable solution object. '''
     def __init__(self, m, A_, R_, L_, species, itrs, lgcs):
-        self.m = m
         self.species = species
+        # interpreted the solution 
         self.A, self.R, self.L = getDetail(m, A_, R_, L_, species, itrs, lgcs)
 
     def output(self, config=True, model=True):
-        printModel(self.species, self.A, self.R, self.L, config, model)
+        printModel(self.species, self.A, self.R, self.L)
         
         
     

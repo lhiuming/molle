@@ -279,7 +279,9 @@ def _And(l):
     else: return And(l);
 
 def _create_sym_rule(num, act, rep):
-    if num < 0: return Bool('Strange')
+    if num < -1 or num > 17:
+        return Bool('Strang, num=%d, act=%s, rep=%s'%(num,str(act), str(rep)))
+    if num == -1: return boolf
 
     if act:
         actt = [Bool(node) for node in act]
@@ -304,7 +306,7 @@ def _create_sym_rule(num, act, rep):
         if num == 16: return And(_Or(rept), Not(_And(rept)))
         elif num==17: return Not(_Or(rept));
         else: return boolf
-    return boolf
+    else: return boolf # no act no rep
 
 def checkBit(i, bv):
     # simplify is necessary
@@ -317,7 +319,8 @@ def bv2logic(lbvv, llist):
     return llist[lcode]
 
 def bv2inters(ibvv, ilist, species):
-    if simplify(ibvv == 0): return []
+    if is_true(simplify(ibvv == 0)): return []
+    assert is_false(simplify(ibvv == 0))
     l = ibvv.size() - 1
     return [species[c] for i, c in enumerate(ilist) if checkBit(l-i, ibvv)]
 
