@@ -106,7 +106,7 @@ class ABN:
                            ilimit))
             if detail:
                 print '>> #2 Interactions limit %d ADDED. %s' \
-                    %(ilimit, solver.check())
+                    %(ilimit, debug and solver.check() or "not-check.")
         else:
             if detail: print '>> #2 Interactions limit: NOT SET.'
         
